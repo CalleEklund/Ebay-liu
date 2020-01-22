@@ -1,16 +1,30 @@
 import requests
 import json
 
+
 def save_msg():
-    r = requests.post("http://127.0.0.1:5000/messages")
+    g = requests.get("http://127.0.0.1:5000/messages") or None
+    """
+    r = requests.post("http://127.0.0.1:5000/messages") or None
     if check_ok(r) == "ok":
         data = r.json()
         return data
+    el
+    """
+    if check_ok(g) == "ok":
+        data = g.json()
+        return data
+    else:
+        print(check_ok(g))
+
 
 def get_msg():
-    r = requests.get("http://127.0.0.1:5000/messages/a0d84018-d718-4715-a645-ff375d4b3a13")
-    if check_ok(r) == "ok":
-        print(r.json())
+    # r = requests.get("http://127.0.0.1:5000/messages/a0d84018-d718-4715-a645-ff375d4b3a13")
+    d = requests.delete("http://127.0.0.1:5000/messages/a0d84018-d718-4715-a645-ff375d4b3a13")
+    if check_ok(d) == "ok":
+        # print(r.json())
+        print(d.status_code)
+
 
 def check_ok(r):
     if r.status_code == 404:
@@ -24,4 +38,6 @@ def check_ok(r):
     else:
         return "ok"
 
-get_msg()
+
+# get_msg()
+print(save_msg())
