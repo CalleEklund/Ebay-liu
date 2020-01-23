@@ -20,8 +20,6 @@ def message():
     global messages
     if request.method == 'POST':
         msg = request.json['msg']
-
-        print(msg)
         uid = uuid.uuid4()
         data = {'id': uid, 'msg':msg,'readBy': []}
         messages = {str(uid): data}
@@ -41,7 +39,6 @@ def get_message(MessageID):
     if request.method == 'GET':
 
         outdata = messages[MessageID]
-        print(outdata)
         return jsonify(outdata)
     elif request.method == 'DELETE':
 
@@ -50,7 +47,7 @@ def get_message(MessageID):
             del messages[MessageID]
             return "", 200
         else:
-            return jsonify(""), 200
+            return jsonify("")
 
 
 @app.route('/messages/<MessageID>/read/<UserID>', methods=['GET'])
