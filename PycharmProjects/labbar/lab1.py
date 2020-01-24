@@ -2,7 +2,7 @@ import requests
 
 
 def save_msg():
-    r = requests.post("http://127.0.0.1:5000/messages",json={"msg" : "hello!"})
+    r = requests.post("http://127.0.0.1:5000/messages", json={"msg" : "hello!"})
     if check_ok(r):
         data = r.json()
         return data
@@ -18,7 +18,7 @@ def get_all_msg():
         return check_ok(g)
 
 def get_msg():
-    r = requests.get("http://127.0.0.1:5000/messages/27e10cb4-0a06-4409-b12c-940f47398c70")
+    r = requests.get("http://127.0.0.1:5000/messages/9f5dccef-4e78-4cc7-b9c7-bd8fa383ab86")
     if check_ok(r):
         data = r.json()
         return data
@@ -58,10 +58,12 @@ def check_ok(req):
     else:
         return True
 
-#testa metoderna här:
-#print(save_msg())
-#print(get_msg())
-#print(delete_msg())
-#print(mark_read())
-#print(get_all_msg())
-#print(get_unread())
+# testa metoderna här:
+# print(save_msg())
+# print(get_msg())
+# print(delete_msg())
+# print(mark_read())
+# print(get_all_msg())
+# print(get_unread())
+
+#maila länk och lägg till som reporter
