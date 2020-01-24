@@ -12,13 +12,13 @@ def save_msg():
 def get_all_msg():
     g = requests.get("http://127.0.0.1:5000/messages")
     if check_ok(g):
-        data_g = g.json
+        data_g = g.json()
         return data_g
     else:
         return check_ok(g)
 
 def get_msg():
-    r = requests.get("http://127.0.0.1:5000/messages/676941a1-5c4f-4d62-b9d5-de2b2d46d7e1")
+    r = requests.get("http://127.0.0.1:5000/messages/27e10cb4-0a06-4409-b12c-940f47398c70")
     if check_ok(r):
         data = r.json()
         return data
@@ -26,17 +26,17 @@ def get_msg():
         return check_ok(r)
 
 def delete_msg():
-    d = requests.delete("http://127.0.0.1:5000/messages/a0d84018-d718-4715-a645-ff375d4b3a13")
+    d = requests.delete("http://127.0.0.1:5000/messages/f036ba77-a224-4180-be03-dc37ed8f74db")
     if check_ok(d):
-        data_d = d[1]
+        data_d = d.status_code
         return data_d
     else:
         return check_ok(d)
 
 def mark_read():
-    g = requests.get("http://127.0.0.1:5000/messages/220f7259-beb1-4012-aa59-6e787a0cd581/read/a0d84018-d718-4715-a645-ff375d4b3a13")
+    g = requests.get("http://127.0.0.1:5000/messages/220f7259-beb1-4012-aa59-6e787a0cd581/read/afe83630-4cbf-4000-baef-38b13145bf65")
     if check_ok(g):
-        data_d = g[1]
+        data_d = g.status_code
         return data_d
     else:
         return check_ok(g)
@@ -59,4 +59,9 @@ def check_ok(req):
         return True
 
 #testa metoderna här:
-print(delete_msg())
+#print(save_msg())
+#print(get_msg())
+#print(delete_msg())
+#print(mark_read())
+#print(get_all_msg())
+#print(get_unread())
