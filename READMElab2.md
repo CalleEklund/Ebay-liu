@@ -1,4 +1,3 @@
-
 1. Vad erbjuder Alchemy för fördelar när man arbetar med databaser?
   Alchemy är anpassat för python programmering, detta gör det lättare att
   arbeta med databas data och göra det till python objekt. Det underlättar
