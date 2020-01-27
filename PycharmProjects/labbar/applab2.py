@@ -9,24 +9,27 @@ db = SQLAlchemy(app)
 
 users_messages = db.Table('users_messages',
                           db.Column('user_id',db.Integer,db.ForeignKey('user.id'),primary_key=True),
-                          db.Column('message_readBy',db.Integer,db.ForeignKey('message.readBy'),primary_key=True)
+                          db.Column('message_readBy',db.Integer,db.ForeignKey('message.id'),primary_key=True)
                           )
 
 class User(db.Model):
     __tabelname__ = 'users'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
 
-    messages = db.relationship('Message',secondary=users_messages,back_populates='users')
+    def __init__(self,id):
+        self.id = id
+
 
 class Message(db.Model):
     __tablename__ = 'message'
     id = db.Column(db.String(36),primary_key=True)
     msg = db.Column(db.String(140),nullable=False)
-    readBy = db.Column(db.Integer,nullable=True)
+    users = db.relationship('User',secondary=users_messages,backref='messages')
+    def __init__(self,id,msg,users):
+        self.id = id
+        self.msg = msg
+        self.users = users
 
-    users = db.relationship('User',secondary=users_messages,back_populates='messages')
-
-#db.create_all()
 
 def intial_insert():
 
@@ -40,18 +43,18 @@ def intial_insert():
                                                          'readBy': []},
                 'a432a82a-6c4b-4c42-b9e0-6713e52b81cb': {'id': 'a432a82a-6c4b-4c42-b9e0-6713e52b81cb', 'text': 'demo4',
                                                          'readBy': []},
-                'a432a82a-6c4b-4c42-b9e0-6713e52b81cb': {'id': 'a432a82a-6c4b-4c42-b9e0-6713e52b81cb', 'text': 'demo4',
-                                                         'readBy': []},
                 'ef9c846a-3477-4506-8f5c-a7200d5fab71': {'id': 'ef9c846a-3477-4506-8f5c-a7200d5fab71', 'text': 'demo5',
                                                          'readBy': []},
                 '2298b7e7-e4e7-48b6-bb13-ea6260d3cfe4': {'id': '2298b7e7-e4e7-48b6-bb13-ea6260d3cfe4', 'text': 'demo6',
                                                          'readBy': []}}
     for elem in messages.values():
-        indata = Message(id = elem['id'],msg = elem['text'],readBy=None)
+        indata = Message(elem['id'],elem['text'],[])
         db.session.add(indata)
     db.session.commit()
 
-intial_insert()
+#db.create_all()
+
+#intial_insert()
 
 def clear_data(session):
     meta = db.metadata
@@ -62,7 +65,8 @@ def clear_data(session):
 #använda för att ta bort överflödig data.
 #clear_data(db.session)
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
