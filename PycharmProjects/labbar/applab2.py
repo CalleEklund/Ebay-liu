@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, request
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -8,8 +8,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
 db = SQLAlchemy(app)
 
 users_messages = db.Table('users_messages',
-                          db.Column('user_id',db.Integer,db.ForeignKey('user.id'),primary_key=True),
-                          db.Column('message_readBy',db.Integer,db.ForeignKey('message.id'),primary_key=True)
+                          db.Column('user_id',db.Integer,db.ForeignKey('user.id'), primary_key=True),
+                          db.Column('message_readBy',db.Integer,db.ForeignKey('message.id'), primary_key=True)
                           )
 
 class User(db.Model):
@@ -63,7 +63,7 @@ def clear_data(session):
         session.execute(table.delete())
     session.commit()
 #använda för att ta bort överflödig data.
-#clear_data(db.session)
+clear_data(db.session)
 
 
 if __name__ == '__main__':
