@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import uuid
+
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
 
@@ -31,7 +34,7 @@ class Message(db.Model):
         self.users = users
 
 
-def intial_insert():
+def initial_insert():
 
     messages = {'220f7259-beb1-4012-aa59-6e787a0cd581': {'id': '220f7259-beb1-4012-aa59-6e787a0cd581', 'text': 'demo0',
                                                          'readBy': []},
@@ -52,21 +55,29 @@ def intial_insert():
         db.session.add(indata)
     db.session.commit()
 
-#db.create_all()
+def init_db():
 
-#intial_insert()
-
-def clear_data(session):
     meta = db.metadata
+
     for table in reversed(meta.sorted_tables):
-        print('Clear table %s' % table)
-        session.execute(table.delete())
-    session.commit()
-#använda för att ta bort överflödig data.
-clear_data(db.session)
+        print(table)
+
+        db.session.execute(table.delete())
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    db.create_all()
+
+    initial_insert()
+
+def store_message(message):
+    new_id = uuid.uuid4()
+    new_message = Message(new_id, message, [])
+    db.session.add(new_message)
+    db.session.commit()
+
+def get_all_msg():
+    all_messages = db.session.query(Message.message).all()
+    return all_messages
+init_db()
 
 

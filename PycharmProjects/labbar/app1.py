@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import uuid
 
 app = Flask(__name__)
-
+import db2
 
 # global dict
 
@@ -73,6 +73,11 @@ def get_unread(UserID):
         if not UserID in post['readBy']:
             output.append(post)
     return jsonify(output)
+
+@app.route('/init_db')
+def init_db():
+    db2.init_db()
+    return ""
 
 
 if __name__ == '__main__':
