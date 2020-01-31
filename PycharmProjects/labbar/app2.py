@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
-import db2
 
 
 app = Flask(__name__)
+import db2
 
 @app.route('/')
 def hello_world():
@@ -12,11 +12,14 @@ def hello_world():
 @app.route('/messages/', methods=['POST', 'GET'])
 def message():
     if request.method == 'POST':
-        msg = request.json['msg']
+        msg = request.json['message']
+        print(msg)
         db2.store_message(msg)
+        #msg_id = db2.query.filter(text=msg).first()
+        #print(msg_id)
         return msg
     elif request.method == 'GET':
-        all_messages = db2.get_all_messages()
+        all_messages = db2.get_all_msg()
         print(all_messages)
         return jsonify(all_messages)
 
@@ -27,6 +30,9 @@ def init_db():
     db2.init_db()
     return ""
 
+@app.route('/get_all')
+def get_all():
+    return jsonify(db2.get_all_msg())
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5000,debug=True)

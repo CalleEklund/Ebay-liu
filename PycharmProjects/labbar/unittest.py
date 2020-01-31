@@ -1,8 +1,8 @@
 import os
 import tempfile
 import pytest
-from app2 import app
-import db2
+from app2 import app, db2
+# import db2
 
 
 @pytest.fixture
@@ -15,7 +15,7 @@ def client():
 
     with app.app_context():
         db2.init_db()
-        test_empty_db(client)
+        # test_empty_db(client)
 
     yield client
 
@@ -25,16 +25,17 @@ def client():
 
 def test_empty_db(client):
     r = client.get('/')
-    print("test")
+    # print("test")
     assert b'hellu erbadies! welcums, to my cribs.' in r.data
 
 
-# def test_save_message(client):
-#     payload = {'message': 'hello'}
-#     r = client.post('/messages', json=payload, content_type='application/json')
-#     message_id = str(r.data.decode(encoding='utf-8'))
-#     assert len(message_id) == 8
-#
+def test_save_message(client):
+    payload = {'message': 'hello'}
+    r = client.post('/messages', json=payload, content_type='application/json')
+    print(r)
+    message_id = str(r.data.decode(encoding='utf-8'))
+    assert len(message_id) == 8
+
 # def test_get_all_messages(client):
 #     payload = {'message': 'hi'}
 #     r = client.post('/messages', json=payload, content_type='application/json')
@@ -47,4 +48,3 @@ def test_empty_db(client):
 #     r = client.get('/messages')
 #     all_messages = r.get_json()
 #     assert(len(all_messages)) == 2
-

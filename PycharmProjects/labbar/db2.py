@@ -1,10 +1,9 @@
-from flask import Flask
+from app2 import app
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 
 
 
-app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -16,7 +15,7 @@ users_messages = db.Table('users_messages',
                           )
 
 class User(db.Model):
-    __tabelname__ = 'users'
+    __tablename__ = 'users'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
 
     def __init__(self,id):
@@ -56,18 +55,18 @@ def initial_insert():
     db.session.commit()
 
 def init_db():
-
+    db.drop_all()
+    db.create_all()
     meta = db.metadata
-
     for table in reversed(meta.sorted_tables):
         print(table)
 
         db.session.execute(table.delete())
 
 
-    db.create_all()
+    # db.create_all()
 
-    initial_insert()
+    # initial_insert()
 
 def store_message(message):
     new_id = uuid.uuid4()
@@ -76,8 +75,8 @@ def store_message(message):
     db.session.commit()
 
 def get_all_msg():
-    all_messages = db.session.query(Message.message).all()
+    all_messages = db.session.query(Message.msg).all()
     return all_messages
-init_db()
+# init_db()
 
 
