@@ -2,39 +2,38 @@ from app2 import app
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 
-
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db = SQLAlchemy(app)
 
 users_messages = db.Table('users_messages',
-                          db.Column('user_id',db.Integer,db.ForeignKey('user.id'), primary_key=True),
-                          db.Column('message_readBy',db.Integer,db.ForeignKey('message.id'), primary_key=True)
+                          db.Column('user_id', db.Integer, db.ForeignKey('User.id'), primary_key=True),
+                          db.Column('message_readBy', db.Integer, db.ForeignKey('Message.id'), primary_key=True)
                           )
 
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
 
-    def __init__(self,id):
+class User(db.Model):
+    __tablename__ = 'User'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    def __init__(self, id):
         self.id = id
 
 
 class Message(db.Model):
-    __tablename__ = 'message'
-    id = db.Column(db.String(36),primary_key=True)
-    msg = db.Column(db.String(140),nullable=False)
-    users = db.relationship('User',secondary=users_messages,backref='messages')
-    def __init__(self,id,msg,users):
+    __tablename__ = 'Message'
+    id = db.Column(db.String(36), primary_key=True)
+    msg = db.Column(db.String(140), nullable=False)
+    users = db.relationship('User', secondary=users_messages, backref='messages')
+
+    def __init__(self, id, msg, users):
         self.id = id
         self.msg = msg
         self.users = users
 
 
 def initial_insert():
-
     messages = {'220f7259-beb1-4012-aa59-6e787a0cd581': {'id': '220f7259-beb1-4012-aa59-6e787a0cd581', 'text': 'demo0',
                                                          'readBy': []},
                 'a0d84018-d718-4715-a645-ff375d4b3a13': {'id': 'a0d84018-d718-4715-a645-ff375d4b3a13', 'text': 'demo1',
@@ -50,9 +49,10 @@ def initial_insert():
                 '2298b7e7-e4e7-48b6-bb13-ea6260d3cfe4': {'id': '2298b7e7-e4e7-48b6-bb13-ea6260d3cfe4', 'text': 'demo6',
                                                          'readBy': []}}
     for elem in messages.values():
-        indata = Message(elem['id'],elem['text'],[])
+        indata = Message(elem['id'], elem['text'], [])
         db.session.add(indata)
     db.session.commit()
+
 
 def init_db():
     db.drop_all()
@@ -63,20 +63,49 @@ def init_db():
 
         db.session.execute(table.delete())
 
-
     # db.create_all()
 
-    # initial_insert()
+    initial_insert()
 
+#funkar
 def store_message(message):
-    new_id = uuid.uuid4()
+    new_id = str(uuid.uuid4())
     new_message = Message(new_id, message, [])
     db.session.add(new_message)
     db.session.commit()
+    return new_id
 
+
+# funkar
+def get_msg(message_id):
+    msg = Message.query.filter_by(id=message_id).first()
+    return msg
+
+#funkar, behöver ett Message obj
+def del_msg(message_id):
+    db.session.delete(message_id)
+    db.session.commit()
+    return 200
+#funkar, ger en lista
+def get_unread(user_id):
+    all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
+    return all_unread
+
+#funkar
+def mark_read(message_id,user_id):
+    new_user = User(user_id)
+    msg = get_msg(message_id)
+    msg.users.append(new_user)
+    db.session.commit()
+    return 200
+
+
+# funkar
 def get_all_msg():
-    all_messages = db.session.query(Message.msg).all()
+    all_messages = db.session.query(Message).all()
     return all_messages
-# init_db()
+#init_db()
 
+# store_message('test')
 
+# print(get_msg('220f7259-beb1-4012-aa59-6e787a0cd581'))
