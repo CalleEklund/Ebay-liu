@@ -2,6 +2,9 @@ import os
 import tempfile
 import pytest
 from app2 import app, db2
+import json
+
+
 # import db2
 
 
@@ -15,7 +18,6 @@ def client():
 
     with app.app_context():
         db2.init_db()
-        # test_empty_db(client)
 
     yield client
 
@@ -25,26 +27,36 @@ def client():
 
 def test_empty_db(client):
     r = client.get('/')
-    # print("test")
     assert b'hellu erbadies! welcums, to my cribs.' in r.data
 
 
 def test_save_message(client):
     payload = {'message': 'hello'}
-    r = client.post('/messages', json=payload, content_type='application/json')
+    r = json.loads(client.post('/message', json=payload, content_type='application/json'))
+    print("=============================")
     print(r)
-    message_id = str(r.data.decode(encoding='utf-8'))
-    assert len(message_id) == 8
+    assert len(r['id']) == 36
 
-# def test_get_all_messages(client):
-#     payload = {'message': 'hi'}
-#     r = client.post('/messages', json=payload, content_type='application/json')
-#     message_id = str(r.data.decode(encoding='utf-8'))
-#     assert len(message_id) == 8
-#     payload = {'message': 'there'}
-#     r = client.post('/messages', json=payload, content_type='application/json')
-#     message_id = str(r.data.decode(encoding='utf-8'))
-#     assert len(message_id) == 8
-#     r = client.get('/messages')
-#     all_messages = r.get_json()
-#     assert(len(all_messages)) == 2
+#def test_get_message(client):
+    #payload = {'message': 'hi'}
+    #r = client.post('/message', json=payload, content_type='application/json')
+    #message_id = r['id']
+    '''d = client.post('/delete/'+message_id)
+    print(d)'''
+
+    #assert 200 == 200
+
+'''def test_get_all_messages(client):
+    payload = {'message': 'hi'}
+    r = client.post('/message', json=payload, content_type='application/json')
+    message_id = str(r.data.decode(encoding='utf-8'))
+    assert len(message_id) == 36
+    payload = {'message': 'there'}
+    r = client.post('/message', json=payload, content_type='application/json')
+    message_id = str(r.data.decode(encoding='utf-8'))
+    assert len(message_id) == 36
+    r = client.get('/message')
+    all_messages = r.get_json()
+    assert all_messages == 2'''
+
+

@@ -1,3 +1,5 @@
+from flask import jsonify
+
 from app2 import app
 from flask_sqlalchemy import SQLAlchemy
 import uuid
@@ -65,7 +67,7 @@ def init_db():
 
     # db.create_all()
 
-    initial_insert()
+    #initial_insert()
 
 #funkar
 def store_message(message):
@@ -83,7 +85,8 @@ def get_msg(message_id):
 
 #funkar, behöver ett Message obj
 def del_msg(message_id):
-    db.session.delete(message_id)
+    db.session.query(Message).filter_by(id=message_id).delete()
+    #db.session.delete(message_id)
     db.session.commit()
     return 200
 #funkar, ger en lista
@@ -102,7 +105,7 @@ def mark_read(message_id,user_id):
 
 # funkar
 def get_all_msg():
-    all_messages = db.session.query(Message).all()
+    all_messages = db.session.query(Message).count()
     return all_messages
 #init_db()
 
