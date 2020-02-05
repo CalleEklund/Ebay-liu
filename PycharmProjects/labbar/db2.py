@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 
 from app2 import app
@@ -81,7 +83,8 @@ def store_message(message):
 # funkar
 def get_msg(message_id):
     msg = Message.query.filter_by(id=message_id).first()
-    return msg
+    msg_dic ={'id':msg.id,'msg':msg.msg,'users':msg.users}
+    return msg_dic
 
 #funkar, behöver ett Message obj
 def del_msg(message_id):

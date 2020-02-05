@@ -13,9 +13,10 @@ def hello_world():
 def message():
     if request.method == 'POST':
         msg = request.json['message']
-        print(msg)
         new_id = db2.store_message(msg)
-        return jsonify({'id' : new_id})
+        outdata = {'id' : new_id}
+        print(outdata)
+        return jsonify(outdata)
 
     elif request.method == 'GET':
         all_messages = db2.get_all_msg()
@@ -28,11 +29,20 @@ def init_db():
     db2.init_db()
     return ""
 
-@app.route('/delete/<MessageId>')
-def delete_msg(MessageId):
-    msg_id = MessageId
-    db2.del_msg(msg_id)
-    return "",200
+@app.route('/message/<MessageID>', methods=['DELETE', 'GET'])
+def get_message(MessageID):
+    if request.method == 'GET':
+        msg_obj = db2.get_msg(MessageID)
+        print(msg_obj)
+        return jsonify(msg_obj)
+    if request.method == 'DELETE':
+        msg_id = MessageID
+        db2.del_msg(msg_id)
+        return "", 200
+
+
+@app.route('/messages/<MessageID>/read/<UserID>', methods=['POST'])
+def mark_read(MessageID, UserID):
 
 
 

@@ -32,31 +32,43 @@ def test_empty_db(client):
 
 def test_save_message(client):
     payload = {'message': 'hello'}
-    r = json.loads(client.post('/message', json=payload, content_type='application/json'))
-    print("=============================")
-    print(r)
-    assert len(r['id']) == 36
+    r = client.post('/message', json=payload)
 
-#def test_get_message(client):
-    #payload = {'message': 'hi'}
-    #r = client.post('/message', json=payload, content_type='application/json')
-    #message_id = r['id']
-    '''d = client.post('/delete/'+message_id)
-    print(d)'''
+    res = r.get_json()
 
-    #assert 200 == 200
+    assert len(res['id']) == 36
 
-'''def test_get_all_messages(client):
+def test_get_message(client):
     payload = {'message': 'hi'}
-    r = client.post('/message', json=payload, content_type='application/json')
-    message_id = str(r.data.decode(encoding='utf-8'))
-    assert len(message_id) == 36
+    r = client.post('/message', json=payload)
+    new_id = r.get_json()['id']
+
+    g = client.get('/message/'+new_id)
+    assert g.get_json()
+
+def test_get_all_messages(client):
+    payload = {'message': 'hi'}
+    r = client.post('/message', json=payload)
+    message_id = r.get_json()
+    assert len(message_id['id']) == 36
+
     payload = {'message': 'there'}
-    r = client.post('/message', json=payload, content_type='application/json')
-    message_id = str(r.data.decode(encoding='utf-8'))
-    assert len(message_id) == 36
+    r = client.post('/message', json=payload)
+    message_id = r.get_json()
+    assert len(message_id['id']) == 36
+
     r = client.get('/message')
     all_messages = r.get_json()
-    assert all_messages == 2'''
+    assert all_messages == 2
+
+def test_del_message(client):
+    payload = {'message': 'hi'}
+    r = client.post('/message', json=payload)
+    new_id = r.get_json()['id']
+
+    d = client.delete('/message/'+new_id)
+    assert d.status_code == 200
+
+
 
 
