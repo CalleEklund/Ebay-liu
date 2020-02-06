@@ -100,7 +100,8 @@ def get_unread(user_id):
 #funkar
 def mark_read(message_id,user_id):
     new_user = User(user_id)
-    msg = get_msg(message_id)
+    msg = Message.query.filter_by(id=message_id).first()
+    #print(msg.users)
     msg.users.append(new_user)
     db.session.commit()
     return 200
