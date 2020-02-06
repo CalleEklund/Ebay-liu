@@ -41,10 +41,19 @@ def get_message(MessageID):
         return "", 200
 
 
-@app.route('/messages/<MessageID>/read/<UserID>', methods=['POST'])
+@app.route('/message/<MessageID>/read/<UserID>', methods=['POST'])
 def mark_read(MessageID, UserID):
+    if request.method == 'POST':
+        msg_id = MessageID
+        user_id = UserID
+        db2.mark_read(msg_id,user_id)
+        return "",200
 
 
+@app.route('/message/unread/<UserID>', methods=['GET'])
+def get_unread(UserID):
+
+    return jsonify(output)
 
 if __name__ == '__main__':
     app.run(port=5000,debug=True)
