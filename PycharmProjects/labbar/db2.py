@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -19,10 +19,10 @@ users_messages = db.Table('users_messages',
 
 class User(db.Model):
     __tablename__ = 'User'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     def __init__(self, id):
-        self.id = id
+         self.id = id
 
 
 class Message(db.Model):
@@ -69,9 +69,10 @@ def init_db():
 
     # db.create_all()
 
-    #initial_insert()
+    # initial_insert()
 
-#funkar
+
+# funkar
 def store_message(message):
     new_id = str(uuid.uuid4())
     new_message = Message(new_id, message, [])
@@ -83,25 +84,29 @@ def store_message(message):
 # funkar
 def get_msg(message_id):
     msg = Message.query.filter_by(id=message_id).first()
-    msg_dic ={'id':msg.id,'msg':msg.msg,'users':msg.users}
+    msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
     return msg_dic
 
-#funkar, behöver ett Message obj
+
+# funkar, behöver ett Message obj
 def del_msg(message_id):
     db.session.query(Message).filter_by(id=message_id).delete()
     #db.session.delete(message_id)
     db.session.commit()
     return 200
-#funkar, ger en lista
+
+
+# funkar, ger en lista
 def get_unread(user_id):
     all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
     return all_unread
 
-#funkar
-def mark_read(message_id,user_id):
-    new_user = User(user_id)
+
+# funkar
+def mark_read(message_id, userid):
+    new_user = User(userid)
     msg = Message.query.filter_by(id=message_id).first()
-    #print(msg.users)
+    print(new_user, " " , msg)
     msg.users.append(new_user)
     db.session.commit()
     return 200
@@ -111,7 +116,7 @@ def mark_read(message_id,user_id):
 def get_all_msg():
     all_messages = db.session.query(Message).count()
     return all_messages
-#init_db()
+# init_db()
 
 # store_message('test')
 

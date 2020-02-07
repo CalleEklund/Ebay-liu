@@ -59,7 +59,7 @@ def check_ok(req):
         return True
 
 # testa metoderna här:
-# print(save_msg())
+print(save_msg())
 # print(get_msg())
 # print(delete_msg())
 # print(mark_read())

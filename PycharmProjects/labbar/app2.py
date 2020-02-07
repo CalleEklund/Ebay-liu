@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 
-
 app = Flask(__name__)
 import db2
+
 
 @app.route('/')
 def hello_world():
@@ -14,7 +14,7 @@ def message():
     if request.method == 'POST':
         msg = request.json['message']
         new_id = db2.store_message(msg)
-        outdata = {'id' : new_id}
+        outdata = {'id': new_id}
         print(outdata)
         return jsonify(outdata)
 
@@ -29,10 +29,11 @@ def init_db():
     db2.init_db()
     return ""
 
+
 @app.route('/message/<MessageID>', methods=['DELETE', 'GET'])
 def get_message(MessageID):
     if request.method == 'GET':
-        msg_obj = db2.get_msg(MessageID)
+        msg_obj = db2.get_msg(str(MessageID))
         print(msg_obj)
         return jsonify(msg_obj)
     if request.method == 'DELETE':
@@ -44,16 +45,19 @@ def get_message(MessageID):
 @app.route('/message/<MessageID>/read/<UserID>', methods=['POST'])
 def mark_read(MessageID, UserID):
     if request.method == 'POST':
+
         msg_id = MessageID
         user_id = UserID
-        db2.mark_read(msg_id,user_id)
-        return "",200
+        db2.mark_read(str(msg_id), int(user_id))
+        return "", 200
 
 
 @app.route('/message/unread/<UserID>', methods=['GET'])
 def get_unread(UserID):
+    pass
+    # return jsonify(output)
 
-    return jsonify(output)
 
 if __name__ == '__main__':
-    app.run(port=5000,debug=True)
+    app.run(port=5000, debug=True)
+
