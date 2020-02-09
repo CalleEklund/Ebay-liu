@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db = SQLAlchemy(app)
 

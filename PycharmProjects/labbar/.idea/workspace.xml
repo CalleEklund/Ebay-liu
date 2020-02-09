@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63bbe443-3904-4519-bb23-ea2c109c61ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ttt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app2.py" beforeDir="false" afterPath="$PROJECT_DIR$/app2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db2.py" beforeDir="false" afterPath="$PROJECT_DIR$/db2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ttt.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unittest.py" beforeDir="false" afterPath="$PROJECT_DIR$/unittest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,7 +181,9 @@
       <workItem from="1580397151310" duration="3577000" />
       <workItem from="1580473352377" duration="5773000" />
       <workItem from="1580807837174" duration="7073000" />
-      <workItem from="1580914931106" duration="2994000" />
+      <workItem from="1580914931106" duration="3231000" />
+      <workItem from="1581084116446" duration="255000" />
+      <workItem from="1581266066067" duration="1188000" />
     </task>
     <task id="LOCAL−00001" summary="en uppgift kvar d:^)">
       <created>1579709312557</created>
@@ -226,7 +227,13 @@
       <option name="presentableId" value="LOCAL−00007" />
       <updated>1580479476885</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL−00008" summary="två testfall kvar">
+      <created>1580918111543</created>
+      <option name="number" value="LOCAL−00008" />
+      <option name="presentableId" value="LOCAL−00008" />
+      <updated>1580918111543</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +244,8 @@
     <MESSAGE value="han kan funka nu men kolla igenom testfilen en gång till är du snäll" />
     <MESSAGE value="vrf e d knas för mig" />
     <MESSAGE value="försökte att gå efter exemplena men inte fan funkar det" />
-    <option name="LAST_COMMIT_MESSAGE" value="försökte att gå efter exemplena men inte fan funkar det" />
+    <MESSAGE value="två testfall kvar" />
+    <option name="LAST_COMMIT_MESSAGE" value="två testfall kvar" />
   </component>
   <component name="WindowStateProjectService">
     <state x="664" y="405" width="583" height="389" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580285702903">
@@ -253,26 +261,30 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="1188" y="357" width="426" height="483" key="FileChooserDialogImpl/0.28.1920.1144@0.28.1920.1144" timestamp="1579703784493" />
-    <state width="1874" height="261" key="GridCell.Tab.0.bottom" timestamp="1580917853893">
-      <screen x="0" y="28" width="1920" height="1144" />
+    <state width="1394" height="176" key="GridCell.Tab.0.bottom" timestamp="1581266246854">
+      <screen x="0" y="28" width="1440" height="844" />
     </state>
+    <state width="1394" height="176" key="GridCell.Tab.0.bottom/0.28.1440.844@0.28.1440.844" timestamp="1581266246854" />
     <state width="1874" height="261" key="GridCell.Tab.0.bottom/0.28.1920.1144/1920.0.1920.1200@0.28.1920.1144" timestamp="1579861613238" />
-    <state width="1874" height="261" key="GridCell.Tab.0.bottom/0.28.1920.1144@0.28.1920.1144" timestamp="1580917853893" />
-    <state width="1874" height="261" key="GridCell.Tab.0.center" timestamp="1580917853892">
-      <screen x="0" y="28" width="1920" height="1144" />
+    <state width="1874" height="261" key="GridCell.Tab.0.bottom/0.28.1920.1144@0.28.1920.1144" timestamp="1581084148319" />
+    <state width="1394" height="176" key="GridCell.Tab.0.center" timestamp="1581266246854">
+      <screen x="0" y="28" width="1440" height="844" />
     </state>
+    <state width="1394" height="176" key="GridCell.Tab.0.center/0.28.1440.844@0.28.1440.844" timestamp="1581266246854" />
     <state width="1874" height="261" key="GridCell.Tab.0.center/0.28.1920.1144/1920.0.1920.1200@0.28.1920.1144" timestamp="1579861613238" />
-    <state width="1874" height="261" key="GridCell.Tab.0.center/0.28.1920.1144@0.28.1920.1144" timestamp="1580917853892" />
-    <state width="1874" height="261" key="GridCell.Tab.0.left" timestamp="1580917853891">
-      <screen x="0" y="28" width="1920" height="1144" />
+    <state width="1874" height="261" key="GridCell.Tab.0.center/0.28.1920.1144@0.28.1920.1144" timestamp="1581084148319" />
+    <state width="1394" height="176" key="GridCell.Tab.0.left" timestamp="1581266246854">
+      <screen x="0" y="28" width="1440" height="844" />
     </state>
+    <state width="1394" height="176" key="GridCell.Tab.0.left/0.28.1440.844@0.28.1440.844" timestamp="1581266246854" />
     <state width="1874" height="261" key="GridCell.Tab.0.left/0.28.1920.1144/1920.0.1920.1200@0.28.1920.1144" timestamp="1579861613238" />
-    <state width="1874" height="261" key="GridCell.Tab.0.left/0.28.1920.1144@0.28.1920.1144" timestamp="1580917853891" />
-    <state width="1874" height="261" key="GridCell.Tab.0.right" timestamp="1580917853893">
-      <screen x="0" y="28" width="1920" height="1144" />
+    <state width="1874" height="261" key="GridCell.Tab.0.left/0.28.1920.1144@0.28.1920.1144" timestamp="1581084148319" />
+    <state width="1394" height="176" key="GridCell.Tab.0.right" timestamp="1581266246854">
+      <screen x="0" y="28" width="1440" height="844" />
     </state>
+    <state width="1394" height="176" key="GridCell.Tab.0.right/0.28.1440.844@0.28.1440.844" timestamp="1581266246854" />
     <state width="1874" height="261" key="GridCell.Tab.0.right/0.28.1920.1144/1920.0.1920.1200@0.28.1920.1144" timestamp="1579861613238" />
-    <state width="1874" height="261" key="GridCell.Tab.0.right/0.28.1920.1144@0.28.1920.1144" timestamp="1580917853893" />
+    <state width="1874" height="261" key="GridCell.Tab.0.right/0.28.1920.1144@0.28.1920.1144" timestamp="1581084148319" />
     <state width="1874" height="380" key="GridCell.Tab.1.bottom" timestamp="1580479487053">
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
@@ -293,10 +305,10 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="898" y="235" key="SettingsEditor/0.28.1920.1144@0.28.1920.1144" timestamp="1580814911001" />
-    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1580815086791">
+    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1580918116210">
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
-    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2/0.28.1920.1144@0.28.1920.1144" timestamp="1580815086791" />
+    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2/0.28.1920.1144@0.28.1920.1144" timestamp="1580918116210" />
     <state x="848" y="310" key="com.intellij.ide.util.TipDialog" timestamp="1579699154551">
       <screen x="0" y="28" width="1536" height="808" />
     </state>
@@ -310,6 +322,10 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="728" y="520" width="456" height="159" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.28.1920.1144@0.28.1920.1144" timestamp="1580400803957" />
+    <state x="589" y="394" width="733" height="412" key="git4idea.merge.GitPullDialog" timestamp="1581084130010">
+      <screen x="0" y="28" width="1920" height="1144" />
+    </state>
+    <state x="589" y="394" width="733" height="412" key="git4idea.merge.GitPullDialog/0.28.1920.1144@0.28.1920.1144" timestamp="1581084130010" />
     <state x="1103" y="283" width="672" height="678" key="search.everywhere.popup" timestamp="1579681261997">
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
@@ -320,7 +336,7 @@
     <SUITE FILE_PATH="coverage/labbar$labbar.coverage" NAME="labbar Coverage Results" MODIFIED="1579627007358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/labbar$Flask__applab2_py_.coverage" NAME="Flask (applab2.py) Coverage Results" MODIFIED="1580285961288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/labbar$lab1.coverage" NAME="lab1 Coverage Results" MODIFIED="1579861613214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/labbar$Flask__app2_py_.coverage" NAME="Flask (app2.py) Coverage Results" MODIFIED="1580917800773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/labbar$Flask__app2_py_.coverage" NAME="Flask (app2.py) Coverage Results" MODIFIED="1581266243962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/labbar$Flask__db2_py_.coverage" NAME="Flask (db2.py) Coverage Results" MODIFIED="1580400015457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/labbar$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1579861600075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
