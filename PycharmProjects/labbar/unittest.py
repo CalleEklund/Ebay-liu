@@ -75,8 +75,10 @@ def test_mark_read(client):
     r = client.post('/message', json=payload)
     new_id = r.get_json()['id']
     user_id = 1
-    mr = client.post('/message/'+str(new_id)+'/read/'+str(user_id))
+    mr = client.post('/message/'+new_id+'/read/'+str(user_id))
     assert mr.status_code == 200
+
+
 
 def test_get_unread(client):
     payload = {'message': 'hi'}
@@ -88,6 +90,16 @@ def test_get_unread(client):
     message_id = r.get_json()
     assert len(message_id['id']) == 36
 
-
-#     #Lägg in så att ett av medellanderna får en User
+'''Fixa den här, läggs inte usern in?'''
+"""
+def test_read(client):
+    payload = {'message': 'mate'}
+    r = client.post('/message', json=payload)
+    new_id = r.get_json()['id']
+    user_id = 1
+    mr = client.post('/message/' + new_id + '/read/' + str(user_id))
+    read_by = mr.get_json()
+    assert len(read_by['id']) == 1
+"""
+#     #Lägg in så att ett av meddelandena får en User
 #     #sen borde längden på outputen vara 1
