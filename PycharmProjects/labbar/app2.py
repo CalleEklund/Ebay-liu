@@ -13,14 +13,14 @@ def hello_world():
 def message():
     if request.method == 'POST':
         msg = request.json['message']
+        if len(msg) > 140:
+            return "", 400
         new_id = db2.store_message(msg)
         outdata = {'id': new_id}
-        print(outdata)
         return jsonify(outdata)
 
     elif request.method == 'GET':
         all_messages = db2.get_all_msg()
-        print(all_messages)
         return jsonify(all_messages)
 
 
@@ -34,10 +34,14 @@ def init_db():
 def get_message(MessageID):
     if request.method == 'GET':
         msg_obj = db2.get_msg(str(MessageID))
-        print(msg_obj)
+        #print(msg_obj)
+        if msg_obj['id'] is None:
+            return "", 404
         return jsonify(msg_obj)
     if request.method == 'DELETE':
         msg_id = MessageID
+        if not msg_id:
+            return "",404
         db2.del_msg(msg_id)
         return "", 200
 
@@ -45,19 +49,22 @@ def get_message(MessageID):
 @app.route('/message/<MessageID>/read/<UserID>', methods=['POST'])
 def mark_read(MessageID, UserID):
     if request.method == 'POST':
-
         msg_id = MessageID
         user_id = UserID
-        db2.mark_read(str(msg_id), int(user_id))
+        if not msg_id or not user_id:
+            return "",404
+        db2.mark_read(str(msg_id), str(user_id))
         return "", 200
 
 
 @app.route('/message/unread/<UserID>', methods=['GET'])
 def get_unread(UserID):
-    pass
-    # return jsonify(output)
+    user_id = UserID
+    print('output')
+
+    output = db2.get_unread(user_id)
+    return jsonify(output)
 
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
-

@@ -3,6 +3,7 @@ import requests
 
 def save_msg():
     payload = {"message": "hello!"}
+    #print('test')
     r = requests.post("http://127.0.0.1:5000/message", json=payload)
     return r.json()['id']
     # print()
@@ -24,3 +25,11 @@ def mark_read(msg_id, user_id):
     r = requests.post("http://127.0.0.1:5000/message/" + str(msg_id) + '/read/' + str(user_id))
     data_r = r.status_code
     print(data_r)
+
+def get_unread(user_id):
+    r = requests.post("http://127.0.0.1:5000//message/unread/" + str(user_id))
+    print(r)
+
+uid = save_msg()
+uid2 = save_msg()
+mark_read(uid,1)

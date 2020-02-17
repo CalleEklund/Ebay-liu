@@ -3,10 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 import os
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lab2.db'
+
+
+if 'NAMESPACE' in os.environ and os.environ['NAMESPACE'] == 'heroku':
+    db_uri = os.environ['DATABASE_URL']
+    debug_flag = False
+else: # when running locally: use sqlite
+    db_path = os.path.join(os.path.dirname(__file__), 'lab2.db')
+    db_uri = 'sqlite:///{}'.format(db_path)
+    debug_flag = True
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db = SQLAlchemy(app)
+
+
 
 users_messages = db.Table('users_messages',
                           db.Column('user_id', db.Integer, db.ForeignKey('User.id'), primary_key=True),
@@ -34,6 +46,9 @@ class Message(db.Model):
         self.users = users
 
 
+db.drop_all()
+db.create_all()
+
 def initial_insert():
     messages = {'220f7259-beb1-4012-aa59-6e787a0cd581': {'id': '220f7259-beb1-4012-aa59-6e787a0cd581', 'text': 'demo0',
                                                          'readBy': []},
@@ -55,13 +70,7 @@ def initial_insert():
     db.session.commit()
 
 
-if 'NAMESPACE' in os.environ and os.environ['NAMESPACE'] == 'heroku':
-    db_uri = os.environ['DATABASE_URL']
-    debug_flag = False
-else: # when running locally: use sqlite
-    db_path = os.path.join(os.path.dirname(__file__), 'app.db')
-    db_uri = 'sqlite:///{}'.format(db_path)
-    debug_flag = True
+
 
 def init_db():
     db.drop_all()
@@ -72,9 +81,6 @@ def init_db():
 
         db.session.execute(table.delete())
 
-    # db.create_all()
-
-    # initial_insert()
 
 
 # funkar
@@ -96,20 +102,23 @@ def get_msg(message_id):
 # funkar, behöver ett Message obj
 def del_msg(message_id):
     db.session.query(Message).filter_by(id=message_id).delete()
-    #db.session.delete(message_id)
     db.session.commit()
     return 200
 
 
 # funkar, ger en lista
 def get_unread(user_id):
-    all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
-    return all_unread
+    # all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
+    for row in db.session.query(Message).join(users_messages).filter(message_readBy=user_id).all():
+        print(row)
+
+    #print(all_unread)
+    # return all_unread
 
 
 # funkar
 def mark_read(message_id, userid):
-    new_user = User(userid)
+    new_user = User(int(userid))
     msg = Message.query.filter_by(id=message_id).first()
     print(new_user, " " , msg)
     msg.users.append(new_user)
@@ -120,7 +129,7 @@ def mark_read(message_id, userid):
 # funkar
 def get_all_msg():
     all_messages = db.session.query(Message).count()
-    return all_messages
+    return list(all_messages)
 # init_db()
 
 # store_message('test')
