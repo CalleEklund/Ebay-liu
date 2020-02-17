@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="63bbe443-3904-4519-bb23-ea2c109c61ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db2.py" beforeDir="false" afterPath="$PROJECT_DIR$/db2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +185,7 @@
       <workItem from="1581343533555" duration="797000" />
       <workItem from="1581344980287" duration="3184000" />
       <workItem from="1581491039875" duration="2115000" />
-      <workItem from="1581684169269" duration="249000" />
+      <workItem from="1581684169269" duration="1478000" />
     </task>
     <task id="LOCAL−00001" summary="en uppgift kvar d:^)">
       <created>1579709312557</created>
@@ -337,10 +336,10 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state width="1874" height="380" key="GridCell.Tab.1.right/0.28.1920.1144@0.28.1920.1144" timestamp="1580479487052" />
-    <state x="898" y="235" key="SettingsEditor" timestamp="1580814911001">
+    <state x="333" y="216" width="1587" height="731" key="SettingsEditor" timestamp="1581689414924">
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
-    <state x="898" y="235" key="SettingsEditor/0.28.1920.1144@0.28.1920.1144" timestamp="1580814911001" />
+    <state x="333" y="216" width="1587" height="731" key="SettingsEditor/0.28.1920.1144@0.28.1920.1144" timestamp="1581689414924" />
     <state x="630" y="212" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1581491646522">
       <screen x="0" y="28" width="1440" height="844" />
     </state>
