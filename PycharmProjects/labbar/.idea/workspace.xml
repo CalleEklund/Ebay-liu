@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63bbe443-3904-4519-bb23-ea2c109c61ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app2.py" beforeDir="false" afterPath="$PROJECT_DIR$/app2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db2.py" beforeDir="false" afterPath="$PROJECT_DIR$/db2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab2.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ttt.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttt.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +202,7 @@
       <workItem from="1581344980287" duration="3184000" />
       <workItem from="1581491039875" duration="2115000" />
       <workItem from="1581684169269" duration="1478000" />
-      <workItem from="1581948382945" duration="7848000" />
+      <workItem from="1581948382945" duration="7999000" />
     </task>
     <task id="LOCAL−00001" summary="en uppgift kvar d:^)">
       <created>1579709312557</created>
@@ -279,7 +276,13 @@
       <option name="presentableId" value="LOCAL−00012" />
       <updated>1581491645289</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL−00013" summary="fixa unread">
+      <created>1581956239001</created>
+      <option name="number" value="LOCAL−00013" />
+      <option name="presentableId" value="LOCAL−00013" />
+      <updated>1581956239001</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,7 +298,8 @@
     <MESSAGE value="den sista funkar inte, verkar som att den inte hittar 'users'" />
     <MESSAGE value="vi behlvde inte den sista, testfilen är klar nu" />
     <MESSAGE value="Första två på frågorna, den sista ska göras efter/under labben. SPARA LÄNKAR" />
-    <option name="LAST_COMMIT_MESSAGE" value="Första två på frågorna, den sista ska göras efter/under labben. SPARA LÄNKAR" />
+    <MESSAGE value="fixa unread" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixa unread" />
   </component>
   <component name="WindowStateProjectService">
     <state x="315" y="112" width="802" height="676" key="#Web_Browsers" timestamp="1581345049931">
@@ -306,12 +310,12 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="664" y="405" width="583" height="389" key="#com.intellij.fileTypes.FileTypeChooser/0.28.1920.1144@0.28.1920.1144" timestamp="1580285702903" />
-    <state x="410" y="65" width="1022" height="806" key="CommitChangelistDialog2" timestamp="1581491644999">
-      <screen x="0" y="28" width="1440" height="844" />
+    <state x="754" y="138" width="1022" height="806" key="CommitChangelistDialog2" timestamp="1581956238332">
+      <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="410" y="65" width="1022" height="806" key="CommitChangelistDialog2/0.28.1440.844@0.28.1440.844" timestamp="1581491644999" />
     <state x="754" y="138" key="CommitChangelistDialog2/0.28.1920.1144/1920.0.1920.1200@0.28.1920.1144" timestamp="1579861724941" />
-    <state x="754" y="138" width="1022" height="806" key="CommitChangelistDialog2/0.28.1920.1144@0.28.1920.1144" timestamp="1580918110719" />
+    <state x="754" y="138" width="1022" height="806" key="CommitChangelistDialog2/0.28.1920.1144@0.28.1920.1144" timestamp="1581956238332" />
     <state x="1188" y="357" width="426" height="483" key="FileChooserDialogImpl" timestamp="1579703784493">
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
@@ -360,11 +364,11 @@
       <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="333" y="216" width="1587" height="731" key="SettingsEditor/0.28.1920.1144@0.28.1920.1144" timestamp="1581949136287" />
-    <state x="630" y="212" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1581491646522">
-      <screen x="0" y="28" width="1440" height="844" />
+    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1581956247438">
+      <screen x="0" y="28" width="1920" height="1144" />
     </state>
     <state x="630" y="212" width="802" height="527" key="Vcs.Push.Dialog.v2/0.28.1440.844@0.28.1440.844" timestamp="1581491646522" />
-    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2/0.28.1920.1144@0.28.1920.1144" timestamp="1580918116210" />
+    <state x="864" y="278" width="802" height="527" key="Vcs.Push.Dialog.v2/0.28.1920.1144@0.28.1920.1144" timestamp="1581956247438" />
     <state x="848" y="310" key="com.intellij.ide.util.TipDialog" timestamp="1579699154551">
       <screen x="0" y="28" width="1536" height="808" />
     </state>

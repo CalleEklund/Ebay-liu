@@ -108,10 +108,14 @@ def del_msg(message_id):
 
 # funkar, ger en lista
 def get_unread(user_id):
-    # all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
-    for row in db.session.query(Message).join(users_messages).filter(message_readBy=user_id).all():
-        print(row)
+    out = []
+    all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
+    for row in all_unread:
+        read_msg = db.session.query(Message).outerjoin(users_messages).filter(message_readBy=user_id).all()
+        if row not in read_msg:
+            out.append(row)
 
+    print(out)
     #print(all_unread)
     # return all_unread
 
