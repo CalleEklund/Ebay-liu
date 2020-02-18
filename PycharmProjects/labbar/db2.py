@@ -2,7 +2,7 @@ from app2 import app
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 import os
-
+import json
 
 
 if 'NAMESPACE' in os.environ and os.environ['NAMESPACE'] == 'heroku':
@@ -17,7 +17,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db = SQLAlchemy(app)
-
 
 
 users_messages = db.Table('users_messages',
@@ -109,23 +108,28 @@ def del_msg(message_id):
 # funkar, ger en lista
 def get_unread(user_id):
     out = []
-    all_unread = Message.query.filter(Message.users.any(id=user_id)).all()
-    for row in all_unread:
-        read_msg = db.session.query(Message).outerjoin(users_messages).filter(message_readBy=user_id).all()
-        if row not in read_msg:
-            out.append(row)
+    all_read = Message.query.filter(Message.users.any(id=user_id)).all()
+    all_msg = Message.query.all()
+    for msg in all_msg:
+        if msg not in all_read:
+            msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
+            out += [msg_dic]
+            # out += [msg]
 
-    print(out)
-    #print(all_unread)
-    # return all_unread
+    return json.dumps(out)
 
 
 # funkar
 def mark_read(message_id, userid):
-    new_user = User(int(userid))
     msg = Message.query.filter_by(id=message_id).first()
-    print(new_user, " " , msg)
-    msg.users.append(new_user)
+    if not User.query.filter_by(id=userid).first():
+        new_user = User(int(userid))
+        msg.users.append(new_user)
+    else:
+        current_user = User.query.filter_by(id=userid).first()
+        msg.users.append(current_user)
+
+    #print(new_user, " " , msg)
     db.session.commit()
     return 200
 
@@ -133,9 +137,13 @@ def mark_read(message_id, userid):
 # funkar
 def get_all_msg():
     all_messages = db.session.query(Message).count()
-    return list(all_messages)
+    return all_messages
 # init_db()
 
-# store_message('test')
+# uid1 = store_message('test')
+# uid2 = store_message('felix')
+# uid3 = store_message('calle')
+# mark_read(uid1, 1)
+# get_unread(1)
 
 # print(get_msg('220f7259-beb1-4012-aa59-6e787a0cd581'))

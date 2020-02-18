@@ -27,9 +27,10 @@ def mark_read(msg_id, user_id):
     print(data_r)
 
 def get_unread(user_id):
-    r = requests.post("http://127.0.0.1:5000//message/unread/" + str(user_id))
-    print(r)
+    r = requests.post("http://127.0.0.1:5000/message/unread/" + str(user_id))
+    print(r.json())
 
 uid = save_msg()
 uid2 = save_msg()
 mark_read(uid,1)
+get_unread(1)

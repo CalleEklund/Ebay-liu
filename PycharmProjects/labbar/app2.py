@@ -57,13 +57,15 @@ def mark_read(MessageID, UserID):
         return "", 200
 
 
-@app.route('/message/unread/<UserID>', methods=['GET'])
+@app.route('/message/unread/<UserID>', methods=['POST'])
 def get_unread(UserID):
-    user_id = UserID
-    print('output')
+    if request.method == 'POST':
+        print('test')
+        user_id = UserID
+        print('output')
 
-    output = db2.get_unread(user_id)
-    return jsonify(output)
+        output = db2.get_unread(user_id)
+        return jsonify(output)
 
 
 if __name__ == '__main__':
