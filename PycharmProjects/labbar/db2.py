@@ -45,8 +45,8 @@ class Message(db.Model):
         self.users = users
 
 
-db.drop_all()
-db.create_all()
+#db.drop_all()
+#db.create_all()
 
 def initial_insert():
     messages = {'220f7259-beb1-4012-aa59-6e787a0cd581': {'id': '220f7259-beb1-4012-aa59-6e787a0cd581', 'text': 'demo0',
