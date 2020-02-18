@@ -27,7 +27,6 @@ def get_msg(uid):
         return check_ok(r)
 
 def delete_msg(uid):
-    print(uid)
     d = requests.delete("https://liubiljett.herokuapp.com/message/"+str(uid))
     if check_ok(d):
         data_d = d.status_code
@@ -62,12 +61,12 @@ def check_ok(req):
 
 # testa metoderna här:
 uid = save_msg()
-uid2 = save_msg()
-print(uid['id'])
-print(get_msg(uid['id']))
-#print(delete_msg(uid['id']))
-print(mark_read(uid['id'],9))
+#uid2 = save_msg()
+#print(uid['id'])
+# print(get_msg(uid['id']))
+# print(delete_msg(uid['id']))
+# print(mark_read(uid['id'],10))
 #print(get_all_msg())
-print(get_unread(9))
+# print(get_unread(10))
 
 #maila länk och lägg till som reporter
