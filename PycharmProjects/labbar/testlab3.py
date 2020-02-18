@@ -67,6 +67,6 @@ uid2 = save_msg()
 #print(delete_msg(uid['id']))
 print(mark_read(uid['id'],2))
 #print(get_all_msg())
-print(get_unread(2))
+print(get_unread(10))
 
 #maila länk och lägg till som reporter

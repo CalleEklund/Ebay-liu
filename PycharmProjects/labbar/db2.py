@@ -137,10 +137,10 @@ def get_all_msg():
     return all_messages
 # init_db()
 
-# uid1 = store_message('test')
-# uid2 = store_message('felix')
-# uid3 = store_message('calle')
-# mark_read(uid1, 1)
-# get_unread(1)
+uid1 = store_message('test')
+uid2 = store_message('felix')
+uid3 = store_message('calle')
+mark_read(uid1, 1)
+get_unread(1)
 
 # print(get_msg('220f7259-beb1-4012-aa59-6e787a0cd581'))
