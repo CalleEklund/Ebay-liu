@@ -80,15 +80,3 @@ def test_mark_read(client):
 
 
 
-# def test_get_unread(client):
-#     payload = {'message': 'hi'}
-#     r = client.post('/message', json=payload)
-#     message_id = r.get_json()
-#     assert len(message_id['id']) == 36
-
-#     payload = {'message': 'there'}
-#     r = client.post('/message', json=payload)
-#     message_id = r.get_json()
-#     assert len(message_id['id']) == 36
-
-

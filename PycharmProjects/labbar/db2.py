@@ -116,7 +116,7 @@ def get_unread(user_id):
             out += [msg_dic]
             # out += [msg]
 
-    return json.dumps(out)
+    return out
 
 
 # funkar

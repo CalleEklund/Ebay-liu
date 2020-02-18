@@ -31,6 +31,6 @@ def get_unread(user_id):
     print(r.json())
 
 uid = save_msg()
-uid2 = save_msg()
-mark_read(uid,1)
-get_unread(1)
+# uid2 = save_msg()
+# mark_read(uid,1)
+# get_unread(1)

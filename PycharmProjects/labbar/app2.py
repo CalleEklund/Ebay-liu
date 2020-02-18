@@ -36,6 +36,7 @@ def get_message(MessageID):
         msg_obj = db2.get_msg(str(MessageID))
         #print(msg_obj)
         if msg_obj['id'] is None:
+            print('test')
             return "", 404
         return jsonify(msg_obj)
     if request.method == 'DELETE':
@@ -57,13 +58,10 @@ def mark_read(MessageID, UserID):
         return "", 200
 
 
-@app.route('/message/unread/<UserID>', methods=['POST'])
+@app.route('/message/unread/<UserID>', methods=['GET'])
 def get_unread(UserID):
-    if request.method == 'POST':
-        print('test')
+    if request.method == 'GET':
         user_id = UserID
-        print('output')
-
         output = db2.get_unread(user_id)
         return jsonify(output)
 
