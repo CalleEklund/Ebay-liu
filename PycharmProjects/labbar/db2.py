@@ -45,8 +45,7 @@ class Message(db.Model):
         self.users = users
 
 
-#db.drop_all()
-#db.create_all()
+
 
 def initial_insert():
     messages = {'220f7259-beb1-4012-aa59-6e787a0cd581': {'id': '220f7259-beb1-4012-aa59-6e787a0cd581', 'text': 'demo0',
@@ -114,9 +113,7 @@ def get_unread(user_id):
         if msg not in all_read:
             msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
             out += [msg_dic]
-            # out += [msg]
-
-    return out
+    return 200
 
 
 # funkar
