@@ -1,8 +1,7 @@
-from app2 import app
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 import os
-import json
+from app2 import app
 
 
 if 'NAMESPACE' in os.environ and os.environ['NAMESPACE'] == 'heroku':
@@ -113,7 +112,7 @@ def get_unread(user_id):
         if msg not in all_read:
             msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
             out += [msg_dic]
-    return 200
+    return out
 
 
 # funkar
@@ -139,7 +138,7 @@ def get_all_msg():
 
 uid1 = store_message('test')
 uid2 = store_message('felix')
-uid3 = store_message('calle')
+# uid3 = store_message('calle')
 mark_read(uid1, 1)
 get_unread(1)
 
