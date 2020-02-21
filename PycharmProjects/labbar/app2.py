@@ -64,7 +64,7 @@ def get_unread(UserID):
         user_id = UserID
         output = db2.get_unread(user_id)
         print(output)
-        return jsonify(output)
+        return output
 
 
 
