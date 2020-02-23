@@ -3,6 +3,7 @@ import requests
 
 def save_msg():
     r = requests.post("http://127.0.0.1:5000/messages", json={"msg" : "hello!"})
+
     if check_ok(r):
         data = r.json()
         return data

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -6,7 +6,7 @@ from flask_bcrypt import Bcrypt
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
-    get_jwt_identity,get_raw_jwt
+    get_jwt_identity, get_raw_jwt
 )
 
 app = Flask(__name__)
@@ -15,8 +15,9 @@ if 'DATABASE_URL' in os.environ:
     db_uri = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_BLACKLIST_ENABLED']= True
-app.config['JWT_BLACKLIST_TOKEN_CHECKS']= ["access"]
+
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
 app.config['JWT_SECRET_KEY'] = 'protect with your life'
 
 db = SQLAlchemy(app)
@@ -24,6 +25,7 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 blacklist = set()
+
 
 class User(db.Model):
     __tablename__ = "User"
@@ -42,10 +44,18 @@ class User(db.Model):
                 }
 
 
+# class Blacklist(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     jti = db.Column(db.String(36), nullable=False)
+#logout_user
+#     def __init__(self, jti):
+#         self.jti = jti
+
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
+
     #return db.session.in_blacklist(jti)
 
 
@@ -54,29 +64,32 @@ def start_page():
     return 'Start Page'
 
 
-@app.route('/user/register/<username>/<password>')
+@app.route('/user/register/<username>/<password>',methods=['POST'])
 def register(username, password):
     print(username, password)
-    user = User.query.filter_by(user_name=username).first()
+    if request.method == 'POST':
+        user = User.query.filter_by(user_name=username).first()
 
-    if user == None:
-        user = User(username, password)
-        db.session.add(user)
-        db.session.commit()
-        return "{'message':registered}", 200
-    return "{'message':'username already taken'}", 409
+        if user == None:
+            user = User(username, password)
+            db.session.add(user)
+            db.session.commit()
+            return "{'message':registered}", 200
+        return "{'message':'username already taken'}", 409
 
 
-@app.route('/user/login/<username>/<password>')
+@app.route('/user/login/<username>/<password>',methods=['POST'])
 def login(username, password):
     user = User.query.filter_by(user_name=username).first()
+    # print('test')
 
-    if user == None:
-        return "{'Error':'No such user'}", 400
-    if bcrypt.check_password_hash(user.password, password):
-        token = create_access_token(identity=user.user_name)
-        return jsonify(access_token=token), 200
-    return "{'Error':'Wrong password'}", 400
+    if request.method == 'POST':
+        if user == None:
+            return "{'Error':'No such user'}", 400
+        if bcrypt.check_password_hash(user.password, password):
+            token = create_access_token(identity=user.user_name)
+            return jsonify(access_token=token), 200
+        return "{'Error':'Wrong password'}", 400
 
 
 @app.route('/user/all')
@@ -86,20 +99,26 @@ def all_users():
     return jsonify(result)
 
 
-@app.route('/user/logout')
+@app.route('/user/logout',methods=['POST'])
 @jwt_required
 def logout():
-    jti = get_raw_jwt()['jti']
-    blacklist.add(jti)
+    if request.method == 'POST':
+        jti = get_raw_jwt()['jti']
+        blacklist.add(jti)
 
-    # jti = get_raw_jwt()['jti']
-    # db.session.revoke_token(jti)
-    return 'logged out',200
+        # jti = get_raw_jwt()['jti']
+        # db.session.revoke_token(jti)
+        return jsonify({'msg': 'logged out'}), 200
 
-@app.route('/protected')
+
+@app.route('/protected',methods=['POST'])
 @jwt_required
 def protected():
-    return jsonify({'hello':'world'})
+    if request.method == 'POST':
+        return jsonify({'hello': 'world'})
+
+
 if __name__ == '__main__':
+    app.run(port=5000, debug=False)
     db.drop_all()
     db.create_all()
