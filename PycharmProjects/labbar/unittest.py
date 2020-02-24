@@ -1,11 +1,7 @@
 import os
 import tempfile
 import pytest
-from app2 import app, db2
-import json
-
-
-# import db2
+from serverlab2 import app, db2
 
 
 @pytest.fixture
