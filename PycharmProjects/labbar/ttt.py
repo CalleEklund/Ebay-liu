@@ -22,7 +22,7 @@ def delete_msg(msg_id):
 
 
 def mark_read(msg_id, user_id):
-    r = requests.post("http://127.0.0.1:5000/message/" + str(msg_id) + '/read/' + str(user_id))
+    r = requests.get("http://127.0.0.1:5000/message/" + str(msg_id) + '/read/' + str(user_id))
     data_r = r.status_code
     print(data_r)
 

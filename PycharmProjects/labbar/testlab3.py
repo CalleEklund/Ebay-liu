@@ -35,7 +35,7 @@ def delete_msg(uid):
         return check_ok(d)
 
 def mark_read(msgid,userid):
-    g = requests.post("https://liubiljett.herokuapp.com/message/"+str(msgid)+"/read/"+str(userid))
+    g = requests.get("https://liubiljett.herokuapp.com/message/"+str(msgid)+"/read/"+str(userid))
     if check_ok(g):
         data_d = g.status_code
         return data_d

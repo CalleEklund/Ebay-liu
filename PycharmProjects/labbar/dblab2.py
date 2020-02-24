@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 import os
+
+from lab4.dblab4 import bcrypt
 from serverlab2 import app
 
 
@@ -25,11 +27,20 @@ users_messages = db.Table('users_messages',
 
 
 class User(db.Model):
-    __tablename__ = 'User'
+    __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(25), unique=True, nullable=False)
+    password = db.Column(db.String(200), unique=False, nullable=False)
 
-    def __init__(self, id):
-         self.id = id
+    def __init__(self, user, password):
+        self.user_name = user
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def to_dict(self):
+        return {'id': self.id,
+                'username': self.user_name,
+                'password': self.password,
+                }
 
 
 class Message(db.Model):
@@ -116,16 +127,16 @@ def get_unread(user_id):
 
 
 # funkar
-def mark_read(message_id, userid):
+def mark_read(message_id, username, password):
     msg = Message.query.filter_by(id=message_id).first()
-    if not User.query.filter_by(id=userid).first():
-        new_user = User(int(userid))
+    if not User.query.filter_by(id=username).first():
+        new_user = User(username, password)
         msg.users.append(new_user)
     else:
-        current_user = User.query.filter_by(id=userid).first()
+        current_user = User.query.filter_by(id=username).first()
         msg.users.append(current_user)
 
-    #print(new_user, " " , msg)
+    # print(new_user, " " , msg)
     db.session.commit()
     return 200
 

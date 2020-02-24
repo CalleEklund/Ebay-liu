@@ -26,6 +26,11 @@ jwt = JWTManager(app)
 
 blacklist = set()
 
+users_messages = db.Table('users_messages',
+                          db.Column('user_id', db.Integer, db.ForeignKey('User.id'), primary_key=True),
+                          db.Column('message_readBy', db.Integer, db.ForeignKey('Message.id'), primary_key=True)
+                          )
+
 
 class User(db.Model):
     __tablename__ = "User"
@@ -44,10 +49,22 @@ class User(db.Model):
                 }
 
 
+class Message(db.Model):
+    __tablename__ = 'Message'
+    id = db.Column(db.String(36), primary_key=True)
+    msg = db.Column(db.String(140), nullable=False)
+    users = db.relationship('User', secondary=users_messages, backref='messages')
+
+    def __init__(self, id, msg, users):
+        self.id = id
+        self.msg = msg
+        self.users = users
+
+
 # class Blacklist(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     jti = db.Column(db.String(36), nullable=False)
-#logout_user
+# logout_user
 #     def __init__(self, jti):
 #         self.jti = jti
 
@@ -56,7 +73,7 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-    #return db.session.in_blacklist(jti)
+    # return db.session.in_blacklist(jti)
 
 
 @app.route('/')
@@ -64,13 +81,13 @@ def start_page():
     return 'Start Page'
 
 
-@app.route('/user/register/<username>/<password>',methods=['POST'])
+@app.route('/user/register/<username>/<password>', methods=['POST'])
 def register(username, password):
     print(username, password)
     if request.method == 'POST':
         user = User.query.filter_by(user_name=username).first()
 
-        if user == None:
+        if user is None:
             user = User(username, password)
             db.session.add(user)
             db.session.commit()
@@ -78,13 +95,13 @@ def register(username, password):
         return "{'message':'username already taken'}", 409
 
 
-@app.route('/user/login/<username>/<password>',methods=['POST'])
+@app.route('/user/login/<username>/<password>', methods=['POST'])
 def login(username, password):
     user = User.query.filter_by(user_name=username).first()
     # print('test')
 
     if request.method == 'POST':
-        if user == None:
+        if user is None:
             return "{'Error':'No such user'}", 400
         if bcrypt.check_password_hash(user.password, password):
             token = create_access_token(identity=user.user_name)
@@ -99,7 +116,7 @@ def all_users():
     return jsonify(result)
 
 
-@app.route('/user/logout',methods=['POST'])
+@app.route('/user/logout', methods=['POST'])
 @jwt_required
 def logout():
     if request.method == 'POST':
@@ -111,11 +128,76 @@ def logout():
         return jsonify({'msg': 'logged out'}), 200
 
 
-@app.route('/protected',methods=['POST'])
+@app.route('/message', methods=['POST'])
+@jwt_required
+def message():
+    print('hej')
+    if request.method == 'POST':
+        msg = request.json['message']
+        if len(msg) > 140:
+            return "", 400
+        new_id = db.session.store_message(msg)
+        outdata = {'id': new_id}
+        return jsonify(outdata)
+
+
+@app.route('/protected', methods=['POST'])
 @jwt_required
 def protected():
     if request.method == 'POST':
         return jsonify({'hello': 'world'})
+
+
+@app.route('/message', methods=['GET'])
+def get_all_messages():
+    if request.method == 'GET':
+        all_messages = db.session.get_all_msg()
+        return jsonify(all_messages)
+
+
+@app.route('/init_db')
+def init_db():
+    db.session.init_db()
+    return ""
+
+
+@app.route('/message/<MessageID>', methods=['GET'])
+def get_message(MessageID):
+    msg_obj = db.session.get_msg(str(MessageID))
+    # print(msg_obj)
+    if msg_obj['id'] is None:
+        print('test')
+        return "", 404
+    return jsonify(msg_obj)
+
+
+@app.route('/message/<MessageID>', methods=['DELETE'])
+@jwt_required
+def delete_message(MessageID):
+    msg_id = MessageID
+    if not msg_id:
+        return "", 404
+    db.session.del_msg(msg_id)
+    return "", 200
+
+
+@app.route('/message/<MessageID>/read/<username>', methods=['GET'])
+@jwt_required
+def mark_read(MessageID, username, password):
+    msg_id = MessageID
+    if not msg_id or not username:
+        return "", 404
+    db.session.mark_read(str(msg_id), str(username), str(password))
+    return "", 200
+
+
+@app.route('/message/unread/<UserID>', methods=['GET'])
+@jwt_required
+def get_unread(UserID):
+    user_id = UserID
+    output = db.session.get_unread(user_id)
+    print(output)
+    return output
 
 
 if __name__ == '__main__':
