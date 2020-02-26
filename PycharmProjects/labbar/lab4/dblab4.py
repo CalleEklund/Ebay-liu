@@ -50,16 +50,22 @@ class User(db.Model):
                 }
 
 
-class Message(db.Model):
+class MessageM(db.Model):
     __tablename__ = 'Message'
     id = db.Column(db.String(36), primary_key=True)
     msg = db.Column(db.String(140), nullable=False)
     users = db.relationship('User', secondary=users_messages, backref='messages')
 
-    def __init__(self, id, msg, users):
-        self.id = id
-        self.msg = msg
-        self.users = users
+    def __init__(self, p1, p2, p3):
+        self.id = p1
+        self.msg = p2
+        self.users = p3
+
+    def to_dict(self):
+        return {'id': self.id,
+                'msg': self.msg,
+                'users': self.users,
+                }
 
 
 # class Blacklist(db.Model):
@@ -84,7 +90,6 @@ def start_page():
 
 @app.route('/user/register/<username>/<password>', methods=['POST'])
 def register(username, password):
-    print(username, password)
     if request.method == 'POST':
         user = User.query.filter_by(user_name=username).first()
 
@@ -99,14 +104,11 @@ def register(username, password):
 @app.route('/user/login/<username>/<password>', methods=['POST'])
 def login(username, password):
     user = User.query.filter_by(user_name=username).first()
-    # print('test')
-
     if request.method == 'POST':
         if user is None:
             return "{'Error':'No such user'}", 400
         if bcrypt.check_password_hash(user.password, password):
             token = create_access_token(identity=user.user_name)
-            # return jsonify({"access_token":token}),200
             return jsonify(access_token=token), 200
         return "{'Error':'Wrong password'}", 400
 
@@ -130,10 +132,16 @@ def logout():
         return jsonify({'msg': 'logged out'}), 200
 
 
+@app.route('/protected', methods=['POST'])
+@jwt_required
+def protected():
+    if request.method == 'POST':
+        return jsonify({'hello': 'world'})
+
+
 @app.route('/message', methods=['POST'])
 @jwt_required
-def message():
-    print('hej')
+def save_message():
     if request.method == 'POST':
         msg = request.json['message']
         if len(msg) > 140:
@@ -143,33 +151,21 @@ def message():
         return jsonify(outdata)
 
 
-@app.route('/protected', methods=['POST'])
-@jwt_required
-def protected():
-    if request.method == 'POST':
-        return jsonify({'hello': 'world'})                              
-
 @app.route('/message', methods=['GET'])
 def get_all_messages():
     if request.method == 'GET':
-        all_messages = db.session.get_all_msg()
+        all_messages = get_all_msg_count()
         return jsonify(all_messages)
 
 
-# @app.route('/init_db')
-# def init_db():
-#     db.session.init_db()
-#     return ""
-
-
 @app.route('/message/<MessageID>', methods=['GET'])
-def get_message(MessageID):
-    msg_obj = db.session.get_msg(str(MessageID))
-    # print(msg_obj)
-    if msg_obj['id'] is None:
-        print('test')
-        return "", 404
-    return jsonify(msg_obj)
+def Message(MessageID):
+    if request.method == 'GET':
+        msg_obj = get_msg(str(MessageID))
+        print(msg_obj)
+        if msg_obj['id'] is None:
+            return "", 404
+        return jsonify(msg_obj)
 
 
 @app.route('/message/<MessageID>', methods=['DELETE'])
@@ -200,21 +196,10 @@ def get_unread(UserID):
     print(output)
     return output
 
-
-def init_db():
-    db.drop_all()
-    db.create_all()
-    meta = db.metadata
-    for table in reversed(meta.sorted_tables):
-        print(table)
-        db.session.execute(table.delete())
-
-
-
 # funkar
 def store_message(message):
     new_id = str(uuid.uuid4())
-    new_message = Message(new_id, message, [])
+    new_message = MessageM(new_id, message, [])
     db.session.add(new_message)
     db.session.commit()
     return new_id
@@ -222,9 +207,10 @@ def store_message(message):
 
 # funkar
 def get_msg(message_id):
-    msg = Message.query.filter_by(id=message_id).first()
-    msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
-    return msg_dic
+    msg = MessageM.query.filter_by(id=message_id).first()
+    # msg = Message.query.filter_by(id=message_id).all()
+
+    return msg.to_dict()
 
 
 # funkar, behöver ett Message obj
@@ -262,9 +248,10 @@ def mark_read(message_id, username, password):
 
 
 # funkar
-def get_all_msg():
+def get_all_msg_count():
     all_messages = db.session.query(Message).count()
     return all_messages
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
@@ -272,7 +259,6 @@ if __name__ == '__main__':
     db.create_all()
     # uid1 = store_message('test')
     # uid2 = store_message('felix')
-
 
 # uid3 = store_message('calle')
 # mark_read(uid1, 1)
