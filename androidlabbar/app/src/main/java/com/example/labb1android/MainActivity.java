@@ -22,16 +22,19 @@ public class MainActivity extends AppCompatActivity {
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = (EditText) findViewById(R.id.input);
-                TextView outputText = (TextView) findViewById(R.id.output);
-                String inputStr = (String) input.getText().toString();
-                //testa med att göra en egen append grej, spara undan sen sätt till de nya värdet
-                String oldValue = (String) outputText.getText().toString();
-                String newValue = (String) oldValue + "\nNamn: " + inputStr;
-                //String newValue = Html.fromHtml(oldValue + "&lt;br&gt; Namn: " + inputStr).toString();
-
-                outputText.setText(newValue);
+                addName();
             }
         });
+    }
+
+    private void addName() {
+        EditText input = (EditText) findViewById(R.id.input);
+        TextView outputText = (TextView) findViewById(R.id.output);
+        String inputStr = (String) input.getText().toString();
+
+        String oldValue = (String) outputText.getText().toString();
+        String newValue = (String) oldValue + "\nNamn: " + inputStr;
+
+        outputText.setText(newValue);
     }
 }
