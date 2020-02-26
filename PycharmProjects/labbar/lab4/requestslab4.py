@@ -9,7 +9,8 @@ def register_user():
 def login_user():
     r = requests.post("http://127.0.0.1:5000/user/login/calle/losen")
     access_token = r.json()
-    return access_token['access_token']
+    return access_token["access_token"]
+    # return access_token
 
 def logout_user(token):
     r = requests.post("http://127.0.0.1:5000/user/logout",headers={'Authorization': 'Bearer ' + token})
@@ -21,6 +22,7 @@ def protected_page(token):
 
 def save_msg(token):
     payload = {"message": "hello!"}
+    # print('token',token)
     r = requests.post("http://127.0.0.1:5000/message", json=payload, headers={'Authorization': 'Bearer ' + token})
     print(r.text)
 
@@ -47,12 +49,12 @@ def get_unread(user_id):
     print(r.json())
 
 
-#register_user()
+register_user()
 token = login_user()
-
+# print(token)
 protected_page(token)
 uid = save_msg(token)
-uid2 = save_msg(token)
+# uid2 = save_msg(token)
 # mark_read(uid, "felix", "test")
 # logout_user(token)
 # protected_page(token)

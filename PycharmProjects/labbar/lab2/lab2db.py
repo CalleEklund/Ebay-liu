@@ -91,7 +91,7 @@ def mark_read(message_id, user_id):
 def get_unread(user_id):
     # .filter(user_id == users_messages).all()
     out = []
-    result = db.session.query(User).join(users_messages).filter(users_messages != user_id)
+    result = db.session.query(User).outerjoin(users_messages).filter(User.id != user_id)
     # print(result)
     for elem in result:
         # print(elem)
@@ -100,15 +100,15 @@ def get_unread(user_id):
     return {'res': x.to_dict() for x in out}
 
 
-# init_db()
+init_db()
 # uid = "test"
 # del_message("test")
-uid1 = save_message('test')['id']
-uid2 = save_message('test')['id']
-print(uid1)
-mark_read(uid1, 1)
-mark_read(uid2, 1)
+# uid1 = save_message('test')['id']
+# uid2 = save_message('test')['id']
+# print(uid1)
+# mark_read(uid1, 1)
+# mark_read(uid2, 1)
 
 # print(get_message(uid['id']))
-print(get_unread(1))
-print('test')
+# print(get_unread(1))
+# print('test')

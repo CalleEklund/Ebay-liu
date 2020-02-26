@@ -106,6 +106,7 @@ def login(username, password):
             return "{'Error':'No such user'}", 400
         if bcrypt.check_password_hash(user.password, password):
             token = create_access_token(identity=user.user_name)
+            # return jsonify({"access_token":token}),200
             return jsonify(access_token=token), 200
         return "{'Error':'Wrong password'}", 400
 
@@ -137,7 +138,7 @@ def message():
         msg = request.json['message']
         if len(msg) > 140:
             return "", 400
-        new_id = db.session.store_message(msg)
+        new_id = store_message(msg)
         outdata = {'id': new_id}
         return jsonify(outdata)
 
@@ -146,8 +147,7 @@ def message():
 @jwt_required
 def protected():
     if request.method == 'POST':
-        return jsonify({'hello': 'world'})
-
+        return jsonify({'hello': 'world'})                              
 
 @app.route('/message', methods=['GET'])
 def get_all_messages():
@@ -156,10 +156,10 @@ def get_all_messages():
         return jsonify(all_messages)
 
 
-@app.route('/init_db')
-def init_db():
-    db.session.init_db()
-    return ""
+# @app.route('/init_db')
+# def init_db():
+#     db.session.init_db()
+#     return ""
 
 
 @app.route('/message/<MessageID>', methods=['GET'])
@@ -270,8 +270,8 @@ if __name__ == '__main__':
     app.run(port=5000, debug=False)
     db.drop_all()
     db.create_all()
-    uid1 = store_message('test')
-    uid2 = store_message('felix')
+    # uid1 = store_message('test')
+    # uid2 = store_message('felix')
 
 
 # uid3 = store_message('calle')
