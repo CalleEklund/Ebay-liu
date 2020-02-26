@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="134dp"
-        android:text="Labb 1"
+        android:text="@string/title_text"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/output"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_marginStart="16dp"
-        android:text="Text:"
+        android:text="@string/namn_text"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Lägg Till"
+        android:text="@string/button_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -59,11 +59,12 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="280dp"
+
         android:background="@null"
-        android:singleLine="true"
-        android:orientation="vertical"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine|textPersonName"
+        android:orientation="vertical"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
