@@ -19,10 +19,10 @@ def protected_page(token):
     r = requests.post("http://127.0.0.1:5000/protected", headers={'Authorization': 'Bearer ' + token})
     print(r.text)
 
-def save_msg():
+def save_msg(token):
     payload = {"message": "hello!"}
     r = requests.post("http://127.0.0.1:5000/message", json=payload, headers={'Authorization': 'Bearer ' + token})
-    print(r.json())
+    print(r.text)
 
 
 def get_msg(msg_id):
@@ -51,8 +51,8 @@ def get_unread(user_id):
 token = login_user()
 
 protected_page(token)
-uid = save_msg()
-# uid2 = save_msg()
+uid = save_msg(token)
+uid2 = save_msg(token)
 # mark_read(uid, "felix", "test")
 # logout_user(token)
 # protected_page(token)

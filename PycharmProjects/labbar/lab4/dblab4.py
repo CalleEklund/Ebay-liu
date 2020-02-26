@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
+import uuid
 
 from flask_bcrypt import Bcrypt
 
@@ -200,7 +201,80 @@ def get_unread(UserID):
     return output
 
 
+def init_db():
+    db.drop_all()
+    db.create_all()
+    meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        print(table)
+        db.session.execute(table.delete())
+
+
+
+# funkar
+def store_message(message):
+    new_id = str(uuid.uuid4())
+    new_message = Message(new_id, message, [])
+    db.session.add(new_message)
+    db.session.commit()
+    return new_id
+
+
+# funkar
+def get_msg(message_id):
+    msg = Message.query.filter_by(id=message_id).first()
+    msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
+    return msg_dic
+
+
+# funkar, behöver ett Message obj
+def del_msg(message_id):
+    db.session.query(Message).filter_by(id=message_id).delete()
+    db.session.commit()
+    return 200
+
+
+# funkar, ger en lista
+def get_unread(user_id):
+    out = []
+    all_read = Message.query.filter(Message.users.any(id=user_id)).all()
+    all_msg = Message.query.all()
+    for msg in all_msg:
+        if msg not in all_read:
+            msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
+            out += [msg_dic]
+    return out
+
+
+# funkar
+def mark_read(message_id, username, password):
+    msg = Message.query.filter_by(id=message_id).first()
+    if not User.query.filter_by(id=username).first():
+        new_user = User(username, password)
+        msg.users.append(new_user)
+    else:
+        current_user = User.query.filter_by(id=username).first()
+        msg.users.append(current_user)
+
+    # print(new_user, " " , msg)
+    db.session.commit()
+    return 200
+
+
+# funkar
+def get_all_msg():
+    all_messages = db.session.query(Message).count()
+    return all_messages
+
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
     db.drop_all()
     db.create_all()
+    uid1 = store_message('test')
+    uid2 = store_message('felix')
+
+
+# uid3 = store_message('calle')
+# mark_read(uid1, 1)
+# print(get_unread(1))
+# print(get_all_msg())
