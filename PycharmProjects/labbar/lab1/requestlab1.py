@@ -1,6 +1,6 @@
 import requests
 
-
+#test från laptop calle
 def save_msg():
     r = requests.post("http://127.0.0.1:5000/messages/", json={"msg" : "hello!"})
 
