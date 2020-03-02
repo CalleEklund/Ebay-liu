@@ -64,7 +64,7 @@ class MessageM(db.Model):
     def to_dict(self):
         return {'id': self.id,
                 'msg': self.msg,
-                'users': self.users,
+                'users': [x.to_dict() for x in self.users],
                 }
 
 
@@ -74,6 +74,65 @@ class MessageM(db.Model):
 # logout_user
 #     def __init__(self, jti):
 #         self.jti = jti
+
+def store_message(message):
+    new_id = str(uuid.uuid4())
+    new_message = MessageM(new_id, message, [])
+    db.session.add(new_message)
+    db.session.commit()
+    return new_id
+
+
+# funkar
+def get_msg(message_id):
+    msg = MessageM.query.filter_by(id=message_id).first()
+    return msg.to_dict()
+
+
+# funkar, behöver ett Message obj
+def del_msg(message_id):
+    db.session.query(Message).filter_by(id=message_id).delete()
+    db.session.commit()
+    return "", 200
+
+
+# funkar, ger en lista
+def get_unread(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    all_msg = MessageM.query.all()
+    unread_msg = []
+    # print("user",user.to_dict())
+    if user is None:
+        return "", 404
+    else:
+        read = MessageM.query.outerjoin(users_messages).filter(user.id == users_messages.c.user_id)
+
+        for message in all_msg:
+            if not message in read:
+                unread_msg.append(message.to_dict())
+    # print(unread_msg)
+    return {'res': unread_msg}
+
+
+# funkar
+def mark_read(message_id, username):
+    searched_message = MessageM.query.filter_by(id=str(message_id)).first()
+    searched_user = User.query.filter_by(user_name=str(username)).first()
+    if not searched_message or not searched_user:
+        return "", 404
+    else:
+        searched_message.users.append(searched_user)
+    db.session.commit()
+    return "", 200
+
+
+# funkar
+def get_all_msg_count():
+    all_messages = db.session.query(Message).count()
+    return all_messages
+
+def all_messages():
+    return [message.to_dict() for message in db.session.query(MessageM).all()]
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
@@ -114,6 +173,7 @@ def login(username, password):
 
 
 @app.route('/user/all')
+@jwt_required
 def all_users():
     all = User.query.all()
     result = {'all': [x.to_dict() for x in all]}
@@ -154,15 +214,14 @@ def save_message():
 @app.route('/message', methods=['GET'])
 def get_all_messages():
     if request.method == 'GET':
-        all_messages = get_all_msg_count()
-        return jsonify(all_messages)
+        all_msg = all_messages()
+        return jsonify(all_msg)
 
 
 @app.route('/message/<MessageID>', methods=['GET'])
 def Message(MessageID):
     if request.method == 'GET':
         msg_obj = get_msg(str(MessageID))
-        print(msg_obj)
         if msg_obj['id'] is None:
             return "", 404
         return jsonify(msg_obj)
@@ -174,93 +233,30 @@ def delete_message(MessageID):
     msg_id = MessageID
     if not msg_id:
         return "", 404
-    db.session.del_msg(msg_id)
+    del_msg(msg_id)
     return "", 200
 
 
 @app.route('/message/<MessageID>/read/<username>', methods=['GET'])
 @jwt_required
-def mark_read(MessageID, username, password):
+def mark_reads(MessageID, username):
     msg_id = MessageID
     if not msg_id or not username:
         return "", 404
-    db.session.mark_read(str(msg_id), str(username), str(password))
+    else:
+        mark_read(str(msg_id), str(username))
     return "", 200
 
 
-@app.route('/message/unread/<UserID>', methods=['GET'])
+@app.route('/message/unread/<UserID>', methods=['POST'])
 @jwt_required
-def get_unread(UserID):
+def get_unreads(UserID):
     user_id = UserID
-    output = db.session.get_unread(user_id)
-    print(output)
+    output = get_unread(user_id)
     return output
-
-# funkar
-def store_message(message):
-    new_id = str(uuid.uuid4())
-    new_message = MessageM(new_id, message, [])
-    db.session.add(new_message)
-    db.session.commit()
-    return new_id
-
-
-# funkar
-def get_msg(message_id):
-    msg = MessageM.query.filter_by(id=message_id).first()
-    # msg = Message.query.filter_by(id=message_id).all()
-
-    return msg.to_dict()
-
-
-# funkar, behöver ett Message obj
-def del_msg(message_id):
-    db.session.query(Message).filter_by(id=message_id).delete()
-    db.session.commit()
-    return 200
-
-
-# funkar, ger en lista
-def get_unread(user_id):
-    out = []
-    all_read = Message.query.filter(Message.users.any(id=user_id)).all()
-    all_msg = Message.query.all()
-    for msg in all_msg:
-        if msg not in all_read:
-            msg_dic = {'id': msg.id, 'msg': msg.msg, 'users': msg.users}
-            out += [msg_dic]
-    return out
-
-
-# funkar
-def mark_read(message_id, username, password):
-    msg = Message.query.filter_by(id=message_id).first()
-    if not User.query.filter_by(id=username).first():
-        new_user = User(username, password)
-        msg.users.append(new_user)
-    else:
-        current_user = User.query.filter_by(id=username).first()
-        msg.users.append(current_user)
-
-    # print(new_user, " " , msg)
-    db.session.commit()
-    return 200
-
-
-# funkar
-def get_all_msg_count():
-    all_messages = db.session.query(Message).count()
-    return all_messages
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=False)
     db.drop_all()
     db.create_all()
-    # uid1 = store_message('test')
-    # uid2 = store_message('felix')
-
-# uid3 = store_message('calle')
-# mark_read(uid1, 1)
-# print(get_unread(1))
-# print(get_all_msg())
+    app.run(port=5000, debug=False)
