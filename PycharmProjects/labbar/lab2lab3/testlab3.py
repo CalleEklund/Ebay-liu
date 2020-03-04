@@ -61,12 +61,12 @@ def check_ok(req):
 
 # testa metoderna här:
 uid = save_msg()
-uid2 = save_msg()
+#uid2 = save_msg()
 #print(uid['id'])
 #print(get_msg(uid['id']))
 #print(delete_msg(uid['id']))
-print(mark_read(uid['id'],1))
+#print(mark_read(uid['id'],1))
 #print(get_all_msg())
-print(get_unread(1))
+#print(get_unread(1))
 
 #maila länk och lägg till som reporter

@@ -1,10 +1,17 @@
+import os
+
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from lab2server import app
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///dblab2.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+if 'NAMESPACE' in os.environ and os.environ['NAMESPACE'] == 'heroku':
+    db_uri = os.environ['DATABASE_URL']
+    debug_flag = False
+else: # when running locally: use sqlite
+    db_path = os.path.join(os.path.dirname(__file__), 'dblab2.db')
+    db_uri = 'sqlite:///{}'.format(db_path)
+    debug_flag = True
 
 db = SQLAlchemy(app)
 

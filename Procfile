@@ -1,2 +1,2 @@
-web: gunicorn app2:app --log-file -
-init: python app2.py
+web: gunicorn lab2lab3/lab2server:app --log-file -
+init: python lab2lab3/lab2server.py
