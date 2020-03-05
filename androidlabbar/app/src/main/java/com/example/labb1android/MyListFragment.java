@@ -3,6 +3,7 @@ package com.example.labb1android;
 ;
 
 import android.app.ListFragment;
+import android.content.Context;
 import android.os.Bundle;
 //import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,15 @@ public class MyListFragment extends ListFragment {
     String[] titles = new String[]{"test1","test2","test3"};
     String[] details = new String[]{"d1","d2","d3"};
     public MyListFragment() {
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MyListFragment.ItemSelectedListener) {
+            MyListFragment.ItemSelectedListener myContext = (MyListFragment.ItemSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " must implement");
+        }
     }
 
     @Override

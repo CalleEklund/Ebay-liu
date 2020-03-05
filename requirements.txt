@@ -3,3 +3,4 @@ Flask-SQLAlchemy==2.4.1
 gunicorn==19.10.0
 pytest==4.6.9
 requests==2.18.4
+psycopg2 == 2.8.4
