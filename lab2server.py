@@ -1,14 +1,14 @@
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-import lab2db as db2
+#import lab2db as db2
 
 
 @app.route('/')
 def hello_world():
     return 'hellu erbadies! welcums, to my cribs.'
 
-
+"""
 @app.route('/message', methods=['POST', 'GET'])
 def message():
     if request.method == 'POST':
@@ -61,8 +61,8 @@ def get_unread(UserID):
         user_id = UserID
         output = db2.get_unread(user_id)
         return jsonify(output)
-
+"""
 
 if __name__ == '__main__':
-    db2.init_db()
+   # db2.init_db()
     app.run(port=5000, debug=True)
