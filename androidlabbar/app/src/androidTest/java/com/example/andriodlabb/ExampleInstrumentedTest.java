@@ -1,4 +1,4 @@
-package com.example.labb1android;
+package com.example.andriodlabb;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
