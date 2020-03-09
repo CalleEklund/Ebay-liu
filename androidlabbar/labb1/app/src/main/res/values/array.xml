@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sections">
+        <item>Sverige</item>
+        <item>Finland</item>
+        <item>Tidning</item>
+        <item>TV</item>
+        <item>Kompis</item>
+        <item>Google</item>
+        <item>Facebook</item>
+    </string-array>
+</resources>
