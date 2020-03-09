@@ -1,4 +1,4 @@
-package com.example.andriodlabb;
+package com.example.androiddlabb;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.andriodlabb.labb1;
+package com.example.androiddlabb.labb1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.andriodlabb.R;
+import com.example.androiddlabb.R;
 
 public class labb1 extends AppCompatActivity {
 
