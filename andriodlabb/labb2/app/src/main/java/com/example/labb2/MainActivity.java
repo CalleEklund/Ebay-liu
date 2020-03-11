@@ -1,11 +1,14 @@
 package com.example.labb2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemSelectedListener, DetailsFragment.OnFragmentactionListener {
@@ -30,8 +33,13 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         args.putInt("members", details[(int) id]);
         detailsFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            transaction.replace(R.id.frameLayout, detailsFragment);
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            transaction.replace(R.id.detailsFrame, detailsFragment);
+        }
 
-        transaction.replace(R.id.frameLayout, detailsFragment);
         transaction.addToBackStack(null);
         transaction.commit();
 
@@ -39,9 +47,11 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
 
     @Override
     public void swapback() {
-        if(findViewById(R.id.frameLayout)!= null)
+        if (findViewById(R.id.frameLayout) != null)
             getSupportFragmentManager()
-                    .beginTransaction().replace(R.id.frameLayout,listFragment).commit();
+                    .beginTransaction().replace(R.id.frameLayout, listFragment).commit();
     }
+
+
 }
 
