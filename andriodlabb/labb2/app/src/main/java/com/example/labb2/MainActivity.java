@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-public class MainActivity extends AppCompatActivity implements ListFragment.ItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements ListFragment.ItemSelectedListener, DetailsFragment.OnFragmentactionListener {
 
     ListFragment listFragment;
     DetailsFragment detailsFragment;
@@ -25,11 +25,9 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
 
     @Override
     public void onItemSelected(ListView l, View v, int position, long id) {
-        //Log.v("TAG", ": " + id);
         detailsFragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putInt("members", details[(int) id]);
-        //args.putString("groupmembers",details[(int)id]);
         detailsFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -39,5 +37,11 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
 
     }
 
+    @Override
+    public void swapback() {
+        if(findViewById(R.id.frameLayout)!= null)
+            getSupportFragmentManager()
+                    .beginTransaction().replace(R.id.frameLayout,listFragment).commit();
+    }
 }
 

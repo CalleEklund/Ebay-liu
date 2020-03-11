@@ -59,7 +59,7 @@ public class ListFragment extends Fragment {
         if (context instanceof ItemSelectedListener) {
             mainParent = (ItemSelectedListener) context;
         } else {
-            throw new ClassCastException(context.toString() + "implemtn interface");
+            throw new ClassCastException(context.toString() + "implement interface");
         }
 
 
