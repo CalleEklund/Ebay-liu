@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -39,9 +40,7 @@ import java.util.List;
  */
 public class ListFragment extends Fragment {
 
-    //String[] items = {"Japan", "Sverige", "Kina", "Norge", "Dannmark"};
     JSONArray itemsJson;
-    // ArrayList<String> items = new ArrayList<>();
     ItemSelectedListener mainParent;
     Context parent;
     TextView textView;
@@ -72,31 +71,10 @@ public class ListFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 try {
                     itemsJson = response.getJSONArray("grupper");
-                    ArrayList<String> items = new Gson().fromJson(itemsJson.toString(), new TypeToken<List<String>>() {
-                    }.getType());
-                    listViewAdapter = new ArrayAdapter<>(
-                            getActivity(),
-                            R.layout.support_simple_spinner_dropdown_item,
-                            items
-                    );
-
-
-                    listView.setAdapter(listViewAdapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            mainParent.onItemSelected(listView, view, position, id);
-                        }
-                    });
-                    //Log.v("TAG", "response:" + itemsJson);
-
-                    //textView.setText(response.getString("grupper"));
+                    makeList(itemsJson);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //textView.setText("Response: " + response.toString());
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -108,6 +86,33 @@ public class ListFragment extends Fragment {
         queue.add(jsonObjectRequest);
 
 
+    }
+
+    private void makeList(final JSONArray itemsJson) {
+        ArrayList<String> items = new Gson().fromJson(itemsJson.toString(), new TypeToken<List<String>>() {
+        }.getType());
+        listViewAdapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,
+                items
+        );
+
+
+        listView.setAdapter(listViewAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String groupName = null;
+                try {
+                    groupName = itemsJson.get((int)id).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mainParent.onItemSelected(listView, view, position, id,groupName);
+            }
+
+        });
     }
 
     @Override
@@ -124,7 +129,7 @@ public class ListFragment extends Fragment {
     }
 
     public interface ItemSelectedListener {
-        void onItemSelected(ListView l, View v, int position, long id);
+        void onItemSelected(ListView l, View v, int position, long id, String groupName);
     }
 
 }

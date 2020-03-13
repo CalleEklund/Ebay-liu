@@ -5,8 +5,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemSelectedListener, DetailsFragment.OnFragmentactionListener {
 
@@ -14,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
     DetailsFragment detailsFragment;
 
     int[] details = {3, 4, 5, 6, 7};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +35,31 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, listFragment).commit();
     }
 
+    public JSONArray fetchInfo(String groupName) {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://tddd80server.herokuapp.com/medlemmar/" + groupName;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("TAG","resp: " + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("E", "Error: " + error);
+            }
+        });
+        queue.add(jsonObjectRequest);
+
+        return new JSONArray();
+
+    }
+
     @Override
-    public void onItemSelected(ListView l, View v, int position, long id) {
+    public void onItemSelected(ListView l, View v, int position, long id, String groupName) {
+        fetchInfo(groupName);
         detailsFragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putInt("members", details[(int) id]);
