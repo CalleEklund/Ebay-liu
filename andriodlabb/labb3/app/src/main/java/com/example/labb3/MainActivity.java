@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
     ListFragment listFragment;
     DetailsFragment detailsFragment;
 
-    int[] details = {3, 4, 5, 6, 7};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,34 +33,14 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, listFragment).commit();
     }
 
-    public JSONArray fetchInfo(String groupName) {
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://tddd80server.herokuapp.com/medlemmar/" + groupName;
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.v("TAG","resp: " + response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v("E", "Error: " + error);
-            }
-        });
-        queue.add(jsonObjectRequest);
-
-        return new JSONArray();
-
-    }
 
     @Override
     public void onItemSelected(ListView l, View v, int position, long id, String groupName) {
-        fetchInfo(groupName);
         detailsFragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putInt("members", details[(int) id]);
+
+        args.putString("group", groupName);
         detailsFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         int orientation = getResources().getConfiguration().orientation;
