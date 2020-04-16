@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         detailsFragment.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         int orientation = getResources().getConfiguration().orientation;
+
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             transaction.replace(R.id.frameLayout, detailsFragment);
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
