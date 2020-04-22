@@ -1,6 +1,8 @@
 package com.example.labb3;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
@@ -20,38 +22,48 @@ import com.google.gson.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemSelectedListener, DetailsFragment.OnFragmentactionListener {
 
     ListFragment listFragment;
     DetailsFragment detailsFragment;
 
-    @Override
+       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listFragment = new ListFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, listFragment).commit();
-    }
+        View v = findViewById(R.id.frameLayout);
+           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+           if (v != null) {
+               System.out.println("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeej");
+               detailsFragment = new DetailsFragment();
+               listFragment = new ListFragment();
+               ft.replace(R.id.frameLayout, listFragment);
+               ft.commit();
+           } else {
+               System.out.println("dåååååååååååååååååååååååååååååååååååå");
 
-
-
-    @Override
-    public void onItemSelected(ListView l, View v, int position, long id, String groupName) {
-        detailsFragment = new DetailsFragment();
-        Bundle args = new Bundle();
-
-        args.putString("group", groupName);
-        detailsFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            transaction.replace(R.id.frameLayout, detailsFragment);
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            transaction.replace(R.id.detailsFrame, detailsFragment);
+               listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
+               detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragemnt);
+               //Varför kan man inte hämta arguments
+               if (savedInstanceState != null) {
+                   System.out.println(savedInstanceState.getString("group"));
+               }
+               detailsFragment.fetchData("Celebs");
         }
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+    }
+
+    @Override
+    public void onItemSelected(String groupName) {
+        if (findViewById(R.id.frameLayout) != null) {
+            detailsFragment = DetailsFragment.newInstance(groupName);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, detailsFragment).addToBackStack(null).commit();
+        } else {
+            detailsFragment.fetchData(groupName);
+        }
+
 
     }
 

@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -19,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -27,104 +30,99 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class DetailsFragment extends Fragment {
-    private String groupName;
-    private JSONArray resp;
-    private TextView textView;
+    String groupName;
+    private View mainView;
     private Button button;
-    private ListFragment.ItemSelectedListener mainParent;
     private DetailsFragment.OnFragmentactionListener goBackToParent;
+    private Members members;
 
     public DetailsFragment() {
+
     }
 
+    public static DetailsFragment newInstance(String searchedName) {
+        DetailsFragment fragment = new DetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("group", searchedName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public void fetchData(String groupName) {
+        String gruppUrl = "https://tddd80server.herokuapp.com/medlemmar/"+groupName;
+        RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
-    private void fetchInfo(String groupName) {
-
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://tddd80server.herokuapp.com/medlemmar/" + groupName;
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, gruppUrl, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    resp = response.getJSONArray("medlemmar");
-                    ArrayList<Object> items = new Gson().fromJson(resp.toString(), new TypeToken<List<Object>>() {
-                    }.getType());
-                    LinkedTreeMap<Object, Object> item;
-                    for (int i = 0; i < items.size(); i++) {
-                        item = (LinkedTreeMap<Object, Object>) items.get(i);
-
-                        String epost = item.get("epost").toString();
-                        String namn = item.get("namn").toString();
-                        String svarade;
-                        if (item.get("svarade") == null) {
-                            svarade = "";
-                        } else {
-                            svarade = item.get("svarade").toString();
-                        }
-                        textView.append("\nNamn: " + namn + "\nEpost: " + epost + "\nSvarade: " + svarade);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(String response) {
+                ListView lis = mainView.findViewById(R.id.listData);
+                Gson gson = new Gson();
+                members = gson.fromJson(response, Members.class);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, members.getMedlemmar());
+                lis.setAdapter(adapter);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("E", "Error: " + error);
+
             }
         });
-        queue.add(jsonObjectRequest);
-
-        new JSONArray();
-
+        queue.add(stringRequest);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             groupName = getArguments().getString("group");
         }
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-        textView = rootView.findViewById(R.id.display);
-
-        fetchInfo(groupName);
-
-        button = rootView.findViewById(R.id.goBack);
+        mainView = inflater.inflate(R.layout.fragment_details, container, false);
+        if (getArguments() != null) {
+            groupName = getArguments().getString("group");
+        }
+        fetchData(groupName);
+        button = mainView.findViewById(R.id.goBack);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goBackToParent.swapback();
             }
         });
-        return rootView;
+        return mainView;
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof ListFragment.ItemSelectedListener) {
-            mainParent = (ListFragment.ItemSelectedListener) context;
+        if (context instanceof DetailsFragment.OnFragmentactionListener) {
             goBackToParent = (DetailsFragment.OnFragmentactionListener) context;
         } else {
             throw new ClassCastException(context.toString() + "implement interface");
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        System.out.println("3");
+        outState.putString("group",groupName);
     }
 
     public interface OnFragmentactionListener {

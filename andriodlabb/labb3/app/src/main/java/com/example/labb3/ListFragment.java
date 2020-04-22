@@ -40,12 +40,11 @@ import java.util.List;
  */
 public class ListFragment extends Fragment {
 
-    JSONArray itemsJson;
-    ItemSelectedListener mainParent;
-    Context parent;
-    TextView textView;
-    ListView listView;
-    ArrayAdapter<String> listViewAdapter;
+    private JSONArray itemsJson;
+    private ItemSelectedListener mainParent;
+    private TextView textView;
+    private ListView listView;
+    private ArrayAdapter<String> listViewAdapter;
 
     public ListFragment() {
     }
@@ -109,7 +108,7 @@ public class ListFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mainParent.onItemSelected(listView, view, position, id,groupName);
+                mainParent.onItemSelected(groupName);
             }
 
         });
@@ -120,7 +119,6 @@ public class ListFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof ItemSelectedListener) {
             mainParent = (ItemSelectedListener) context;
-            parent = context;
         } else {
             throw new ClassCastException(context.toString() + "implement interface");
         }
@@ -129,7 +127,7 @@ public class ListFragment extends Fragment {
     }
 
     public interface ItemSelectedListener {
-        void onItemSelected(ListView l, View v, int position, long id, String groupName);
+        void onItemSelected(String groupName);
     }
 
 }
