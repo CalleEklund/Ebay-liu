@@ -6,7 +6,7 @@ import lab2db as db2
 
 @app.route('/')
 def hello_world():
-    return 'hellu erbadies! welcums, to my.'
+    return 'hello erbadies! welcums, to my.'
 
 
 @app.route('/message', methods=['POST', 'GET'])
@@ -16,6 +16,7 @@ def message():
         if len(msg) > 140:
             return "", 400
         message_obj = db2.save_message(msg)
+
         return jsonify(message_obj)
 
     elif request.method == 'GET':
