@@ -8,6 +8,10 @@ import lab2db as db2
 def hello_world():
     return 'hello erbadies! welcums, to my.'
 
+@app.route('/all')
+def all_messages():
+    return jsonify(db2.all_messages())
+
 
 @app.route('/message', methods=['POST', 'GET'])
 def message():
