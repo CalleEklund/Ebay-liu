@@ -7,13 +7,13 @@ public class Members {
 
 
     public ArrayList<String> getMedlemmar() {
-        ArrayList<String> list = new ArrayList<>();
-        for (Member medlem: medlemmar
-        ) {
-            String currmed;
-            currmed = "Namn: " + medlem.getNamn() + "\n" + "Epost: " + medlem.getEpost() + "\n" +
-                    "Svarade: " + medlem.getSvarade();
-            list.add(currmed);
+                ArrayList<String> list = new ArrayList<>();
+                for (Member medlem: medlemmar
+                ) {
+                    String currmed;
+                    currmed = "Namn: " + medlem.getNamn() + "\n" + "Epost: " + medlem.getEpost() + "\n" +
+                            "Svarade: " + medlem.getSvarade();
+                    list.add(currmed);
         }
         return list;
     }

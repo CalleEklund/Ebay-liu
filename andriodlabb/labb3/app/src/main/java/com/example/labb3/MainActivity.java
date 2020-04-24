@@ -28,35 +28,50 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
 
     ListFragment listFragment;
     DetailsFragment detailsFragment;
+    String gName;
 
-       @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         View v = findViewById(R.id.frameLayout);
-           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-           if (v != null) {
-               System.out.println("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeej");
-               detailsFragment = new DetailsFragment();
-               listFragment = new ListFragment();
-               ft.replace(R.id.frameLayout, listFragment);
-               ft.commit();
-           } else {
-               System.out.println("dåååååååååååååååååååååååååååååååååååå");
-
-               listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
-               detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragemnt);
-               //Varför kan man inte hämta arguments
-               if (savedInstanceState != null) {
-                   System.out.println(savedInstanceState.getString("group"));
-               }
-               detailsFragment.fetchData("Celebs");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (v != null) {
+            detailsFragment = new DetailsFragment();
+            listFragment = new ListFragment();
+            ft.replace(R.id.frameLayout, listFragment);
+            ft.commit();
+        } else {
+            listFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
+            detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragemnt);
+            System.out.println(savedInstanceState);
+            if (savedInstanceState != null) {
+                System.out.println(savedInstanceState.getString("group"));
+            }
         }
 
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("group", gName);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        gName = savedInstanceState.getString("group");
+        if (findViewById(R.id.frameLayout) == null) {
+            detailsFragment.fetchData(gName);
+        }
+
+    }
+
+
+    @Override
     public void onItemSelected(String groupName) {
+        gName = groupName;
         if (findViewById(R.id.frameLayout) != null) {
             detailsFragment = DetailsFragment.newInstance(groupName);
             getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, detailsFragment).addToBackStack(null).commit();

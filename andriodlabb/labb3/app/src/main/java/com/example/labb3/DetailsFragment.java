@@ -115,13 +115,13 @@ public class DetailsFragment extends Fragment {
         } else {
             throw new ClassCastException(context.toString() + "implement interface");
         }
-
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        System.out.println("3");
+        System.out.println("3"+groupName);
+
         outState.putString("group",groupName);
     }
 
