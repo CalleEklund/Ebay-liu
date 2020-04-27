@@ -51,6 +51,7 @@ def get_message(MessageID):
 
 @app.route('/message/<MessageID>/read/<UserID>', methods=['POST'])
 def mark_read(MessageID, UserID):
+
     if request.method == 'POST':
         msg_id = MessageID
         user_id = UserID

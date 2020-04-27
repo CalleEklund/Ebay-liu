@@ -12,6 +12,9 @@ else: # when running locally: use sqlite
     db_uri = 'sqlite:///{}'.format(db_path)
     debug_flag = True
 
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+
 db = SQLAlchemy(app)
 
 users_messages = db.Table('users_messages',

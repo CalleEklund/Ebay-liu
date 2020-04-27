@@ -28,6 +28,7 @@ def get_msg(uid):
 
 def delete_msg(uid):
     d = requests.delete("https://liubiljett.herokuapp.com/message/"+str(uid))
+
     if check_ok(d):
         data_d = d.status_code
         return data_d
@@ -35,7 +36,7 @@ def delete_msg(uid):
         return check_ok(d)
 
 def mark_read(msgid,userid):
-    g = requests.get("https://liubiljett.herokuapp.com/message/"+str(msgid)+"/read/"+str(userid))
+    g = requests.post("https://liubiljett.herokuapp.com/message/"+str(msgid)+"/read/"+str(userid))
     if check_ok(g):
         data_d = g.status_code
         return data_d
@@ -45,7 +46,12 @@ def mark_read(msgid,userid):
 def get_unread(userid):
     g = requests.get("https://liubiljett.herokuapp.com/message/unread/"+str(userid))
     if check_ok(g):
-        return g
+        return g.json()
+
+def reset_db():
+    r = requests.get("https://liubiljett.herokuapp.com/init_db")
+    return r.status_code
+
 
 def check_ok(req):
     if req.status_code == 404:
@@ -63,10 +69,11 @@ def check_ok(req):
 #uid = save_msg()
 #uid2 = save_msg()
 #print(uid['id'])
-#print(get_msg(uid['id']))
-#print(delete_msg(uid['id']))
-#print(mark_read(uid['id'],1))
-print(get_all_msg())
-#print(get_unread(1))
+#print(get_msg(id))
+#print(delete_msg(id))
+#print(mark_read(id,1))
+print(get_unread(1))
+#print(get_all_msg())
+#print(reset_db())
 
 #maila länk och lägg till som reporter
