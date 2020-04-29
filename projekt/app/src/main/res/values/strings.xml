@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">liubiljett</string>
+    <string name="title_activity_test">test</string>
+    <string name="title_feed">Feed</string>
+    <string name="title_post">Post</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_liked">Liked</string>
+    <string name="title_chat">Chat</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+</resources>

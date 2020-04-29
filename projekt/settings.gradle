@@ -1,0 +1,2 @@
+rootProject.name='liubiljett'
+include ':app'
