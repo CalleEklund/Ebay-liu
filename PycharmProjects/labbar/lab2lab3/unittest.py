@@ -1,7 +1,7 @@
 import os
 import tempfile
 import pytest
-from serverlab2 import app, db2
+from lab2server import app, db2
 
 
 @pytest.fixture
