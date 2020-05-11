@@ -1,1 +1,0 @@
-web: gunicorn projektmain:app --log-file -
