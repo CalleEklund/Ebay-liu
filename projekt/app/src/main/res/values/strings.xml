@@ -16,6 +16,12 @@
     <string name="confirm_password">Bekräfta lösenord</string>
     <string name="logo">logo</string>
     <string name="create_account">Skapa</string>
+    <string name="take_picture">Ta bild</string>
+    <string name="headline">Rubrik</string>
+    <string name="publish">Publicera</string>
+    <string name="ad_photo">ad_photo</string>
+    <string name="description">Övrigt</string>
+    <string name="price">Pris</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
