@@ -3,12 +3,19 @@
     <string name="title_activity_test">test</string>
     <string name="title_feed">Feed</string>
     <string name="title_post">Post</string>
-    <string name="title_profile">Profile</string>
+    <string name="title_profile">Skapa konto</string>
     <string name="title_liked">Liked</string>
     <string name="title_chat">Chat</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Namn</string>
+    <string name="email">Email</string>
+    <string name="telephone">Telefonnummer</string>
+    <string name="password">Lösenord</string>
+    <string name="confirm_password">Bekräfta lösenord</string>
+    <string name="logo">logo</string>
+    <string name="create_account">Skapa</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

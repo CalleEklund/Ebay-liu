@@ -19,7 +19,7 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
         final TextView textView = root.findViewById(R.id.text_chat);
-        textView.setText("Liked");
+        textView.setText("Chat");
 
         return root;
     }
