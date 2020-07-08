@@ -52,7 +52,8 @@ def check_if_token_in_blacklist(decrypted_token):
 
 @app.route('/user/register/<username>/<password>/<email>/<section>', methods=['POST'])
 def register_user(username, password, email, section):
-    if request.method == 'POST':
+    return "{'message':registered}", 200
+    if request.method == 'GET':
         existing_user = User.query.filter_by(user_email=email).first()
 
         if existing_user is None:
@@ -66,7 +67,7 @@ def register_user(username, password, email, section):
 @app.route('/user/login/<email>/<password>', methods=['POST'])
 def login_user(email, password):
     existing_user = User.query.filter_by(user_email=email).first()
-    if request.method == 'POST':
+    if request.method == 'GET':
         if existing_user is None:
             return "{'Error': 'No such user'}", 400
         if bcrypt.check_password_hash(existing_user.user_password, password):
