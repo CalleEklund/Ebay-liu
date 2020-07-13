@@ -62,8 +62,7 @@ def register_user(username, password, email, section):
             db.session.commit()
             return "{'message':registered}", 200
         return "{'message':'user email already taken'}", 400
-    else:
-        return "{'message': error}"
+
 
 
 @app.route('/user/login/<email>/<password>', methods=['POST'])
@@ -88,7 +87,7 @@ def get_all_users():
 
 @app.route('/')
 def start_page():
-    return "test för projekt"
+    return "liublijett"
 
 
 if __name__ == "__main__":
