@@ -7,10 +7,10 @@ def start_test():
 
 
 def register_user(name, password, email, section):
-    r = requests.get(
+    r = requests.post(
         "https://liubiljett.herokuapp.com/user/register/" + name + "/" + password + "/" + email + "/" + section)
 
-    print(r)
+    print(r.text)
 
 def login_user(email,password):
     r = requests.get("https://liubiljett.herokuapp.com/user/login/"+email+"/"+password)

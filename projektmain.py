@@ -53,16 +53,17 @@ def check_if_token_in_blacklist(decrypted_token):
 @app.route('/user/register/<username>/<password>/<email>/<section>', methods=['POST', 'GET'])
 def register_user(username, password, email, section):
     if request.method == 'GET':
-        existing_user = User.query.filter_by(user_email=email).first()
-
-        if existing_user is None:
-            new_user = User(username, password, email, section)
-            db.session.add(new_user)
-            db.session.commit()
-            return "{'message':registered}", 200
-        return "{'message':'user email already taken'}", 400
-    else:
-        return "registered"
+        return "GET registerd"
+        # existing_user = User.query.filter_by(user_email=email).first()
+        #
+        # if existing_user is None:
+        #     new_user = User(username, password, email, section)
+        #     db.session.add(new_user)
+        #     db.session.commit()
+        #     return "{'message':registered}", 200
+        # return "{'message':'user email already taken'}", 400
+    elif request.method == 'POST':
+        return "POST registered"
 
 
 @app.route('/user/login/<email>/<password>', methods=['POST', 'GET'])
