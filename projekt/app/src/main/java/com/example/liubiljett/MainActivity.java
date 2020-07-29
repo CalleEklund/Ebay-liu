@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {  //ANVÄND javac -Xlint:un
         MyAdapter mAdapter = new MyAdapter(this, headLineArray, priceArray, imageArray);
         listView = findViewById(R.id.listviewID);
         listView.setAdapter(mAdapter);
+        //kan inte gitta?
 
         //github.com/crazycodeboy/react-native-splash-screen/issues/
     }
