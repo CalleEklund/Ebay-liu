@@ -7,7 +7,8 @@
     tools:context=".ui.MainPageFragment">
 
     <ListView
-        android:layout_width="413dp"
+        android:id="@+id/listviewID"
+        android:layout_width="409dp"
         android:layout_height="729dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
