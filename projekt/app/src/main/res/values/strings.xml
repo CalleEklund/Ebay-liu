@@ -24,6 +24,7 @@
     <string name="price">Pris</string>
     <string name="linear_layout_manager">linearlayoutman</string>
     <string name="grid_layout_manager">gridlayoutman</string>
+    <string name="postimage">postImage</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

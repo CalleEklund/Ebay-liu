@@ -16,27 +16,27 @@ public class MyAdapter extends ArrayAdapter {
 
     private final Activity context;
 
-    private final Integer[] imageArray; //om vi vill visa bilder i flödet
+    //private final Integer[] imageArray; //om vi vill visa bilder i flödet
 
     private final String[] headLineArray; //rubriken
 
-    private final String[] priceArray; //priset, ta den i string för då kan vi ha "100kr"
+    //private final String[] priceArray; //priset, ta den i string för då kan vi ha "100kr"
 
     // context sparar vilken activity listviewen är på, de andra sparar själva datan som visas.
 
-    public MyAdapter(Activity context, String[] headLineArrayParam, String[] priceArrayParam, Integer[] imageArrayParam) {
+    MyAdapter(Activity context, String[] headLineArrayParam) {
         super(context, R.layout.listview_row, headLineArrayParam);
 
         this.context = context;
-        this.imageArray = imageArrayParam;
-        this.headLineArray = headLineArrayParam;
-        this.priceArray = priceArrayParam;
+        //this.imageArray = imageArrayParam;
+        headLineArray = headLineArrayParam;
+        //this.priceArray = priceArrayParam;
     }
 
     @NonNull
     public View getView(int position, View view, @NonNull ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        @SuppressLint({"ViewHolder", "InflateParams"}) View rowView = inflater.inflate(R.layout.listview_row, null, true);
+        @SuppressLint({"InflateParams", "ViewHolder"}) View rowView = inflater.inflate(R.layout.listview_row, null, true);
 
         //dessa skapar variabler från xml-filen
         TextView headline = rowView.findViewById(R.id.headlineID);
@@ -44,8 +44,8 @@ public class MyAdapter extends ArrayAdapter {
         ImageView ticketImage = rowView.findViewById(R.id.image_holderID);
 
         headline.setText(headLineArray[position]);
-        price.setText(priceArray[position]);
-        ticketImage.setImageResource(imageArray[position]);
+        //price.setText(priceArray[position]);
+        //ticketImage.setImageResource(imageArray[position]);
 
         return rowView;
     }

@@ -1,6 +1,7 @@
 package com.example.liubiljett;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,9 +38,13 @@ public class MainActivity extends AppCompatActivity {  //ANVÄND javac -Xlint:un
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        MyAdapter mAdapter = new MyAdapter(this, headLineArray, priceArray, imageArray);
+        MyAdapter mAdapter = new MyAdapter(this, headLineArray);
+        Log.d("adapter",mAdapter.toString());
         listView = findViewById(R.id.listviewID);
-        listView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            System.out.println("HAN E NULL");
+        }
+        //listView.setAdapter(mAdapter);
         //kan inte gitta? :(
 
         //github.com/crazycodeboy/react-native-splash-screen/issues/
