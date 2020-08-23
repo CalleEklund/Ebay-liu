@@ -43,19 +43,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestPermission();
+//        requestPermission();
         imageView = findViewById(R.id.image_view);
         btnOpen = findViewById(R.id.btn_open);
         textView = findViewById(R.id.textView);
 
-        geocoder = new Geocoder(this, Locale.getDefault());
+//        geocoder = new Geocoder(this, Locale.getDefault());
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, 100);
         }
-        client = LocationServices.getFusedLocationProviderClient(this);
+//        client = LocationServices.getFusedLocationProviderClient(this);
 
 
         btnOpen.setOnClickListener(new View.OnClickListener() {
@@ -64,26 +64,26 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 100);
 
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-                client.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            double lat = location.getLatitude();
-                            double longi = location.getLongitude();
-
-                            try {
-                                addresses = geocoder.getFromLocation(lat,longi,1);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            textView.setText(addresses.get(0).getAddressLine(0));
-                        } else {
-                            textView.setText("Location null");
-                        }
-                    }
-                });
+//                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+//
+//                client.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        if (location != null) {
+//                            double lat = location.getLatitude();
+//                            double longi = location.getLongitude();
+//
+//                            try {
+//                                addresses = geocoder.getFromLocation(lat,longi,1);
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            textView.setText(addresses.get(0).getAddressLine(0));
+//                        } else {
+//                            textView.setText("Location null");
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
+            Log.d("bitmap", captureImage.toString());
             imageView.setImageBitmap(captureImage);
         }
 

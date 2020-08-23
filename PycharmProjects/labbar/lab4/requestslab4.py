@@ -58,15 +58,16 @@ def get_unread(token, user_name):
     print(r.json())
 
 
-register_user("felix", "losen")
-register_user("calle", "losen")
-tokenf = login_user("felix", "losen")
+# register_user("felix", "losen")
+# register_user("calle", "losen")
+# tokenf = login_user("felix", "losen")
+# print(tokenf)
 tokenc = login_user("calle", "losen")
-
-idf = save_msg(tokenf)
-idc = save_msg(tokenc)
-
-print(get_all_msg())
+#
+# idf = save_msg(tokenf)
+# idc = save_msg(tokenc)
+#
+# print(get_all_msg())
 
 # mark_read(tokenf,idf,"felix")
 # mark_read(tokenc,idc,"calle")

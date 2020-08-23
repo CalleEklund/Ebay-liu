@@ -11,6 +11,11 @@ db_uri = 'sqlite:///projektdb.db'
 
 if 'DATABASE_URL' in os.environ:
     db_uri = os.environ['DATABASE_URL']
+else:  # when running locally: use sqlite
+    db_path = os.path.join(os.path.dirname(__file__), 'projektdb.db')
+    db_uri = 'sqlite:///{}'.format(db_path)
+    debug_flag = True
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -27,6 +32,7 @@ blacklist = set()
 
 class User(db.Model):
     __tablename__ = "User"
+
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(255), unique=False, nullable=False)
     user_password = db.Column(db.String(255), unique=False, nullable=False)
@@ -35,7 +41,7 @@ class User(db.Model):
 
     def __init__(self, name, password, email, section):
         self.user_name = name
-        self.user_password = password
+        self.user_password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.user_email = email
         self.user_section = section
 
@@ -44,37 +50,38 @@ class User(db.Model):
                 'email': self.user_email, 'section': self.user_section}
 
 
+class Post(db.Model):
+    __tablename__ = "Post"
+    post_id = db.Column(db.Integer, primary_key=True)
+    post_image = db.Column(db.BLOB)
+
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
 
-@app.route('/user/register/<username>/<password>/<email>/<section>', methods=['POST', 'GET'])
+@app.route('/user/register/<username>/<password>/<email>/<section>', methods=['POST'])
 def register_user(username, password, email, section):
-    if request.method == 'POST':
-        existing_user = User.query.filter_by(user_email=email).first()
-        return existing_user
-        # if existing_user is None:
-        #     new_user = User(username, password, email, section)
-        #     db.session.add(new_user)
-        #     db.session.commit()
-        #     return "{'message':registered}", 200
-        # return "{'message':'user email already taken'}", 400
-    elif request.method == 'GET':
-        return "GET method"
+    existing_user = User.query.filter_by(user_email=email).first()
+    if existing_user is None:
+        new_user = User(username, password, email, section)
+        db.session.add(new_user)
+        db.session.commit()
+        return "{'message': 'user registered'}", 200
+    return "{'message':'user email already taken'}", 400
 
 
-@app.route('/user/login/<email>/<password>', methods=['POST', 'GET'])
+@app.route('/user/login/<email>/<password>', methods=['POST'])
 def login_user(email, password):
     existing_user = User.query.filter_by(user_email=email).first()
-    if request.method == 'GET':
+    if request.method == 'POST':
         if existing_user is None:
-            return "{'Error': 'No such user'}", 400
+            return '{"Error": "No such user"}', 400
         if bcrypt.check_password_hash(existing_user.user_password, password):
             user_token = create_access_token(identity=existing_user.user_email)
             return jsonify(access_token=user_token), 200
-        return "{'Error':'Wrong password'}", 400
+        return '{"Error":"Wrong password"}', 400
 
 
 @app.route('/user/all')
@@ -85,10 +92,18 @@ def get_all_users():
     return jsonify(result)
 
 
+@app.route('/user/savepost/<bitmap>', methods=['POST'])
+@jwt_required
+def save_post(bitmap):
+    print(bitmap)
+
+
 @app.route('/')
 def start_page():
     return "liublijett"
 
 
 if __name__ == "__main__":
+    # db.drop_all()
+    db.create_all()
     app.run(port=5000, debug=True)
