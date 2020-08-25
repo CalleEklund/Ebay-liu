@@ -1,8 +1,7 @@
 package com.example.liubiljett;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -11,17 +10,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import com.example.liubiljett.R;
+
+
 
 public class MainActivity extends AppCompatActivity {  //ANVÄND javac -Xlint:unchecked MainActivity.java
                                                         //I TERMINALEN OCH GÅ IGENOM FELEN DÄR
-
-    String[] headLineArray = {"Big Chonkus", "ODZ", "Beatles", "LasseMajas detektivbyrå"};
-    String[] priceArray = {"100kr", "120kr", "999kr", "100kr"};
-    Integer[] imageArray = {R.drawable.account, R.drawable.comment, R.drawable.heart, R.drawable.search};
-
-    ListView listView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +31,5 @@ public class MainActivity extends AppCompatActivity {  //ANVÄND javac -Xlint:un
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        MyAdapter mAdapter = new MyAdapter(this, headLineArray);
-        Log.d("adapter",mAdapter.toString());
-        listView = findViewById(R.id.listviewID);
-        if (mAdapter == null) {
-            System.out.println("HAN E NULL");
-        }
-        //listView.setAdapter(mAdapter);
-        //kan inte gitta? :(
-
-        //github.com/crazycodeboy/react-native-splash-screen/issues/
     }
-
 }
