@@ -5,26 +5,35 @@ public class RowItem {
     private String headline;
     private String price;
     private int imageID;
+    private String description;
 
-    public RowItem(final String headline, final String price, final int imageID){
+    public RowItem(final String headline, final String price, final int imageID, final String description){
         this.headline = headline;
         this.price = price;
         this.imageID = imageID;
     }
 
-    String getHeadline() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHeadline() {
         return headline;
     }
 
     //public void setHeadline(String headline) {this.headline = headline;}
 
-    String getPrice() {
+    public String getPrice() {
         return price;
     }
 
     //public void setPrice(String price) {this.price = price;}
 
-    int getImageID() {
+    public int getImageID() {
         return imageID;
     }
 

@@ -43,7 +43,7 @@ public class TestAdapter extends BaseAdapter {
 
             TextView headline = convertView.findViewById(R.id.headlineID);
             TextView price = convertView.findViewById(R.id.priceID);
-            ImageView image = convertView.findViewById(R.id.image_holderID); //skulle kunna vara image_holderID också, men testar med imageview först
+            ImageView image = convertView.findViewById(R.id.image_holderID);
 
             RowItem currentRow = (RowItem) getItem(position);
 
