@@ -11,6 +11,7 @@ public class RowItem {
         this.headline = headline;
         this.price = price;
         this.imageID = imageID;
+        this.description = description;
     }
 
     public String getDescription() {
@@ -38,4 +39,14 @@ public class RowItem {
     }
 
     //public void setImageID(int imageID) {this.imageID = imageID;}
+
+    @Override
+    public String toString() {
+        return "RowItem{" +
+                "headline='" + headline + '\'' +
+                ", price='" + price + '\'' +
+                ", imageID=" + imageID +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

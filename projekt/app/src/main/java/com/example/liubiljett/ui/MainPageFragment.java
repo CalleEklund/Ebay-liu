@@ -24,42 +24,28 @@ import java.util.Objects;
 
 public class MainPageFragment extends Fragment implements ListFragment.ItemSelectedListener {
 
-    ArrayList<RowItem> rowItems;
     ListFragment listFragment;
     DetailFragment detailFragment;
-    String gName;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_mainpage, container, false);
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        View v = root.findViewById(R.id.frame_layout);
+        listFragment = new ListFragment();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        if (v != null) {
-            detailFragment = new DetailFragment();
-            listFragment = new ListFragment();
-            ft.replace(R.id.frame_layout, listFragment);
-            ft.commit();
-        }
-
-
+        ft.replace(R.id.frame_layout, listFragment);
+        ft.commit();
 
 
         return root;
     }
 
-
     @Override
-    public void onItemSelected(String groupName) {
-
-        gName = groupName;
-        if (getView().findViewById(R.id.frame_layout) != null) {
-            detailFragment = DetailFragment.newInstance(groupName);
+    public void onItemSelected(RowItem listItem) {
+        if (getActivity().findViewById(R.id.frame_layout) != null) {
+            detailFragment = DetailFragment.newInstance(listItem);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, detailFragment).addToBackStack(null).commit();
         }
     }
-
-
 }

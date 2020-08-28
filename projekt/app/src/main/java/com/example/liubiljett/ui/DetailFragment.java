@@ -1,6 +1,7 @@
 package com.example.liubiljett.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,54 +14,59 @@ import androidx.fragment.app.Fragment;
 
 import com.example.liubiljett.R;
 import com.example.liubiljett.RowItem;
+import com.google.gson.Gson;
 
-public class DetailFragment extends Fragment {  // den här verkar vara knas
+import org.w3c.dom.Text;
 
-    /*
-    private String mHeadline;
-    private String mPrice;
-    private int mImage;
-    private String mDescription;
+public class DetailFragment extends Fragment {
 
-    public DetailFragment(final RowItem ad){
-        this.mHeadline = ad.getHeadline();
-        this.mPrice = ad.getPrice();
-        this.mImage = ad.getImageID();
-        this.mDescription = ad.getDescription();
+    String clickedItem;
+    Gson gson;
+    TextView headline;
+    TextView price;
+    TextView description;
+    ImageView image;
+
+    public DetailFragment() {
+        gson = new Gson();
     }
 
-     */
-
-    public DetailFragment(){
-
-    }
-
-    public static DetailFragment newInstance(String searchedName) {
+    public static DetailFragment newInstance(RowItem listItem) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putString("group", searchedName);
+        Gson gson = new Gson();
+        String json = gson.toJson(listItem);
+        args.putString("result", json);
         fragment.setArguments(args);
         return fragment;
     }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_detail, container, false);
-        /*
-        TextView headline = root.findViewById(R.id.detailHeadline);
-        TextView price = root.findViewById(R.id.detailPrice);
-        ImageView image = root.findViewById(R.id.detailImage);
-        TextView description = root.findViewById(R.id.detailDescription);
+        headline = root.findViewById(R.id.detailHeadline);
+        price = root.findViewById(R.id.detailPrice);
+        image = root.findViewById(R.id.detailImage);
+        description = root.findViewById(R.id.detailDescription);
 
-        headline.setText(mHeadline);
-        price.setText(mPrice);
-        image.setImageResource(mImage);
-        description.setText(mDescription);
-
-         */
+        if (getArguments() != null) {
+            clickedItem = getArguments().getString("result");
+        }
+        RowItem clicked = gson.fromJson(clickedItem, RowItem.class);
+        fillData(clicked);
 
         return root;
 
+    }
+
+
+
+    private void fillData(RowItem data) {
+        headline.setText(data.getHeadline());
+        price.setText(data.getPrice());
+        description.setText(data.getDescription());
+        image.setImageResource(data.getImageID());
     }
 
 

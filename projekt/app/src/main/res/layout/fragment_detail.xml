@@ -8,16 +8,20 @@
 
     <ImageView
         android:id="@+id/detailImage"
-        android:layout_width="258dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginBottom="14dp"
+        android:layout_width="370dp"
+        android:layout_height="370dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="316dp"
         android:contentDescription="@string/ad_photo"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/detailHeadline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.443"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
@@ -28,18 +32,19 @@
         android:text="@string/headline"
         app:layout_constraintBottom_toTopOf="@+id/detailPrice"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
         android:id="@+id/detailPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/price"
         app:layout_constraintBottom_toTopOf="@+id/detailDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
