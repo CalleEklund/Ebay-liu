@@ -8,53 +8,67 @@
 
     <ImageView
         android:id="@+id/detailImage"
-        android:layout_width="370dp"
-        android:layout_height="370dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="316dp"
+        android:layout_width="178dp"
+        android:layout_height="128dp"
+        android:layout_marginBottom="13dp"
         android:contentDescription="@string/ad_photo"
+
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/detailHeadline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.443"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
+        app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
         android:id="@+id/detailHeadline"
         android:layout_width="326dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/headline"
+        android:textAlignment="center"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/detailPrice"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.437"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.329"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/detailPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_width="328dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/price"
+        android:textAlignment="center"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/detailDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintHorizontal_bias="0.337"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/detailDescription"
-        android:layout_width="334dp"
-        android:layout_height="191dp"
-        android:layout_marginBottom="52dp"
+        android:layout_width="339dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/description"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/likeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/likeButton"
+        app:layout_constraintBottom_toTopOf="@+id/detailImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/heart" />
 </androidx.constraintlayout.widget.ConstraintLayout>
