@@ -19,10 +19,8 @@ public class LikedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_liked, container, false);
-        final TextView textView = root.findViewById(R.id.text_liked);
-        textView.setText("Liked");
 
-        return root;
+
+        return inflater.inflate(R.layout.fragment_liked, container, false);
     }
 }

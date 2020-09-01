@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">liubiljett</string>
     <string name="title_activity_test">test</string>
-    <string name="title_feed">Feed</string>
-    <string name="title_post">Post</string>
-    <string name="title_profile">Skapa konto</string>
-    <string name="title_liked">Liked</string>
-    <string name="title_chat">Chat</string>
+    <string name="title_feed">Alla inlägg</string>
+    <string name="title_post">Nytt inlägg</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_liked">Gillade inlägg</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -29,6 +28,7 @@
     <string name="logga_in">Logga in</string>
     <string name="gilla">Gilla</string>
     <string name="register">Inget konto? Registrera dig här!</string>
+    <string name="mina_poster">Mina poster</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

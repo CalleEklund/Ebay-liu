@@ -43,13 +43,13 @@ public class TestAdapter extends BaseAdapter {
 
             TextView headline = convertView.findViewById(R.id.headlineID);
             TextView price = convertView.findViewById(R.id.priceID);
-            ImageView image = convertView.findViewById(R.id.image_holderID);
+            //ImageView image = convertView.findViewById(R.id.image_holderID);
 
             RowItem currentRow = (RowItem) getItem(position);
 
             headline.setText(currentRow.getHeadline());
             price.setText(currentRow.getPrice());
-            image.setImageResource(currentRow.getImageID());
+            //image.setImageResource(currentRow.getImageID());
         }
         return convertView;
     }

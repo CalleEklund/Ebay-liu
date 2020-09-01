@@ -21,13 +21,23 @@ public class LogInFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_login, container, false);
 
         final TextView textView = root.findViewById(R.id.register_link);
+        final Button loginButton = root.findViewById(R.id.login_button);
         textView.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, new ProfileFragment()).commit();
-                Button loginButton = root.findViewById(R.id.login_button);
+                //Button loginButton = root.findViewById(R.id.login_button);
                 loginButton.setVisibility(View.INVISIBLE);
 
+            }
+        });
+
+        loginButton.setOnClickListener(new AdapterView.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, new LoggedInFragment()).commit();
+                loginButton.setVisibility(View.INVISIBLE);
             }
         });
 
