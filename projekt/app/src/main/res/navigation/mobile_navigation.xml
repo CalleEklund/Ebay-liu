@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_feed">
+    app:startDestination="@id/navigation_feed">
 
     <fragment
         android:id="@+id/navigation_feed"
@@ -19,17 +19,12 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.liubiljett.ui.ProfileFragment"
+        android:name="com.example.liubiljett.ui.LogInFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/navigation_liked"
         android:name="com.example.liubiljett.ui.LikedFragment"
         android:label="@string/title_liked"
         tools:layout="@layout/fragment_liked" />
-    <fragment
-        android:id="@+id/navigation_chat"
-        android:name="com.example.liubiljett.ui.ChatFragment"
-        android:label="@string/title_chat"
-        tools:layout="@layout/fragment_chat" />
 </navigation>

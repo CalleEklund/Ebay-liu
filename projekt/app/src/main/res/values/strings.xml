@@ -26,6 +26,9 @@
     <string name="grid_layout_manager">gridlayoutman</string>
     <string name="postimage">postImage</string>
     <string name="likeButton">likeButton</string>
+    <string name="logga_in">Logga in</string>
+    <string name="gilla">Gilla</string>
+    <string name="register">Inget konto? Registrera dig här!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

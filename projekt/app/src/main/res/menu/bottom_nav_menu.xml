@@ -18,10 +18,6 @@
         android:title="@string/title_post" />
 
     <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/comment"
-        android:title="@string/title_chat" />
-    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/account"
         android:title="@string/title_profile" />

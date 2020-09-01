@@ -25,7 +25,7 @@ public class DetailFragment extends Fragment {
     TextView headline;
     TextView price;
     TextView description;
-    ImageView image;
+    //ImageView image;
 
     public DetailFragment() {
         gson = new Gson();
@@ -47,7 +47,7 @@ public class DetailFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_detail, container, false);
         headline = root.findViewById(R.id.detailHeadline);
         price = root.findViewById(R.id.detailPrice);
-        image = root.findViewById(R.id.detailImage);
+        //image = root.findViewById(R.id.detailImage);
         description = root.findViewById(R.id.detailDescription);
 
         if (getArguments() != null) {
@@ -66,7 +66,7 @@ public class DetailFragment extends Fragment {
         headline.setText(data.getHeadline());
         price.setText(data.getPrice());
         description.setText(data.getDescription());
-        image.setImageResource(data.getImageID());
+        //image.setImageResource(data.getImageID());
     }
 
 
