@@ -2,25 +2,28 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_constraint"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
 
-    <RelativeLayout
-        android:id="@+id/relative_layout"
+    tools:context=".ui.LogInFragment">
+
+    <FrameLayout
+        android:id="@+id/frame_login"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/cardview_light_background">
 
         <Button
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+
             android:layout_marginStart="160dp"
-            android:layout_marginTop="655dp"
+            android:layout_marginTop="300dp"
             android:layout_marginEnd="160dp"
             android:layout_marginBottom="28dp"
             android:text="@string/logga_in" />
@@ -29,12 +32,9 @@
             android:id="@+id/register_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+
             android:layout_marginStart="123dp"
-            android:layout_marginTop="633dp"
+            android:layout_marginTop="260dp"
             android:layout_marginEnd="124dp"
             android:layout_marginBottom="82dp"
             android:text="@string/register"
@@ -45,12 +45,9 @@
             android:id="@+id/passwordLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+
             android:layout_marginStart="100dp"
-            android:layout_marginTop="560dp"
+            android:layout_marginTop="190dp"
             android:layout_marginEnd="101dp"
             android:layout_marginBottom="127dp"
             android:autofillHints=""
@@ -62,17 +59,14 @@
             android:id="@+id/emailLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+
             android:layout_marginStart="101dp"
-            android:layout_marginTop="493dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="101dp"
             android:layout_marginBottom="194dp"
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
-    </RelativeLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
