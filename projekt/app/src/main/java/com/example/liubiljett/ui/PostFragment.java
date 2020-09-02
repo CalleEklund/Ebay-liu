@@ -18,11 +18,12 @@ public class PostFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_post, container, false);
-        final Button postButton = root.findViewById(R.id.button2);
+        final Button postButton = root.findViewById(R.id.publishButton);
         postButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getActivity().getSupportFragmentManager().beginTransaction().replace()
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.post_frame, new MainPageFragment()).commit();
+                postButton.setVisibility(View.INVISIBLE);
             }
         });
 
