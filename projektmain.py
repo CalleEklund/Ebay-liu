@@ -4,7 +4,7 @@ import os
 
 from flask_bcrypt import Bcrypt
 
-from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_raw_jwt)
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity)
 
 app = Flask(__name__)
 db_uri = 'sqlite:///projektdb.db'
@@ -37,23 +37,32 @@ class User(db.Model):
     user_name = db.Column(db.String(255), unique=False, nullable=False)
     user_password = db.Column(db.String(255), unique=False, nullable=False)
     user_email = db.Column(db.String(255), unique=True, nullable=False)
-    user_section = db.Column(db.String(25), unique=False, nullable=False)
 
-    def __init__(self, name, password, email, section):
+    def __init__(self, name, password, email):
         self.user_name = name
         self.user_password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.user_email = email
-        self.user_section = section
 
     def to_dict(self):
         return {'id': self.user_id, 'username': self.user_name, 'password': self.user_password,
-                'email': self.user_email, 'section': self.user_section}
+                'email': self.user_email}
 
 
 class Post(db.Model):
     __tablename__ = "Post"
     post_id = db.Column(db.Integer, primary_key=True)
-    post_image = db.Column(db.BLOB)
+    post_title = db.Column(db.String(255), unique=False, nullable=False)
+    post_price = db.Column(db.String(255), unique=False, nullable=False)
+    post_desc = db.Column(db.String(255), unique=False, nullable=False)
+
+    def __init__(self, title, price, desc):
+        self.title = title
+        self.price = price
+        self.desc = desc
+
+    def to_dict(self):
+        return {'id': self.id, 'title': self.title, 'price': self.price, 'desc:': self.desc}
+
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
@@ -92,10 +101,18 @@ def get_all_users():
     return jsonify(result)
 
 
-@app.route('/user/savepost/<bitmap>', methods=['POST'])
+# Kommer inte behövas då vi kör utan bilder
+# @app.route('/user/savepost/<bitmap>', methods=['POST'])
+# @jwt_required
+# def save_post(bitmap):
+#     print(bitmap)
+
+@app.route('/protected')
 @jwt_required
-def save_post(bitmap):
-    print(bitmap)
+def protected():
+    curr_user = get_jwt_identity()
+    current_user = User.query.filter_by(user_email=curr_user).first()
+    return jsonify(logged_in_user=current_user.to_dict()), 200
 
 
 @app.route('/')
