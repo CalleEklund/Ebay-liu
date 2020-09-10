@@ -29,6 +29,12 @@
     <string name="gilla">Gilla</string>
     <string name="register">Inget konto? Registrera dig här!</string>
     <string name="mina_poster">Mina poster</string>
+    <string name="following">Följer</string>
+    <string name="showAll">Visar alla poster</string>
+    <string name="showFollowing">Visar endast de du följer</string>
+    <string name="comment">Kommentera</string>
+    <string name="follow">Följ</string>
+    <string name="publicera">Publicera</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

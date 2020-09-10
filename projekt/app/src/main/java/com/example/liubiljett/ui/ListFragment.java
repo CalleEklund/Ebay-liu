@@ -1,5 +1,6 @@
 package com.example.liubiljett.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.liubiljett.R;
 import com.example.liubiljett.RowItem;
 import com.example.liubiljett.TestAdapter;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +58,21 @@ public class ListFragment extends Fragment {
             }
 
         });
+        @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch showPost = root.findViewById(R.id.showPostsSwitch);
+        showPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    showPost.setText(R.string.showFollowing);
+                    //filtrera så att man bara lägger till de rowitems som är gjorda av de man följer
+                } else {
+                    showPost.setText(R.string.showAll);
+                    //visa alla poster som vanligt
+                }
+            }
+        });
+
+
 
 
         return root;
