@@ -136,6 +136,17 @@ def like_post(id_post):
     db.session.commit()
     return '{"Message":"Post liked"}', 200
 
+@app.route('/user/deletepost/<id_post>')
+@jwt_required
+def delete_post(id_post):
+    searched_post = Post.query.filter_by(post_id=id_post).first()
+    logged_in_user = get_current_user()
+    if searched_post not in logged_in_user.post_created:
+        return '{"Error":"No post found"}', 400
+    else:
+        db.session.delete(searched_post)
+        db.session.commit()
+        return '{"Message":"Post deleted"}', 200
 
 @app.route('/user/all')
 @jwt_required
@@ -158,7 +169,6 @@ def get_current_user():
     curr_user = get_jwt_identity()
     current_user = User.query.filter_by(user_email=curr_user).first()
     return current_user
-    # return jsonify(logged_in_user=current_user.to_dict()), 200
 
 
 @app.route('/')
