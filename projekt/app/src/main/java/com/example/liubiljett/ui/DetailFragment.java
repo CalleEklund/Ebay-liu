@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
 import com.example.liubiljett.RowItem;
 import com.google.gson.Gson;
@@ -31,7 +32,7 @@ public class DetailFragment extends Fragment {
         gson = new Gson();
     }
 
-    public static DetailFragment newInstance(RowItem listItem) {
+    public static DetailFragment newInstance(Post listItem) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();

@@ -18,12 +18,14 @@
             android:id="@+id/profileName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/profileEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="TextView" />
 
         <TextView
@@ -31,11 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/mina_poster"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:textAllCaps="false"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <ListView
+            android:layout_marginTop="10dp"
             android:id="@+id/postedByUserList"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

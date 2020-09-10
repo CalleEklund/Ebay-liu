@@ -7,7 +7,7 @@ public class RowItem {
     private int imageID;
     private String description;
 
-    public RowItem(final String headline, final String price, final int imageID, final String description){
+    public RowItem(final String headline, final String price, final String description){
         this.headline = headline;
         this.price = price;
         this.imageID = imageID;

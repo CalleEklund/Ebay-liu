@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_row"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+    android:columnCount="4"
+   >
 
-        <TextView
-            android:id="@+id/headlineID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/headlineID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:textSize="24sp"
+        android:layout_marginStart="5dp"
+        android:gravity="left"
+        android:text="Tile1"
+         />
 
-        <TextView
-            android:id="@+id/priceID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="18sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/priceID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="0"
+        android:layout_columnSpan="2"
+        android:layout_gravity="fill_horizontal"
+        android:textSize="18sp"
+        android:layout_marginStart="5dp"
+        android:gravity="left"
+        android:text="Tile2" />
 
-</LinearLayout>
+
+
+    <TextView
+        android:id="@+id/descID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_rowSpan="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_vertical"
+        android:textSize="14sp"
+        android:gravity="left"
+        android:text="Tile4" />
+
+</GridLayout>

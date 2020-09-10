@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 public class TestAdapter extends BaseAdapter {
 
-    private ArrayList<RowItem> singleRow;
+    private ArrayList<Post> singleRow;
     private LayoutInflater mInflater;
 
-    public TestAdapter(Context context, ArrayList<RowItem> mRow){
+    public TestAdapter(Context context, ArrayList<Post> mRow){
         this.singleRow = mRow;
         mInflater = (LayoutInflater.from(context));
     }
@@ -43,12 +43,14 @@ public class TestAdapter extends BaseAdapter {
 
             TextView headline = convertView.findViewById(R.id.headlineID);
             TextView price = convertView.findViewById(R.id.priceID);
+            TextView description = convertView.findViewById(R.id.descID);
             //ImageView image = convertView.findViewById(R.id.image_holderID);
 
-            RowItem currentRow = (RowItem) getItem(position);
+            Post currentRow = (Post) getItem(position);
 
-            headline.setText(currentRow.getHeadline());
+            headline.setText(currentRow.getTitle());
             price.setText(currentRow.getPrice());
+            description.setText(currentRow.getDesc());
             //image.setImageResource(currentRow.getImageID());
         }
         return convertView;

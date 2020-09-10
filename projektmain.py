@@ -1,10 +1,12 @@
+from datetime import datetime, timedelta
+import flask_login
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 
 from flask_bcrypt import Bcrypt
 
-from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity)
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt)
 
 app = Flask(__name__)
 db_uri = 'sqlite:///projektdb.db'
@@ -16,17 +18,19 @@ else:  # when running locally: use sqlite
     db_uri = 'sqlite:///{}'.format(db_path)
     debug_flag = True
 
+app.config.from_object("config.Config")
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
-app.config['JWT_SECRET_KEY'] = 'protect with your life'
+app.config['JWT_SECRET_KEY'] = app.config['SERVER_SECRET']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=500)
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
-
 blacklist = set()
 
 users_created = db.Table('users_created',
@@ -77,7 +81,7 @@ class Post(db.Model):
         self.post_desc = post_desc
 
     def to_dict(self):
-        return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc:': self.post_desc}
+        return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc': self.post_desc}
 
 
 @jwt.token_in_blacklist_loader
@@ -93,8 +97,8 @@ def register_user(username, password, email):
         new_user = User(username, password, email)
         db.session.add(new_user)
         db.session.commit()
-        return "{'message': 'user registered'}", 200
-    return "{'message':'user email already taken'}", 400
+        return "{'message': 'Användare Registerad'}", 200
+    return "{'message':'Email readan tagen'}", 400
 
 
 @app.route('/user/login/<email>/<password>', methods=['POST'])
@@ -103,11 +107,19 @@ def login_user(email, password):
 
     if request.method == 'POST':
         if existing_user is None:
-            return '{"Error": "No such user"}', 400
+            return '{"Error": "Ingen sådan användare"}', 400
         if bcrypt.check_password_hash(existing_user.user_password, password):
             user_token = create_access_token(identity=existing_user.user_email)
             return jsonify(access_token=user_token), 200
-        return '{"Error":"Wrong password"}', 400
+        return '{"Error":"Fel Lösenord"}', 400
+
+
+@app.route('/logout', methods=['DELETE'])
+@jwt_required
+def logout():
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"msg": "Successfully logged out"}), 200
 
 
 @app.route('/user/createpost/<title>/<price>/<description>')
@@ -115,13 +127,13 @@ def login_user(email, password):
 def create_post(title, price, description):
     new_post = Post(title, price, description)
     db.session.add(new_post)
-    logged_in_user = get_current_user()
+    logged_in_user = get_curr_user()
     if logged_in_user is None:
-        return "{'Error':'No such user'", 400
+        return "{'Error':'Ingen sådan användare'", 400
     else:
         logged_in_user.post_created.append(new_post)
     db.session.commit()
-    return "{'message': 'post created'}", 200
+    return "{'message': 'Inlägg Skapat'}", 200
 
 
 @app.route('/user/likepost/<id_post>')
@@ -130,23 +142,25 @@ def like_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_current_user()
     if searched_post is None:
-        return '{"Error":"No post found"}', 400
+        return '{"Error":"Inget inlägg hittat"}', 400
     else:
         logged_in_user.post_liked.append(searched_post)
     db.session.commit()
-    return '{"Message":"Post liked"}', 200
+    return '{"Message":"Inlägg Gillat"}', 200
 
-@app.route('/user/deletepost/<id_post>')
+
+@app.route('/user/deletepost/<id_post>', methods=['DELETE'])
 @jwt_required
 def delete_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_current_user()
     if searched_post not in logged_in_user.post_created:
-        return '{"Error":"No post found"}', 400
+        return '{"Error":"Inget inlägg hittat"}', 400
     else:
         db.session.delete(searched_post)
         db.session.commit()
-        return '{"Message":"Post deleted"}', 200
+        return '{"Message":"Inlägg Borttaget"}', 200
+
 
 @app.route('/user/all')
 @jwt_required
@@ -156,16 +170,34 @@ def get_all_users():
     return jsonify(result)
 
 
+@app.route('/post/all', methods=['POST'])
+def get_all_posts():
+    all_posts = Post.query.all()
+    if all_posts is None:
+        return "{'Error':'Hittad inga inlägg'}", 400
+    else:
+        result = {'all': [x.to_dict() for x in all_posts]}
+        return jsonify(result)
+
+
 @app.route('/user/get/<email>', methods=['POST'])
 def get_user(email):
     user_search = User.query.filter_by(user_email=email).first()
     if user_search is None:
-        return "{'Error':'No such user'", 400
+        return "{'Error':'Ingen sådan användare'", 400
     else:
         return jsonify(user_search.to_dict()), 200
 
 
+@app.route('/user/current', methods=['POST'])
+@jwt_required
 def get_current_user():
+    curr_user = get_jwt_identity()
+    current_user = User.query.filter_by(user_email=curr_user).first()
+    return jsonify(current_user.to_dict())
+
+
+def get_curr_user():
     curr_user = get_jwt_identity()
     current_user = User.query.filter_by(user_email=curr_user).first()
     return current_user
