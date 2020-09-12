@@ -27,4 +27,14 @@
         android:name="com.example.liubiljett.ui.LikedFragment"
         android:label="@string/title_liked"
         tools:layout="@layout/fragment_liked" />
+    <fragment
+        android:id="@+id/navigation_loggedin"
+        android:name="com.example.liubiljett.ui.LoggedInFragment"
+        android:label="@string/title_loggedin"
+        tools:layout="@layout/fragment_loggedin" >
+        <argument
+            android:name="result"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

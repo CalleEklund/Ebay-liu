@@ -43,6 +43,7 @@ public class ListFragment extends Fragment {
     private Gson gson;
     private ListView listView;
     private FragmentActivity fragmentActivity;
+    private TestAdapter adapter;
     public ListFragment() {
 
     }
@@ -50,12 +51,15 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("PAGE","mainpage");
+
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
         volleyService = new VolleyService(getContext());
         rowItems = new ArrayList<>();
         gson = new Gson();
         listView = root.findViewById(R.id.itemList);
         fragmentActivity = requireActivity();
+        adapter = new TestAdapter(fragmentActivity, rowItems);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,12 +87,13 @@ public class ListFragment extends Fragment {
 
 
         volleyService.getAllPosts(new VolleyService.VolleyCallback() {
+
+
             @Override
             public void onSuccess(String result) {
                 List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                 }.getType());
                 addRowItems(feedPosts);
-                TestAdapter adapter = new TestAdapter(fragmentActivity, rowItems);
                 listView.setAdapter(adapter);
 
             }
@@ -101,9 +106,6 @@ public class ListFragment extends Fragment {
         return root;
     }
 
-    /**
-     * Denna ska senare bytas ut mot en JSON request
-     */
     private void addRowItems(List<Post> currentFeed) {
         rowItems.addAll(currentFeed);
     }

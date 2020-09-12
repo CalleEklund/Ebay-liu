@@ -1,6 +1,7 @@
 package com.example.liubiljett.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ public class MainPageFragment extends Fragment implements ListFragment.ItemSelec
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.fragment_mainpage, container, false);
         super.onCreate(savedInstanceState);
         listFragment = new ListFragment();

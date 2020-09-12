@@ -44,6 +44,7 @@ public class LoggedInFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_loggedin, container, false);
+
         profileName = root.findViewById(R.id.profileName);
         profileEmail = root.findViewById(R.id.profileEmail);
         userCreatedPosts = root.findViewById(R.id.postedByUserList);
