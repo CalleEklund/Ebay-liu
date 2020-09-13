@@ -37,7 +37,7 @@
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/postDescr"
+            android:id="@+id/postDescription"
             android:layout_width="333dp"
             android:layout_height="74dp"
             android:layout_marginBottom="11dp"

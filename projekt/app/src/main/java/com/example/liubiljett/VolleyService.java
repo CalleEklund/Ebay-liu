@@ -77,11 +77,8 @@ public class VolleyService {
         JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, logInUserURL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String responseBody;
                 try {
-
                     String volleyResponse = response.getString("access_token");
-//                    Log.d("SUCCESS", volleyResponse);
                     volleyCallback.onSuccess(volleyResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -94,14 +91,12 @@ public class VolleyService {
                 String out;
                 responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
                 try {
-                    out = new JSONObject(responseBody).getString("message");
+                    out = new JSONObject(responseBody).getString("Error");
                     volleyCallback.onError(out);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                Log.d("ERROR", String.valueOf(error));
-
             }
         }) {
             @Override
@@ -151,6 +146,57 @@ public class VolleyService {
         queue.add(request);
     }
 
+    public void uploadPost(final String accessToken, Post post, final VolleyCallback volleyCallback) {
+        String postTitle = post.getTitle();
+        String postPrice = post.getPrice();
+        String postDescription = post.getDesc();
+        String addPostURL = baseURL + "user/createpost/" + postTitle + "/" + postPrice + "/" + postDescription;
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, addPostURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String volleyResponse = null;
+                try {
+                    volleyResponse = response.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                volleyCallback.onSuccess(volleyResponse);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String responseBody;
+                String out;
+                responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                try {
+                    out = new JSONObject(responseBody).getString("Error");
+                    volleyCallback.onError(out);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + accessToken);
+                return params;
+            }
+
+
+        };
+
+        queue.add(request);
+
+    }
+
+
     public void getAllPosts(final VolleyCallback volleyCallback) {
         String allPostURL = baseURL + "post/all";
         RequestQueue queue = Volley.newRequestQueue(mContext);
@@ -184,6 +230,7 @@ public class VolleyService {
         });
         queue.add(request);
     }
+
     public interface VolleyCallback {
         void onSuccess(String result);
 

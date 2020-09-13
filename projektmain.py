@@ -54,6 +54,7 @@ class User(db.Model):
     user_name = db.Column(db.String(255), unique=False, nullable=False)
     user_password = db.Column(db.String(255), unique=False, nullable=False)
     user_email = db.Column(db.String(255), unique=True, nullable=False)
+
     post_created = db.relationship('Post', secondary=users_created, backref="post_created")
     post_liked = db.relationship('Post', secondary=users_liked, backref="post_liked")
 
@@ -122,7 +123,7 @@ def logout():
     return jsonify({"msg": "Successfully logged out"}), 200
 
 
-@app.route('/user/createpost/<title>/<price>/<description>')
+@app.route('/user/createpost/<title>/<price>/<description>', methods=['POST'])
 @jwt_required
 def create_post(title, price, description):
     new_post = Post(title, price, description)
@@ -136,18 +137,35 @@ def create_post(title, price, description):
     return "{'message': 'Inlägg Skapat'}", 200
 
 
-@app.route('/user/likepost/<id_post>')
+@app.route('/user/likepost/<id_post>', methods=['POST'])
 @jwt_required
 def like_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
-    logged_in_user = get_current_user()
+    logged_in_user = get_curr_user()
     if searched_post is None:
         return '{"Error":"Inget inlägg hittat"}', 400
     else:
         logged_in_user.post_liked.append(searched_post)
+
     db.session.commit()
     return '{"Message":"Inlägg Gillat"}', 200
 
+
+@app.route('/user/unlikepost/<id_post>', methods=['POST'])
+@jwt_required
+def unlike_post(id_post):
+    searched_post = Post.query.filter_by(post_id=id_post).first()
+    logged_in_user = get_curr_user()
+    if searched_post is None:
+        return '{"Error":"Inget inlägg hittat"}', 400
+    else:
+        if searched_post not in logged_in_user.post_liked:
+            return '{"Error":"Kan inte ogillat inte gillat inlägg"}',400
+        else:
+            logged_in_user.post_liked.remove(searched_post)
+
+    db.session.commit()
+    return '{"Message":"Inlägg Ogillat"}', 200
 
 @app.route('/user/deletepost/<id_post>', methods=['DELETE'])
 @jwt_required
@@ -209,6 +227,6 @@ def start_page():
 
 
 if __name__ == "__main__":
-    # db.drop_all()
+  #  db.drop_all()
     db.create_all()
     app.run(port=5000, debug=True)

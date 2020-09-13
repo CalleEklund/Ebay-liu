@@ -15,6 +15,8 @@ import com.example.liubiljett.ui.MainPageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity implements LogInFragment.OnAcccesKeyListener {
     //ANVÄND javac -Xlint:unchecked MainActivity.java
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
 
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
-                        navController.navigate(R.id.navigation_post);
+                        args.putString("result", new Gson().toJson(loggedInUser));
+                        navController.navigate(R.id.navigation_post,args);
                         break;
                     case R.id.navigation_liked:
                         args.putString("result", new Gson().toJson(loggedInUser));
@@ -49,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
                         navController.navigate(R.id.navigation_feed);
                         break;
                     case R.id.navigation_profile:
+
                         args.putString("result", new Gson().toJson(loggedInUser));
                         if (hasUserAccessKey) {
                             navController.navigate(R.id.navigation_loggedin, args);
+
                         } else {
                             navController.navigate(R.id.navigation_profile);
                         }
@@ -72,7 +77,5 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
         if (u != null) {
             loggedInUser = u;
         }
-//        Log.d("key", String.valueOf(hasUserAccessKey));
-//        Log.d("loggedinuser", loggedInUser.toString());
     }
 }

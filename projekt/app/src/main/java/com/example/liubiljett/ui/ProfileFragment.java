@@ -61,10 +61,10 @@ public class ProfileFragment extends Fragment {
         final TextView passwordTextView = root.findViewById(R.id.password);
         final TextView confirmPasswordTextView = root.findViewById(R.id.confirm_password);
 
-        nameTextView.setText("Calle");
-        emailTextView.setText("calle@gmail.com");
-        passwordTextView.setText("losen123");
-        confirmPasswordTextView.setText("losen123");
+//        nameTextView.setText("Calle");
+//        emailTextView.setText("calle@gmail.com");
+        //passwordTextView.setText("losen123");
+        //confirmPasswordTextView.setText("losen123");
 
         Button createButton = root.findViewById(R.id.create_button);
         createButton.setOnClickListener(new AdapterView.OnClickListener() {
@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
 
                             toast.show();
 
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, new LoggedInFragment()).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, new LogInFragment()).commit();
 
                         }
 

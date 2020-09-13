@@ -46,7 +46,7 @@ public class LogInFragment extends Fragment {
         final TextView passwordTextView = root.findViewById(R.id.passwordLogin);
 
         emailTextView.setText("calle@gmail.com");
-        passwordTextView.setText("losen123");
+        passwordTextView.setText("callelosen");
 
 
         textView.setOnClickListener(new AdapterView.OnClickListener() {
@@ -69,6 +69,7 @@ public class LogInFragment extends Fragment {
                         @Override
                         public void onSuccess(String result) {
                             setCurrentUser(result);
+//                            Log.d("key", result);
                             loginButton.setVisibility(View.INVISIBLE);
 
                         }
@@ -90,8 +91,8 @@ public class LogInFragment extends Fragment {
 
     }
 
-    private void setCurrentUser(String inUser) {
-        volleyService.getCurrentUser(inUser, new VolleyService.VolleyCallback() {
+    public void setCurrentUser(final String userAccessToken) {
+        volleyService.getCurrentUser(userAccessToken, new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
                 JsonObject convertedObject = new Gson().fromJson(result, JsonObject.class);
@@ -104,10 +105,9 @@ public class LogInFragment extends Fragment {
                 JsonElement userLikedJsonElem = convertedObject.get("liked_posts");
                 List userLiked = gson.fromJson(userLikedJsonElem, List.class);
                 User newUser = new User(userName, userEmail, userPassword, userId, true, userCreated, userLiked);
-
-
+                newUser.setAccessToken(userAccessToken);
                 loggedInFragment = LoggedInFragment.newInstance(newUser);
-                mainParent.hasAccessKey(newUser.isAccessToken(),newUser);
+                mainParent.hasAccessKey(newUser.isAccessToken(), newUser);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, loggedInFragment).commit();
             }
 
@@ -123,12 +123,12 @@ public class LogInFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnAcccesKeyListener) {
             mainParent = (OnAcccesKeyListener) context;
-        }else{
+        } else {
             throw new ClassCastException(context.toString() + "must implement interface");
         }
     }
 
     public interface OnAcccesKeyListener {
-        public void hasAccessKey(boolean hasKey,User loggedInUser);
+        public void hasAccessKey(boolean hasKey, User loggedInUser);
     }
 }

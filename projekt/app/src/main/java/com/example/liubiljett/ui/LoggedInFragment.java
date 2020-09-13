@@ -1,6 +1,7 @@
 package com.example.liubiljett.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
 import com.example.liubiljett.TestAdapter;
 import com.example.liubiljett.User;
+import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoggedInFragment extends Fragment {
     TextView profileName;
@@ -58,8 +61,7 @@ public class LoggedInFragment extends Fragment {
         }
         User u = gson.fromJson(currentUser, User.class);
         setData(u);
-        TestAdapter adapter = new TestAdapter(requireActivity(), rowItems);
-        userCreatedPosts.setAdapter(adapter);
+
         return root;
     }
 
@@ -68,6 +70,8 @@ public class LoggedInFragment extends Fragment {
         profileName.setText("Namn: " + u.getName());
         profileEmail.setText("Email: " + u.getEmail());
         rowItems.addAll(u.getCreated_post());
+        TestAdapter adapter = new TestAdapter(requireActivity(), rowItems);
+        userCreatedPosts.setAdapter(adapter);
 
     }
 }

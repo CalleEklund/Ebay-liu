@@ -1,5 +1,7 @@
 package com.example.liubiljett;
 
+import android.util.Log;
+
 import java.util.List;
 
 public class User {
@@ -8,6 +10,7 @@ public class User {
     private String password;
     private int userId;
     private boolean hasAccessToken;
+    private String accessToken;
     private List<Post> created_post;
     private List<Post> liked_post;
 
@@ -17,8 +20,10 @@ public class User {
         this.password = password;
         this.userId = userId;
         this.hasAccessToken = hasAccessToken;
+        this.accessToken = "";
         this.created_post = created_post;
         this.liked_post = liked_post;
+
     }
 
     public int getUserId() {
@@ -53,8 +58,20 @@ public class User {
         this.created_post = created_post;
     }
 
+    public void addPost(Post p){
+        this.created_post.add(p);
+    }
+
     public void setLiked_post(List<Post> liked_post) {
         this.liked_post = liked_post;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -65,6 +82,7 @@ public class User {
                         ", password: " + password +
                         ", userId: " + userId +
                         ", hasAccessToken: " + hasAccessToken +
+                        ", userAccessToken:" + accessToken +
                         ", created_post: " + created_post +
                         ", liked_post: " + liked_post
                 ;

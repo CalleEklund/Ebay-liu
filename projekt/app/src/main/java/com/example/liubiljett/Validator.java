@@ -1,6 +1,7 @@
 package com.example.liubiljett;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
@@ -37,7 +38,7 @@ public class Validator {
         return !matcher.find();
     }
 
-    public boolean checkInput(int createAccount,String name, String email, String password, String confirmPassword) {
+    public boolean checkInput(int createAccount, String name, String email, String password, String confirmPassword) {
         if (!checkPassword(password, confirmPassword)) {
             Toast toast = Toast.makeText(mContext,
                     "Lösenorden matcher inte varandra.",
@@ -50,7 +51,7 @@ public class Validator {
                     Toast.LENGTH_SHORT);
 
             toast.show();
-        } else if (checkEmptyInput(createAccount,name, email, password, confirmPassword)) {
+        } else if (checkEmptyInput(createAccount, name, email, password, confirmPassword)) {
             Toast toast = Toast.makeText(mContext,
                     "Tomma inputs",
                     Toast.LENGTH_SHORT);
@@ -60,5 +61,9 @@ public class Validator {
             return true;
         }
         return false;
+    }
+
+    public boolean checkPostInput(Post p) {
+        return p.getTitle() != null || p.getPrice() != null || p.getDesc() != null;
     }
 }
