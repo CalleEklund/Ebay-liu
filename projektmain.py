@@ -45,6 +45,12 @@ users_liked = db.Table('users_liked',
                        db.Column('message_liked', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
                                  primary_key=True)
                        )
+commented_by = db.Table('commented_by',
+                        db.Column('comment_by', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
+                                  primary_key=True),
+                        db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+                                  primary_key=True)
+                        )
 
 
 class User(db.Model):
@@ -76,13 +82,25 @@ class Post(db.Model):
     post_price = db.Column(db.String(255), unique=False, nullable=False)
     post_desc = db.Column(db.String(255), unique=False, nullable=False)
 
+    post_commented_by = db.relationship('User', secondary=commented_by, backref="post_commented_by")
+    _comments = db.Column(db.String, default="")
+
     def __init__(self, post_title, post_price, post_desc):
         self.post_title = post_title
         self.post_price = post_price
         self.post_desc = post_desc
 
+    @property
+    def comments(self):
+        return [str(x) for x in self._comments.split(';')]
+
+    @comments.setter
+    def comments(self, comment):
+        self._comments += ';%s' % comment
+
     def to_dict(self):
-        return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc': self.post_desc}
+        return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc': self.post_desc,
+                'comments': self._comments, 'commentedby': [x.to_dict() for x in self.post_commented_by]}
 
 
 @jwt.token_in_blacklist_loader
@@ -160,12 +178,13 @@ def unlike_post(id_post):
         return '{"Error":"Inget inlägg hittat"}', 400
     else:
         if searched_post not in logged_in_user.post_liked:
-            return '{"Error":"Kan inte ogillat inte gillat inlägg"}',400
+            return '{"Error":"Kan inte ogillat inte gillat inlägg"}', 400
         else:
             logged_in_user.post_liked.remove(searched_post)
 
     db.session.commit()
     return '{"Message":"Inlägg Ogillat"}', 200
+
 
 @app.route('/user/deletepost/<id_post>', methods=['DELETE'])
 @jwt_required
@@ -178,6 +197,23 @@ def delete_post(id_post):
         db.session.delete(searched_post)
         db.session.commit()
         return '{"Message":"Inlägg Borttaget"}', 200
+
+
+@app.route('/user/comment/<id_post>/<comment>', methods=['POST'])
+@jwt_required
+def add_comment(id_post, comment):
+    searched_post = Post.query.filter_by(post_id=id_post).first()
+    logged_in_user = get_curr_user()
+    if not searched_post:
+        return '{"Error":"Inget inlägg hittat"}', 400
+    elif searched_post in logged_in_user.post_created:
+        return '{"Error":"Kan inte kommentera eget inlägg"}', 400
+
+    else:
+        searched_post.comments = comment
+        searched_post.post_commented_by.append(logged_in_user)
+        db.session.commit()
+        return '{"Message":"Inlägg kommenterat"}'
 
 
 @app.route('/user/all')
@@ -227,6 +263,6 @@ def start_page():
 
 
 if __name__ == "__main__":
-  #  db.drop_all()
+    # db.drop_all()
     db.create_all()
     app.run(port=5000, debug=True)
