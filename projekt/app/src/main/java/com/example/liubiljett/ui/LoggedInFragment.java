@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,8 +63,18 @@ public class LoggedInFragment extends Fragment {
         User u = gson.fromJson(currentUser, User.class);
         setData(u);
 
+        final Button logOut = root.findViewById(R.id.button4);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //LOGGA UT
+            }
+        });
+
         return root;
     }
+
+
 
     @SuppressLint("SetTextI18n")
     public void setData(User u) {
