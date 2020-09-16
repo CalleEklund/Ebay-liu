@@ -24,6 +24,7 @@ import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
 import com.example.liubiljett.RowItem;
 import com.example.liubiljett.TestAdapter;
+import com.example.liubiljett.User;
 import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,9 +44,20 @@ public class ListFragment extends Fragment {
     private Gson gson;
     private ListView listView;
     private FragmentActivity fragmentActivity;
+    private User currentUser;
     private TestAdapter adapter;
     public ListFragment() {
 
+    }
+
+    public static ListFragment newInstance(User currentUser) {
+        ListFragment fragment = new ListFragment();
+        Bundle args = new Bundle();
+        Gson gson = new Gson();
+        String json = gson.toJson(currentUser);
+        args.putString("currentUser", json);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
@@ -60,11 +72,25 @@ public class ListFragment extends Fragment {
         fragmentActivity = requireActivity();
         adapter = new TestAdapter(fragmentActivity, rowItems);
 
+        if (getArguments() != null) {
+            String currentUserString = getArguments().getString("currentUser");
+            if (!currentUserString.equals("null")) {
+                currentUser = gson.fromJson(currentUserString, User.class);
+//                Log.d("user",currentUser.toString());
+
+            }
+        } else {
+            Log.d("ERROR", "args null");
+        }
+
+
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mainParent = (ItemSelectedListener) getActivity().getSupportFragmentManager().findFragmentByTag("mainpageFragment");
-                mainParent.onItemSelected(rowItems.get(position));
+                mainParent.onItemSelected(rowItems.get(position),currentUser);
 
             }
 
@@ -82,6 +108,7 @@ public class ListFragment extends Fragment {
                 }
             }
         });
+
 
 
 
@@ -110,6 +137,6 @@ public class ListFragment extends Fragment {
     }
 
     public interface ItemSelectedListener {
-        void onItemSelected(Post listItem);
+        void onItemSelected(Post listItem,User user);
     }
 }

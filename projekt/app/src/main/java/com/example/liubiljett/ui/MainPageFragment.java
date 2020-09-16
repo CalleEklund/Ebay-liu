@@ -12,18 +12,32 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
+import com.example.liubiljett.User;
+import com.google.gson.Gson;
 
 
 public class MainPageFragment extends Fragment implements ListFragment.ItemSelectedListener {
 
+    private Gson gson;
     ListFragment listFragment;
     DetailFragment detailFragment;
+
+    User currentUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mainpage, container, false);
         super.onCreate(savedInstanceState);
-        listFragment = new ListFragment();
+        gson = new Gson();
+        if (getArguments() != null) {
+            String currentUserString = getArguments().getString("user");
+
+            currentUser = gson.fromJson(currentUserString, User.class);
+        } else {
+            Log.d("ERROR", "args null");
+        }
+
+        listFragment = ListFragment.newInstance(currentUser);
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame_layout, listFragment);
         ft.commit();
@@ -33,9 +47,9 @@ public class MainPageFragment extends Fragment implements ListFragment.ItemSelec
     }
 
     @Override
-    public void onItemSelected(Post listItem) {
+    public void onItemSelected(Post listItem, User user) {
         if (getActivity().findViewById(R.id.frame_layout) != null) {
-            detailFragment = DetailFragment.newInstance(listItem);
+            detailFragment = DetailFragment.newInstance(listItem, user);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, detailFragment).addToBackStack(null).commit();
         }
     }

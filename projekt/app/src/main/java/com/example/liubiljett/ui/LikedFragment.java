@@ -40,11 +40,11 @@ public class LikedFragment extends Fragment {
             String currentUserString = getArguments().getString("result");
             if (currentUserString != null) {
                 currentUser = gson.fromJson(currentUserString, User.class);
-                Log.d("liked", Arrays.toString(currentUser.getLiked_post().toArray()));
             }
         } else {
             Log.d("ERROR", "args null");
         }
+
 
         showLikedPosts(currentUser);
 

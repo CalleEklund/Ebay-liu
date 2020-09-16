@@ -3,6 +3,7 @@ package com.example.liubiljett;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,14 +43,23 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
                         args.putString("result", new Gson().toJson(loggedInUser));
-                        navController.navigate(R.id.navigation_post,args);
+                        navController.navigate(R.id.navigation_post, args);
                         break;
                     case R.id.navigation_liked:
-                        args.putString("result", new Gson().toJson(loggedInUser));
-                        navController.navigate(R.id.navigation_liked,args);
+                        if (loggedInUser == null) {
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    "Du måste vara inloggad för att se dina gillade inlägg.",
+                                    Toast.LENGTH_SHORT);
+
+                            toast.show();
+                        } else {
+                            args.putString("result", new Gson().toJson(loggedInUser));
+                            navController.navigate(R.id.navigation_liked, args);
+                        }
                         break;
                     case R.id.navigation_feed:
-                        navController.navigate(R.id.navigation_feed);
+                        args.putString("user", new Gson().toJson(loggedInUser));
+                        navController.navigate(R.id.navigation_feed, args);
                         break;
                     case R.id.navigation_profile:
 

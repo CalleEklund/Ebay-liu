@@ -2,31 +2,31 @@ package com.example.liubiljett;
 
 public class RowItem {
 
-    private String headline;
+    private String title;
     private String price;
     private int imageID;
-    private String description;
+    private String desc;
 
-    public RowItem(final String headline, final String price, final String description){
-        this.headline = headline;
+    public RowItem(final String title, final String price, final String desc){
+        this.title = title;
         this.price = price;
         this.imageID = imageID;
-        this.description = description;
+        this.desc = desc;
     }
 
     public String getDescription() {
-        return description;
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String desc) {
+        this.desc = desc;
     }
 
-    public String getHeadline() {
-        return headline;
+    public String getTitle() {
+        return title;
     }
 
-    //public void setHeadline(String headline) {this.headline = headline;}
+    //public void setHeadline(String title) {this.title = title;}
 
     public String getPrice() {
         return price;
@@ -43,10 +43,10 @@ public class RowItem {
     @Override
     public String toString() {
         return "RowItem{" +
-                "headline='" + headline + '\'' +
+                "title='" + title + '\'' +
                 ", price='" + price + '\'' +
                 ", imageID=" + imageID +
-                ", description='" + description + '\'' +
+                ", desc='" + desc + '\'' +
                 '}';
     }
 }

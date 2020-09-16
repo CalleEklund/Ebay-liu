@@ -10,8 +10,8 @@ public class Post {
         this.title = title;
         this.price = price;
         this.desc = desc;
-        this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
@@ -30,11 +30,10 @@ public class Post {
 
     @Override
     public String toString() {
-        return
+        return "Post{" +
                 "title='" + title +
-                        ", price='" + price +
-                        ", desc='" + desc +
-                        ", id=" + id
-                ;
+                ", price='" + price +
+                ", desc='" + desc +
+                ", id=" + id;
     }
 }

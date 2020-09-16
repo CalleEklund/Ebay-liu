@@ -129,6 +129,6 @@ public class LogInFragment extends Fragment {
     }
 
     public interface OnAcccesKeyListener {
-        public void hasAccessKey(boolean hasKey, User loggedInUser);
+        void hasAccessKey(boolean hasKey, User loggedInUser);
     }
 }

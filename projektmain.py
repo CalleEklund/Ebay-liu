@@ -100,7 +100,7 @@ class Post(db.Model):
 
     def to_dict(self):
         return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc': self.post_desc,
-                'comments': self._comments, 'commentedby': [x.to_dict() for x in self.post_commented_by]}
+                'comments': self._comments, 'commentedby': [x.user_email for x in self.post_commented_by]}
 
 
 @jwt.token_in_blacklist_loader

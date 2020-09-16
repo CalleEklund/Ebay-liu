@@ -196,7 +196,94 @@ public class VolleyService {
 
     }
 
+    public void likePost(final String accessToken,int postId, final VolleyCallback volleyCallback){
+        String likePostURL = baseURL + "user/likepost/"+postId;
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, likePostURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String volleyResponse = null;
+                try {
+                    volleyResponse = response.getString("Message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+                volleyCallback.onSuccess(volleyResponse);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String responseBody;
+                String out;
+                responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                try {
+                    out = new JSONObject(responseBody).getString("Error");
+                    volleyCallback.onError(out);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + accessToken);
+                return params;
+            }
+
+
+        };
+
+        queue.add(request);
+    }
+    public void unLikePost(final String accessToken,int postId, final VolleyCallback volleyCallback){
+        String likePostURL = baseURL + "user/unlikepost/"+postId;
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, likePostURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String volleyResponse = null;
+                try {
+                    volleyResponse = response.getString("Message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                volleyCallback.onSuccess(volleyResponse);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String responseBody;
+                String out;
+                responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                try {
+                    out = new JSONObject(responseBody).getString("Error");
+                    volleyCallback.onError(out);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + accessToken);
+                return params;
+            }
+
+
+        };
+
+        queue.add(request);
+    }
     public void getAllPosts(final VolleyCallback volleyCallback) {
         String allPostURL = baseURL + "post/all";
         RequestQueue queue = Volley.newRequestQueue(mContext);

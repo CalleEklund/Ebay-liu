@@ -67,6 +67,7 @@ public class PostFragment extends Fragment {
                 String postPrice = postPriceTextView.getText().toString();
                 String postDescription = postDescriptionTextView.getText().toString();
                 final Post newPost = new Post(postTitle, postPrice, postDescription);
+                Log.d("post",newPost.toString());
                 if (validator.checkPostInput(newPost)){
                     volleyService.uploadPost(currentUser.getAccessToken(), newPost, new VolleyService.VolleyCallback() {
                         @Override
