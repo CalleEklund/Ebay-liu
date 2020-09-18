@@ -21,7 +21,7 @@ public class MainPageFragment extends Fragment implements ListFragment.ItemSelec
     private Gson gson;
     ListFragment listFragment;
     DetailFragment detailFragment;
-
+    boolean hasAccessKey;
     User currentUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -31,7 +31,6 @@ public class MainPageFragment extends Fragment implements ListFragment.ItemSelec
         gson = new Gson();
         if (getArguments() != null) {
             String currentUserString = getArguments().getString("user");
-
             currentUser = gson.fromJson(currentUserString, User.class);
         } else {
             Log.d("ERROR", "args null");

@@ -14,11 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
 import com.example.liubiljett.User;
 import com.example.liubiljett.Validator;
 import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -32,6 +34,10 @@ public class LogInFragment extends Fragment {
     LoggedInFragment loggedInFragment;
     OnAcccesKeyListener mainParent;
 
+
+    public static LogInFragment newInstance() {
+        return new LogInFragment();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -95,6 +101,11 @@ public class LogInFragment extends Fragment {
         volleyService.getCurrentUser(userAccessToken, new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
+                /** TODO:
+                 * Se om du kan göra detta smidigare genom att använda gsonbuilder för att kunna excluda hasAccesskey och sätt den sedan till true
+                 * https://www.tutorialspoint.com/gson/gson_excluded_serialization.htm
+                 * Använda transiten framför värderna
+                 */
                 JsonObject convertedObject = new Gson().fromJson(result, JsonObject.class);
                 String userName = String.valueOf(convertedObject.get("username"));
                 String userPassword = String.valueOf(convertedObject.get("password"));

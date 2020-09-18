@@ -45,12 +45,14 @@ users_liked = db.Table('users_liked',
                        db.Column('message_liked', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
                                  primary_key=True)
                        )
-commented_by = db.Table('commented_by',
-                        db.Column('comment_by', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
-                                  primary_key=True),
-                        db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
-                                  primary_key=True)
-                        )
+
+
+# commented_by = db.Table('commented_by',
+#                         db.Column('comment_by', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
+#                                   primary_key=True),
+#                         db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+#                                   primary_key=True)
+#                         )
 
 
 class User(db.Model):
@@ -82,7 +84,7 @@ class Post(db.Model):
     post_price = db.Column(db.String(255), unique=False, nullable=False)
     post_desc = db.Column(db.String(255), unique=False, nullable=False)
 
-    post_commented_by = db.relationship('User', secondary=commented_by, backref="post_commented_by")
+    _commented_by = db.Column(db.String, default="")
     _comments = db.Column(db.String, default="")
 
     def __init__(self, post_title, post_price, post_desc):
@@ -96,11 +98,25 @@ class Post(db.Model):
 
     @comments.setter
     def comments(self, comment):
-        self._comments += ';%s' % comment
+        if self._comments is None:
+            self._comments = comment
+        else:
+            self._comments += '%s;' % comment
+
+    @property
+    def commented_by(self):
+        return [str(x) for x in self._commented_by.split(';')]
+
+    @commented_by.setter
+    def commented_by(self, user_email):
+        if self._commented_by is None:
+            self._commented_by = user_email
+        else:
+            self._commented_by += '%s;' % user_email
 
     def to_dict(self):
         return {'id': self.post_id, 'title': self.post_title, 'price': self.post_price, 'desc': self.post_desc,
-                'comments': self._comments, 'commentedby': [x.user_email for x in self.post_commented_by]}
+                'comments': [x for x in self.comments], 'commentedby': [x for x in self.commented_by]}
 
 
 @jwt.token_in_blacklist_loader
@@ -138,7 +154,7 @@ def login_user(email, password):
 def logout():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
-    return jsonify({"msg": "Successfully logged out"}), 200
+    return jsonify({"msg": "Du är utloggad"}), 200
 
 
 @app.route('/user/createpost/<title>/<price>/<description>', methods=['POST'])
@@ -211,7 +227,7 @@ def add_comment(id_post, comment):
 
     else:
         searched_post.comments = comment
-        searched_post.post_commented_by.append(logged_in_user)
+        searched_post.commented_by = logged_in_user.user_email
         db.session.commit()
         return '{"Message":"Inlägg kommenterat"}'
 

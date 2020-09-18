@@ -75,16 +75,13 @@ def add_comment(post_id, comment, token):
 
 # print(register_user("felix","felixlosen","felix@gmail.com"))
 # print(register_user("calle", "callelosen", "calle@gmail.com"))
-
-token = login_user('calle@gmail.com', 'callelosen')
+# token = login_user('calle@gmail.com', 'callelosen')
 # token = login_user("felix@gmail.com", "felixlosen")
-#
 # print(create_post(token,"gilla","10kr","snälla"))
 # print(get_user('calle@gmail.com'))
-#
 # print(get_user('felix@gmail.com'))
 # print(like_post(token, 1))
-print(unlike_post(token,1))
+# print(unlike_post(token,1))
 # print(delete_post(token,1))
 # print(get_feed())
 # print(token)

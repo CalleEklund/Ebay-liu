@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,15 +23,17 @@ import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LoggedInFragment extends Fragment {
     TextView profileName;
     TextView profileEmail;
     ListView userCreatedPosts;
     ArrayList<Post> rowItems;
-    String currentUser;
+    String currentUserString;
+    User currentUser;
     Gson gson;
+    private VolleyService volleyService;
+    LogInFragment.OnAcccesKeyListener mainParent;
 
 
     public LoggedInFragment() {
@@ -48,7 +51,7 @@ public class LoggedInFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_loggedin, container, false);
-
+        volleyService = new VolleyService(getContext());
         profileName = root.findViewById(R.id.profileName);
         profileEmail = root.findViewById(R.id.profileEmail);
         userCreatedPosts = root.findViewById(R.id.postedByUserList);
@@ -56,25 +59,54 @@ public class LoggedInFragment extends Fragment {
 
 
         if (getArguments() != null) {
-            currentUser = getArguments().getString("result");
+            currentUserString = getArguments().getString("result");
         } else {
             Log.d("ERROR", "args null");
         }
-        User u = gson.fromJson(currentUser, User.class);
-        setData(u);
+        currentUser = gson.fromJson(currentUserString, User.class);
+        setData(currentUser);
 
         final Button logOut = root.findViewById(R.id.button4);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //LOGGA UT
+                volleyService.logOutUser(currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast toast = Toast.makeText(getContext(),
+                                result,
+                                Toast.LENGTH_SHORT);
+
+                        toast.show();
+                        mainParent.hasAccessKey(false, null);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_logged, new LogInFragment()).commit();
+                    }
+
+                    @Override
+                    public void onError(String result) {
+                        Toast toast = Toast.makeText(getContext(),
+                                result,
+                                Toast.LENGTH_SHORT);
+
+                        toast.show();
+                    }
+                });
             }
+
         });
 
         return root;
     }
 
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof LogInFragment.OnAcccesKeyListener) {
+            mainParent = (LogInFragment.OnAcccesKeyListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + "must implement interface");
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     public void setData(User u) {

@@ -51,6 +51,9 @@ public class LikedFragment extends Fragment {
         return root;
     }
     public void showLikedPosts(User u){
+        /**TODO:
+         * Lägg så att den hämtar användare för att hitta de gillade inläggen
+         */
         userLikedPosts.addAll(u.getLiked_post());
         TestAdapter adapter = new TestAdapter(requireActivity(), userLikedPosts);
         likedList.setAdapter(adapter);

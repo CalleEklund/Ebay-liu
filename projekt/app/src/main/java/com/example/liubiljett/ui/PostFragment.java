@@ -79,7 +79,7 @@ public class PostFragment extends Fragment {
 
                             toast.show();
                             currentUser.addPost(newPost);
-                            mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+//                            mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
                         }
 
                         @Override

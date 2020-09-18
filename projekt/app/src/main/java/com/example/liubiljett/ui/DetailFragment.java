@@ -26,6 +26,7 @@ import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DetailFragment extends Fragment {
 
@@ -34,7 +35,6 @@ public class DetailFragment extends Fragment {
     TextView headline;
     TextView price;
     TextView description;
-    TextView createdBy;
     ArrayList<String> commentPosts;
     String comment;
     private VolleyService volleyService;
@@ -74,24 +74,23 @@ public class DetailFragment extends Fragment {
 
 
         if (getArguments() != null) {
-//            Log.d("args", getArguments().toString());
             clickedItem = getArguments().getString("result");
             currentUserString = getArguments().getString("user");
         }
         clicked = gson.fromJson(clickedItem, Post.class);
         currentUser = gson.fromJson(currentUserString, User.class);
         showPost(clicked);
-        if(currentUser != null){
-            if(isOwnPost()){
+        if (currentUser != null) {
+            if (isOwnPost()) {
                 like.setChecked(true);
                 follow.setChecked(true);
                 like.setEnabled(false);
                 follow.setEnabled(false);
-            }else if(isLikedPost()){
+            } else if (isLikedPost()) {
                 like.setChecked(true);
             }
             //Lägg till en check för följda personer
-        }else{
+        } else {
             like.setEnabled(false);
             follow.setEnabled(false);
             commentField.setEnabled(false);
@@ -102,7 +101,6 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.d("TAG","inlägget gillat");
                         volleyService.likePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -121,7 +119,6 @@ public class DetailFragment extends Fragment {
                             }
                         });
                     } else {
-                        Log.d("TAG","inlägget ogillat");
                         volleyService.unLikePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -139,7 +136,6 @@ public class DetailFragment extends Fragment {
                                 toast.show();
                             }
                         });
-                        //ta bort post ur gillade
                     }
                 }
             });
@@ -157,21 +153,41 @@ public class DetailFragment extends Fragment {
                 }
             });
         }
-
+        clicked.getComments().removeAll(Arrays.asList("", null));
+        for (int i = 0; i < clicked.getComments().size(); i++) {
+            commentPosts.add(clicked.getCommentedBy().get(i) + ": " + clicked.getComments().get(i));
+        }
 
         // FRÅN: https://stackoverflow.com/questions/8063439/android-edittext-finished-typing-event
         commentField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE
-                        || event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    if (event == null || !event.isShiftPressed()) {
-                        comment = commentField.getText().toString();
-                        commentPosts.add(comment);
+                if (actionId == EditorInfo.IME_ACTION_DONE || event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+//                  Bort kommentarad för att den kallar på addComment med en tom sträng en andra gång vilket knasar till det
+//                    if (event == null || !event.isShiftPressed()) {
+                    comment = commentField.getText().toString();
+                    volleyService.addComment(currentUser.getAccessToken(), clicked.getId(), comment, new VolleyService.VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            Toast toast = Toast.makeText(getContext(),
+                                    result,
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                            commentPosts.add(comment);
+                        }
 
-                        commentField.setText("");
-                        return true;
-                    }
+                        @Override
+                        public void onError(String result) {
+                            Toast toast = Toast.makeText(getContext(),
+                                    result,
+                                    Toast.LENGTH_SHORT);
+
+                            toast.show();
+                        }
+                    });
+                    commentField.setText("");
+//                        return true;
+//                    }
                 }
                 return false;
             }
@@ -188,8 +204,6 @@ public class DetailFragment extends Fragment {
         });
 
          */
-
-
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
@@ -209,7 +223,8 @@ public class DetailFragment extends Fragment {
         }
         return false;
     }
-    public boolean isLikedPost(){
+
+    public boolean isLikedPost() {
         for (Post userLikedPost : currentUser.getLiked_post()) {
             if (userLikedPost.getId() == clicked.getId()) {
                 return true;
@@ -224,6 +239,7 @@ public class DetailFragment extends Fragment {
         headline.setText("Title: " + data.getTitle());
         price.setText("Price: " + data.getPrice());
         description.setText("Övrig info: " + data.getDesc());
+
     }
 
 

@@ -27,6 +27,8 @@ import com.example.liubiljett.TestAdapter;
 import com.example.liubiljett.User;
 import com.example.liubiljett.VolleyService;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -34,6 +36,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,8 +79,6 @@ public class ListFragment extends Fragment {
             String currentUserString = getArguments().getString("currentUser");
             if (!currentUserString.equals("null")) {
                 currentUser = gson.fromJson(currentUserString, User.class);
-//                Log.d("user",currentUser.toString());
-
             }
         } else {
             Log.d("ERROR", "args null");
@@ -116,14 +117,13 @@ public class ListFragment extends Fragment {
 
 
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(String result)  {
+//                Log.d("feedposts", result);
                 List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                 }.getType());
                 addRowItems(feedPosts);
                 listView.setAdapter(adapter);
-
             }
-
             @Override
             public void onError(String result) {
                 Log.d("ERROR", result);

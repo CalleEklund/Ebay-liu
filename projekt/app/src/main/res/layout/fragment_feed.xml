@@ -8,7 +8,7 @@
     tools:context=".ui.MainPageFragment">
 
     <LinearLayout
-        android:id="@+id/feed_layout"
+        android:id="@+id/frame_feed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">

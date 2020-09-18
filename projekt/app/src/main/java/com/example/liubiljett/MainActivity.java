@@ -39,18 +39,20 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Bundle args = new Bundle();
-
+                if (loggedInUser != null) {
+                    Log.d("TAG", "key" + hasUserAccessKey + "user: " + loggedInUser);
+                }
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
                         args.putString("result", new Gson().toJson(loggedInUser));
                         navController.navigate(R.id.navigation_post, args);
                         break;
                     case R.id.navigation_liked:
-                        if (loggedInUser == null) {
+                        if (!hasUserAccessKey) {
+
                             Toast toast = Toast.makeText(getApplicationContext(),
                                     "Du måste vara inloggad för att se dina gillade inlägg.",
                                     Toast.LENGTH_SHORT);
-
                             toast.show();
                         } else {
                             args.putString("result", new Gson().toJson(loggedInUser));
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
                         break;
                     case R.id.navigation_feed:
                         args.putString("user", new Gson().toJson(loggedInUser));
+                        args.putString("hasAccessKey", String.valueOf(hasUserAccessKey));
                         navController.navigate(R.id.navigation_feed, args);
                         break;
                     case R.id.navigation_profile:
@@ -84,8 +87,7 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
     @Override
     public void hasAccessKey(boolean hasKey, User u) {
         hasUserAccessKey = hasKey;
-        if (u != null) {
-            loggedInUser = u;
-        }
+        loggedInUser = u;
+
     }
 }

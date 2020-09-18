@@ -2,6 +2,8 @@ package com.example.liubiljett;
 
 import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 public class User {
@@ -9,7 +11,7 @@ public class User {
     private String email;
     private String password;
     private int userId;
-    private boolean hasAccessToken;
+    private transient boolean hasAccessToken;
     private String accessToken;
     private List<Post> created_post;
     private List<Post> liked_post;
@@ -58,7 +60,7 @@ public class User {
         this.created_post = created_post;
     }
 
-    public void addPost(Post p){
+    public void addPost(Post p) {
         this.created_post.add(p);
     }
 
