@@ -1,4 +1,4 @@
-package com.example.liubiljett;
+package com.example.liubiljett.handlers;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.liubiljett.classes.Post;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,21 @@ public class VolleyService {
         this.mContext = mContext;
     }
 
+    public void connTest() {
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.GET, baseURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("TEST", String.valueOf(response));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("TEST", String.valueOf(error));
+            }
+        });
+        queue.add(request);
+    }
 
     public void createAccount(String name, String email, String password, final VolleyCallback volleyCallback) {
         String createAccountURL = baseURL + "user/register/" + name + "/" + password + "/" + email;
@@ -156,6 +172,7 @@ public class VolleyService {
         JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, addPostURL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d("RESP", String.valueOf(response));
                 String volleyResponse = null;
                 try {
                     volleyResponse = response.getString("message");
@@ -168,6 +185,8 @@ public class VolleyService {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("RESP", String.valueOf(error));
+
                 String responseBody;
                 String out;
                 responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
@@ -396,6 +415,37 @@ public class VolleyService {
                 return params;
             }
         };
+        queue.add(request);
+    }
+
+    public void getPostCreator(int postId, final VolleyCallback volleyCallback) {
+        String getPostCreatorURL = baseURL + "post/getcreator/" + postId;
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, getPostCreatorURL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String volleyResponse = response.getString("creator_id");
+                    volleyCallback.onSuccess(volleyResponse);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String responseBody;
+                String out;
+                responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                try {
+                    out = new JSONObject(responseBody).getString("Error");
+                    volleyCallback.onError(out);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         queue.add(request);
     }
 

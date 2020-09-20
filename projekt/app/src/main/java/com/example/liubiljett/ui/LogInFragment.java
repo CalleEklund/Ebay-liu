@@ -14,17 +14,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.User;
-import com.example.liubiljett.Validator;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.Validator;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.util.List;
 
 public class LogInFragment extends Fragment {
 
@@ -106,17 +100,9 @@ public class LogInFragment extends Fragment {
                  * https://www.tutorialspoint.com/gson/gson_excluded_serialization.htm
                  * Använda transiten framför värderna
                  */
-                JsonObject convertedObject = new Gson().fromJson(result, JsonObject.class);
-                String userName = String.valueOf(convertedObject.get("username"));
-                String userPassword = String.valueOf(convertedObject.get("password"));
-                String userEmail = String.valueOf(convertedObject.get("email"));
-                int userId = Integer.parseInt(String.valueOf(convertedObject.get("id")));
-                JsonElement userCreatedJsonElem = convertedObject.get("created_posts");
-                List userCreated = gson.fromJson(userCreatedJsonElem, List.class);
-                JsonElement userLikedJsonElem = convertedObject.get("liked_posts");
-                List userLiked = gson.fromJson(userLikedJsonElem, List.class);
-                User newUser = new User(userName, userEmail, userPassword, userId, true, userCreated, userLiked);
+                User newUser = gson.fromJson(result, User.class);
                 newUser.setAccessToken(userAccessToken);
+                newUser.setHasAccessToken(true);
                 loggedInFragment = LoggedInFragment.newInstance(newUser);
                 mainParent.hasAccessKey(newUser.isAccessToken(), newUser);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_login, loggedInFragment).commit();

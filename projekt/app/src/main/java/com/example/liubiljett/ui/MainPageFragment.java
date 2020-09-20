@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.User;
+import com.example.liubiljett.classes.User;
 import com.google.gson.Gson;
 
 

@@ -1,13 +1,7 @@
 package com.example.liubiljett.ui;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
-import android.util.Log;
-import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Validator;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.handlers.Validator;
+import com.example.liubiljett.handlers.VolleyService;
 import com.example.liubiljett.R;
-
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 public class ProfileFragment extends Fragment {
 

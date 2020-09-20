@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import flask_login
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -47,14 +46,6 @@ users_liked = db.Table('users_liked',
                        )
 
 
-# commented_by = db.Table('commented_by',
-#                         db.Column('comment_by', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
-#                                   primary_key=True),
-#                         db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
-#                                   primary_key=True)
-#                         )
-
-
 class User(db.Model):
     __tablename__ = "User"
 
@@ -64,17 +55,31 @@ class User(db.Model):
     user_email = db.Column(db.String(255), unique=True, nullable=False)
 
     post_created = db.relationship('Post', secondary=users_created, backref="post_created")
-    post_liked = db.relationship('Post', secondary=users_liked, backref="post_liked")
+    post_liked = db.relationship('Post', secondary=users_liked, backref=db.backref("post_liked"))
+
+    _users_following = db.Column(db.Integer, default="")
 
     def __init__(self, name, password, email):
         self.user_name = name
         self.user_password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.user_email = email
 
+    @property
+    def users_following(self):
+        return [str(x) for x in self._users_following.split(';')]
+
+    @users_following.setter
+    def users_following(self, follower_email):
+        if self._users_following is None:
+            self._users_following = follower_email
+        else:
+            self._users_following += '%s;' % follower_email
+
     def to_dict(self):
-        return {'id': self.user_id, 'username': self.user_name, 'password': self.user_password,
+        return {'id': self.user_id, 'name': self.user_name, 'password': self.user_password,
                 'email': self.user_email, 'created_posts': [x.to_dict() for x in self.post_created],
-                'liked_posts': [x.to_dict() for x in self.post_liked]}
+                'liked_posts': [x.to_dict() for x in self.post_liked],
+                'user_following': [x for x in self.users_following]}
 
 
 class Post(db.Model):
@@ -171,6 +176,14 @@ def create_post(title, price, description):
     return "{'message': 'Inlägg Skapat'}", 200
 
 
+@app.route('/post/getcreator/<id_post>', methods=['POST'])
+def get_creator(id_post):
+    user_creator_id = User.query.filter(User.post_created.any(post_id=id_post)).first().user_id
+    if user_creator_id is None:
+        return "{'Error':'Inget inlägg hittat'", 400
+    else:
+        return jsonify(creator_id=user_creator_id)
+
 @app.route('/user/likepost/<id_post>', methods=['POST'])
 @jwt_required
 def like_post(id_post):
@@ -202,6 +215,35 @@ def unlike_post(id_post):
     return '{"Message":"Inlägg Ogillat"}', 200
 
 
+@app.route('/user/followuser/<id_user>', methods=['POST'])
+@jwt_required
+def follow_user(id_user):
+    searched_user = User.query.filter_by(user_id=id_user).first()
+    logged_in_user = get_curr_user()
+    if searched_user is None:
+        return '{"Error":"Ingen användare hittad"}', 400
+    elif searched_user == logged_in_user:
+        return '{"Error":"Kan inte följa sig själv"}', 400
+    else:
+        logged_in_user.users_following = searched_user.user_id
+        db.session.commit()
+        return '{"Message":"Användare följd."}'
+
+@app.route('/user/unfollowuser/<id_user>', methods=['POST'])
+@jwt_required
+def unfollow_user(id_user):
+    searched_user = User.query.filter_by(user_id=id_user).first()
+    logged_in_user = get_curr_user()
+    if searched_user is None:
+        return '{"Error":"Ingen användare hittad"}', 400
+    elif searched_user not in logged_in_user.users_following:
+        return '{"Error":"Kan inte ofölja en användare som du inte följer"}', 400
+    else:
+        logged_in_user.users_following.remove(searched_user.user_id)
+        db.session.commit()
+        return '{"Message":"Användare följd."}'
+
+
 @app.route('/user/deletepost/<id_post>', methods=['DELETE'])
 @jwt_required
 def delete_post(id_post):
@@ -224,7 +266,6 @@ def add_comment(id_post, comment):
         return '{"Error":"Inget inlägg hittat"}', 400
     elif searched_post in logged_in_user.post_created:
         return '{"Error":"Kan inte kommentera eget inlägg"}', 400
-
     else:
         searched_post.comments = comment
         searched_post.commented_by = logged_in_user.user_email
@@ -273,9 +314,9 @@ def get_curr_user():
     return current_user
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def start_page():
-    return "liublijett"
+    return "{'message':'liublijett'}", 200
 
 
 if __name__ == "__main__":

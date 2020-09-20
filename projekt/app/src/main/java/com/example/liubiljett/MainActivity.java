@@ -10,13 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.liubiljett.classes.User;
 import com.example.liubiljett.ui.ListFragment;
 import com.example.liubiljett.ui.LogInFragment;
 import com.example.liubiljett.ui.MainPageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
-
-import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity implements LogInFragment.OnAcccesKeyListener {

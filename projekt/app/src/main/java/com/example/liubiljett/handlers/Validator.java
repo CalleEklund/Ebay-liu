@@ -1,8 +1,9 @@
-package com.example.liubiljett;
+package com.example.liubiljett.handlers;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.example.liubiljett.classes.Post;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

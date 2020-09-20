@@ -14,14 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.User;
-import com.example.liubiljett.Validator;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.Validator;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
-
-import java.util.Arrays;
 
 public class PostFragment extends Fragment {
 
@@ -67,7 +65,6 @@ public class PostFragment extends Fragment {
                 String postPrice = postPriceTextView.getText().toString();
                 String postDescription = postDescriptionTextView.getText().toString();
                 final Post newPost = new Post(postTitle, postPrice, postDescription);
-                Log.d("post",newPost.toString());
                 if (validator.checkPostInput(newPost)){
                     volleyService.uploadPost(currentUser.getAccessToken(), newPost, new VolleyService.VolleyCallback() {
                         @Override
@@ -79,7 +76,7 @@ public class PostFragment extends Fragment {
 
                             toast.show();
                             currentUser.addPost(newPost);
-//                            mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+                           mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
                         }
 
                         @Override

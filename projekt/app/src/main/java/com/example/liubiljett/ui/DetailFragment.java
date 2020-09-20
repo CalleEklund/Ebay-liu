@@ -19,10 +19,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.User;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -30,17 +30,14 @@ import java.util.Arrays;
 
 public class DetailFragment extends Fragment {
 
-    String clickedItem;
-    Gson gson;
-    TextView headline;
-    TextView price;
-    TextView description;
-    ArrayList<String> commentPosts;
-    String comment;
+    private Gson gson;
+    private TextView headline;
+    private TextView price;
+    private TextView description;
+    private ArrayList<String> commentPosts;
     private VolleyService volleyService;
     User currentUser;
-    Post clicked;
-    String currentUserString;
+    private Post clicked;
     private EditText commentField;
 
     public DetailFragment() {
@@ -72,7 +69,8 @@ public class DetailFragment extends Fragment {
         @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch like = root.findViewById(R.id.like);
         @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch follow = root.findViewById(R.id.follow);
 
-
+        String clickedItem = null;
+        String currentUserString = null;
         if (getArguments() != null) {
             clickedItem = getArguments().getString("result");
             currentUserString = getArguments().getString("user");
@@ -80,21 +78,7 @@ public class DetailFragment extends Fragment {
         clicked = gson.fromJson(clickedItem, Post.class);
         currentUser = gson.fromJson(currentUserString, User.class);
         showPost(clicked);
-        if (currentUser != null) {
-            if (isOwnPost()) {
-                like.setChecked(true);
-                follow.setChecked(true);
-                like.setEnabled(false);
-                follow.setEnabled(false);
-            } else if (isLikedPost()) {
-                like.setChecked(true);
-            }
-            //Lägg till en check för följda personer
-        } else {
-            like.setEnabled(false);
-            follow.setEnabled(false);
-            commentField.setEnabled(false);
-        }
+        initialPostCheck(like, follow);
 
         if (like != null) {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -146,6 +130,17 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
+                                Log.d("res",result);
+                            }
+
+                            @Override
+                            public void onError(String result) {
+
+                            }
+                        });
                         //lägg till användare i following
                     } else {
                         //ta bort användare ur following
@@ -165,7 +160,7 @@ public class DetailFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_DONE || event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 //                  Bort kommentarad för att den kallar på addComment med en tom sträng en andra gång vilket knasar till det
 //                    if (event == null || !event.isShiftPressed()) {
-                    comment = commentField.getText().toString();
+                    final String comment = commentField.getText().toString();
                     volleyService.addComment(currentUser.getAccessToken(), clicked.getId(), comment, new VolleyService.VolleyCallback() {
                         @Override
                         public void onSuccess(String result) {
@@ -204,6 +199,7 @@ public class DetailFragment extends Fragment {
         });
 
          */
+        Log.d("post",clicked.toString());
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
@@ -215,25 +211,24 @@ public class DetailFragment extends Fragment {
 
     }
 
-    public boolean isOwnPost() {
-        for (Post userCreatedPost : currentUser.getCreated_post()) {
-            if (userCreatedPost.getId() == clicked.getId()) {
-                return true;
+    private void initialPostCheck(Switch like, Switch follow) {
+
+        if (currentUser != null) {
+            if (currentUser.isOwnPost(clicked)) {
+                like.setChecked(true);
+                follow.setChecked(true);
+                like.setEnabled(false);
+                follow.setEnabled(false);
+            } else if (currentUser.isLikedPost(clicked)) {
+                like.setChecked(true);
             }
+            //Lägg till en check för följda personer
+        } else {
+            like.setEnabled(false);
+            follow.setEnabled(false);
+            commentField.setEnabled(false);
         }
-        return false;
     }
-
-    public boolean isLikedPost() {
-        for (Post userLikedPost : currentUser.getLiked_post()) {
-            if (userLikedPost.getId() == clicked.getId()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     @SuppressLint("SetTextI18n")
     private void showPost(Post data) {
         headline.setText("Title: " + data.getTitle());

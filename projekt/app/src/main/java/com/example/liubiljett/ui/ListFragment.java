@@ -1,42 +1,29 @@
 package com.example.liubiljett.ui;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.RowItem;
-import com.example.liubiljett.TestAdapter;
-import com.example.liubiljett.User;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.handlers.FeedAdapter;
+import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +35,7 @@ public class ListFragment extends Fragment {
     private ListView listView;
     private FragmentActivity fragmentActivity;
     private User currentUser;
-    private TestAdapter adapter;
+    private FeedAdapter adapter;
     public ListFragment() {
 
     }
@@ -73,7 +60,7 @@ public class ListFragment extends Fragment {
         gson = new Gson();
         listView = root.findViewById(R.id.itemList);
         fragmentActivity = requireActivity();
-        adapter = new TestAdapter(fragmentActivity, rowItems);
+        adapter = new FeedAdapter(fragmentActivity, rowItems);
 
         if (getArguments() != null) {
             String currentUserString = getArguments().getString("currentUser");
@@ -112,13 +99,12 @@ public class ListFragment extends Fragment {
 
 
 
-
-        volleyService.getAllPosts(new VolleyService.VolleyCallback() {
+       volleyService.getAllPosts(new VolleyService.VolleyCallback() {
 
 
             @Override
             public void onSuccess(String result)  {
-//                Log.d("feedposts", result);
+               Log.d("feedposts", result);
                 List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                 }.getType());
                 addRowItems(feedPosts);

@@ -15,11 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.TestAdapter;
-import com.example.liubiljett.User;
-import com.example.liubiljett.VolleyService;
+import com.example.liubiljett.handlers.FeedAdapter;
+import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -113,7 +113,7 @@ public class LoggedInFragment extends Fragment {
         profileName.setText("Namn: " + u.getName());
         profileEmail.setText("Email: " + u.getEmail());
         rowItems.addAll(u.getCreated_post());
-        TestAdapter adapter = new TestAdapter(requireActivity(), rowItems);
+        FeedAdapter adapter = new FeedAdapter(requireActivity(), rowItems);
         userCreatedPosts.setAdapter(adapter);
 
     }

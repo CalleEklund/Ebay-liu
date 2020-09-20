@@ -1,21 +1,23 @@
-package com.example.liubiljett;
+package com.example.liubiljett.handlers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.liubiljett.classes.Post;
+import com.example.liubiljett.R;
 
 import java.util.ArrayList;
 
-public class TestAdapter extends BaseAdapter {
+public class FeedAdapter extends BaseAdapter {
 
     private ArrayList<Post> singleRow;
     private LayoutInflater mInflater;
 
-    public TestAdapter(Context context, ArrayList<Post> mRow){
+    public FeedAdapter(Context context, ArrayList<Post> mRow){
         this.singleRow = mRow;
         mInflater = (LayoutInflater.from(context));
     }

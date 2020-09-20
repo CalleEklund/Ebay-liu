@@ -9,14 +9,13 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.Post;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.TestAdapter;
-import com.example.liubiljett.User;
+import com.example.liubiljett.handlers.FeedAdapter;
+import com.example.liubiljett.classes.User;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LikedFragment extends Fragment {
 
@@ -55,7 +54,7 @@ public class LikedFragment extends Fragment {
          * Lägg så att den hämtar användare för att hitta de gillade inläggen
          */
         userLikedPosts.addAll(u.getLiked_post());
-        TestAdapter adapter = new TestAdapter(requireActivity(), userLikedPosts);
+        FeedAdapter adapter = new FeedAdapter(requireActivity(), userLikedPosts);
         likedList.setAdapter(adapter);
     }
 }

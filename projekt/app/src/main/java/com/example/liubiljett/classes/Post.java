@@ -1,4 +1,4 @@
-package com.example.liubiljett;
+package com.example.liubiljett.classes;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +48,7 @@ public class Post {
     public int getId() {
         return id;
     }
+
 
     @Override
     public String toString() {
