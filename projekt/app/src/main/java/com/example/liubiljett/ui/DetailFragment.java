@@ -133,7 +133,8 @@ public class DetailFragment extends Fragment {
                         volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
-                                Log.d("res",result);
+                                Log.d("res", result);
+                                followCreator(result);
                             }
 
                             @Override
@@ -199,7 +200,7 @@ public class DetailFragment extends Fragment {
         });
 
          */
-        Log.d("post",clicked.toString());
+        Log.d("post", clicked.toString());
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
@@ -209,6 +210,26 @@ public class DetailFragment extends Fragment {
 
         return root;
 
+    }
+
+    public void followCreator(String creatorId) {
+        volleyService.followUser(creatorId, currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                Toast toast = Toast.makeText(getContext(),
+                        result,
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+            @Override
+            public void onError(String result) {
+                Toast toast = Toast.makeText(getContext(),
+                        result,
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
     private void initialPostCheck(Switch like, Switch follow) {
@@ -229,6 +250,7 @@ public class DetailFragment extends Fragment {
             commentField.setEnabled(false);
         }
     }
+
     @SuppressLint("SetTextI18n")
     private void showPost(Post data) {
         headline.setText("Title: " + data.getTitle());

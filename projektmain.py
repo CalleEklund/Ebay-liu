@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
+import copy
 
 from flask_bcrypt import Bcrypt
 
@@ -44,6 +45,12 @@ users_liked = db.Table('users_liked',
                        db.Column('message_liked', db.Integer, db.ForeignKey('Post.post_id', ondelete="CASCADE"),
                                  primary_key=True)
                        )
+users_followed = db.Table('users_followed',
+                          db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+                                    primary_key=True),
+                          db.Column('following', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+                                    primary_key=True)
+                          )
 
 
 class User(db.Model):
@@ -56,30 +63,35 @@ class User(db.Model):
 
     post_created = db.relationship('Post', secondary=users_created, backref="post_created")
     post_liked = db.relationship('Post', secondary=users_liked, backref=db.backref("post_liked"))
+    user_following = db.relationship('User', secondary=users_followed,
+                                     primaryjoin=user_id == users_followed.c.user_id,
+                                     secondaryjoin=user_id == users_followed.c.following)
 
-    _users_following = db.Column(db.Integer, default="")
+    # _users_following = db.Column(db.String, default="")
 
     def __init__(self, name, password, email):
         self.user_name = name
         self.user_password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.user_email = email
 
-    @property
-    def users_following(self):
-        return [str(x) for x in self._users_following.split(';')]
-
-    @users_following.setter
-    def users_following(self, follower_email):
-        if self._users_following is None:
-            self._users_following = follower_email
-        else:
-            self._users_following += '%s;' % follower_email
+    # @property
+    # def users_following(self):
+    #     return [x for x in self._users_following.split(';')]
+    #
+    # @users_following.setter
+    # def users_following(self, follower_id):
+    #     if self._users_following is None:
+    #         self._users_following = follower_id
+    #     self._users_following += '%s;' % follower_id
+    #
+    # def set_users_following(self,following_list):
+    #     self.users_following = following_list
 
     def to_dict(self):
         return {'id': self.user_id, 'name': self.user_name, 'password': self.user_password,
                 'email': self.user_email, 'created_posts': [x.to_dict() for x in self.post_created],
                 'liked_posts': [x.to_dict() for x in self.post_liked],
-                'user_following': [x for x in self.users_following]}
+                'user_following': [x.user_id for x in self.user_following]}
 
 
 class Post(db.Model):
@@ -184,6 +196,7 @@ def get_creator(id_post):
     else:
         return jsonify(creator_id=user_creator_id)
 
+
 @app.route('/user/likepost/<id_post>', methods=['POST'])
 @jwt_required
 def like_post(id_post):
@@ -224,10 +237,13 @@ def follow_user(id_user):
         return '{"Error":"Ingen användare hittad"}', 400
     elif searched_user == logged_in_user:
         return '{"Error":"Kan inte följa sig själv"}', 400
+    elif searched_user in logged_in_user.user_following:
+        return '{"Error":"Du följer redan användaren."}', 400
     else:
-        logged_in_user.users_following = searched_user.user_id
+        logged_in_user.user_following.append(searched_user)
         db.session.commit()
-        return '{"Message":"Användare följd."}'
+        return '{"Message":"Användare följd."}', 200
+
 
 @app.route('/user/unfollowuser/<id_user>', methods=['POST'])
 @jwt_required
@@ -236,12 +252,12 @@ def unfollow_user(id_user):
     logged_in_user = get_curr_user()
     if searched_user is None:
         return '{"Error":"Ingen användare hittad"}', 400
-    elif searched_user not in logged_in_user.users_following:
+    elif searched_user not in logged_in_user.user_following:
         return '{"Error":"Kan inte ofölja en användare som du inte följer"}', 400
     else:
-        logged_in_user.users_following.remove(searched_user.user_id)
+        logged_in_user.user_following.remove(searched_user)
         db.session.commit()
-        return '{"Message":"Användare följd."}'
+        return '{"Message":"Du följer inte längre användaren."}', 200
 
 
 @app.route('/user/deletepost/<id_post>', methods=['DELETE'])

@@ -72,32 +72,39 @@ def add_comment(post_id, comment, token):
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
 
+
 def get_post_creator(post_id):
     r = requests.post("http://127.0.0.1:5000/post/getcreator/" + str(post_id))
     return r.json()
 
-def follow_user(user_id):
+
+def follow_user(user_id, token):
     r = requests.post("http://127.0.0.1:5000/user/followuser/" + str(user_id),
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
-def unfollow_user(user_id):
+
+
+def unfollow_user(user_id, token):
     r = requests.post("http://127.0.0.1:5000/user/unfollowuser/" + str(user_id),
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
-#print(register_user("felix", "felixlosen", "felix@gmail.com"))
-#print(register_user("calle", "callelosen", "calle@gmail.com"))
-#token = login_user('calle@gmail.com', 'callelosen')
+
+
+print(register_user("felix", "felixlosen", "felix@gmail.com"))
+print(register_user("calle", "callelosen", "calle@gmail.com"))
+# token = login_user('calle@gmail.com', 'callelosen')
 token = login_user("felix@gmail.com", "felixlosen")
-#print(create_post(token, "gilla", "10kr", "snälla"))
-#print(get_user('calle@gmail.com'))
-print(get_user('felix@gmail.com'))
+# print(create_post(token, "gilla", "10kr", "snälla"))
+# print(get_user('calle@gmail.com'))
+# print(get_user('felix@gmail.com'))
 # print(like_post(token, 1))
 # print(unlike_post(token,1))
 # print(delete_post(token,1))
 # print(get_feed())
 # print(token)
 # print(add_comment(1,"test",token))
-#print(get_post_creator(1))
-#print(start_test())
-#print(follow_user(2))
-#print(unfollow_user(2))
+# print(get_post_creator(1))
+# print(start_test())
+# print(follow_user(2, token))
+print(unfollow_user(2,token))
+# print(get_user('felix@gmail.com'))
