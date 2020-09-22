@@ -39,6 +39,9 @@ public class DetailFragment extends Fragment {
     User currentUser;
     private Post clicked;
     private EditText commentField;
+    String creatorIdStr = "";
+    Switch like;
+    Switch follow;
 
     public DetailFragment() {
         gson = new Gson();
@@ -66,8 +69,8 @@ public class DetailFragment extends Fragment {
         description = root.findViewById(R.id.detailDescription);
         commentField = root.findViewById(R.id.comment);
         commentPosts = new ArrayList<>();
-        @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch like = root.findViewById(R.id.like);
-        @SuppressLint("UseSwitchCompatOrMaterialCode") final Switch follow = root.findViewById(R.id.follow);
+        like = root.findViewById(R.id.like);
+        follow = root.findViewById(R.id.follow);
 
         String clickedItem = null;
         String currentUserString = null;
@@ -78,7 +81,8 @@ public class DetailFragment extends Fragment {
         clicked = gson.fromJson(clickedItem, Post.class);
         currentUser = gson.fromJson(currentUserString, User.class);
         showPost(clicked);
-        initialPostCheck(like, follow);
+        setCreatorId();
+
 
         if (like != null) {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -130,21 +134,41 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
+                        volleyService.followUser(creatorIdStr, currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
-                                Log.d("res", result);
-                                followCreator(result);
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
                             }
 
                             @Override
                             public void onError(String result) {
-
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
                             }
                         });
-                        //lägg till användare i following
                     } else {
-                        //ta bort användare ur following
+                        volleyService.unFollowUser(creatorIdStr, currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+
+                            @Override
+                            public void onError(String result) {
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        });
                     }
                 }
             });
@@ -200,7 +224,6 @@ public class DetailFragment extends Fragment {
         });
 
          */
-        Log.d("post", clicked.toString());
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
@@ -212,28 +235,33 @@ public class DetailFragment extends Fragment {
 
     }
 
-    public void followCreator(String creatorId) {
-        volleyService.followUser(creatorId, currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
+    private void setCreatorId() {
+        volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                Toast toast = Toast.makeText(getContext(),
-                        result,
-                        Toast.LENGTH_SHORT);
-                toast.show();
+                initialPostCheck(like, follow, result);
             }
 
             @Override
             public void onError(String result) {
-                Toast toast = Toast.makeText(getContext(),
-                        result,
-                        Toast.LENGTH_SHORT);
-                toast.show();
+                Log.d("ERROR", result);
             }
         });
     }
 
-    private void initialPostCheck(Switch like, Switch follow) {
+    /**
+     * TODO:     *
+     *  Skapa så att lyssnarna är variabler så att du sedan kan använda
+     *  detta för att inte trigga checkedListener varje gång en post öppnas
+     *  mCheck.setOnCheckedChangeListener (null);
+     *  mCheck.setChecked (false);
+     *  mCheck.setOnCheckedChangeListener (mListener);
+     *  Gör detta för varje lyssnare genom att hela appen
+     */
 
+
+    private void initialPostCheck(Switch like, Switch follow, String creatorId) {
+        creatorIdStr = creatorId;
         if (currentUser != null) {
             if (currentUser.isOwnPost(clicked)) {
                 like.setChecked(true);
@@ -242,6 +270,8 @@ public class DetailFragment extends Fragment {
                 follow.setEnabled(false);
             } else if (currentUser.isLikedPost(clicked)) {
                 like.setChecked(true);
+            } else if (currentUser.isFollowed(creatorId)) {
+                follow.setChecked(true);
             }
             //Lägg till en check för följda personer
         } else {

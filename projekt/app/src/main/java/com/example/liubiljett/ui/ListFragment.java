@@ -104,7 +104,6 @@ public class ListFragment extends Fragment {
 
             @Override
             public void onSuccess(String result)  {
-               Log.d("feedposts", result);
                 List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                 }.getType());
                 addRowItems(feedPosts);

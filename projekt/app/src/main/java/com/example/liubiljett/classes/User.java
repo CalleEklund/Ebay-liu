@@ -11,17 +11,18 @@ public class User {
     private String accessToken;
     private List<Post> created_posts;
     private List<Post> liked_posts;
+    private List<Integer> user_following;
 
-    public User(String name, String email, String password, int id, boolean hasAccessToken, List<Post> created_posts, List<Post> liked_posts) {
+    public User(String name, String email, String password, int id, boolean hasAccessToken, String accessToken, List<Post> created_posts, List<Post> liked_posts, List<Integer> user_following) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.id = id;
         this.hasAccessToken = hasAccessToken;
-        this.accessToken = "";
+        this.accessToken = accessToken;
         this.created_posts = created_posts;
         this.liked_posts = liked_posts;
-
+        this.user_following = user_following;
     }
 
     public User() {
@@ -80,6 +81,14 @@ public class User {
         this.hasAccessToken = hasAccessToken;
     }
 
+    public List<Integer> getUser_followed() {
+        return user_following;
+    }
+
+    public void setUser_followed(List<Integer> user_followed) {
+        this.user_following = user_followed;
+    }
+
     public boolean isOwnPost(Post p){
         if(this.created_posts == null){return false;}
         for (Post userCreatedPost :  this.created_posts){
@@ -98,17 +107,27 @@ public class User {
         }
         return false;
     }
+    public boolean isFollowed(String userId){
+        if(this.user_following == null){return false;}
+        for (int followingId : this.user_following){
+            if(followingId ==  Integer.parseInt(userId)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return
-                "name: " + name +
-                        ", email: " + email +
-                        ", password: " + password +
-                        ", userId: " + id +
-                        ", hasAccessToken: " + hasAccessToken +
-                        ", userAccessToken:" + accessToken +
-                        ", created_post: " + created_posts +
-                        ", liked_post: " + liked_posts
-                ;
+        return "User{" +
+                "name='" + name +
+                ", email='" + email +
+                ", password='" + password +
+                ", id=" + id +
+                ", hasAccessToken=" + hasAccessToken +
+                ", accessToken='" + accessToken +
+                ", created_posts=" + created_posts +
+                ", liked_posts=" + liked_posts +
+                ", user_followed=" + user_following;
     }
 }

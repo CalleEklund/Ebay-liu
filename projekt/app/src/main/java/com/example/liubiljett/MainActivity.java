@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Bundle args = new Bundle();
                 if (loggedInUser != null) {
-                    Log.d("TAG", "key" + hasUserAccessKey + "user: " + loggedInUser);
                 }
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
