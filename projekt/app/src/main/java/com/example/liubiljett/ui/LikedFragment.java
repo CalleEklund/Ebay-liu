@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class LikedFragment extends Fragment {
 
     private User currentUser;
-    private Gson gson;
     private ListView likedList;
     ArrayList<Post> userLikedPosts;
 
@@ -29,7 +28,7 @@ public class LikedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_liked, container, false);
-        gson = new Gson();
+        Gson gson = new Gson();
         userLikedPosts = new ArrayList<>();
 
         likedList = root.findViewById(R.id.liked_list);

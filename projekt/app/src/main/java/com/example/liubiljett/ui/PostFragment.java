@@ -26,7 +26,6 @@ public class PostFragment extends Fragment {
     private User currentUser;
     private Validator validator;
     private VolleyService volleyService;
-    private Gson gson;
 
     TextView postTitleTextView;
     TextView postPriceTextView;
@@ -40,7 +39,7 @@ public class PostFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_post, container, false);
         volleyService = new VolleyService(getContext());
         validator = new Validator(getContext());
-        gson = new Gson();
+        Gson gson = new Gson();
 
         postButton = root.findViewById(R.id.publishButton);
 

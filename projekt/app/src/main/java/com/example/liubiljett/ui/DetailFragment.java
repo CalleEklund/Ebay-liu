@@ -40,7 +40,9 @@ public class DetailFragment extends Fragment {
     private Post clicked;
     private EditText commentField;
     String creatorIdStr = "";
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch like;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch follow;
 
     public DetailFragment() {
@@ -84,17 +86,14 @@ public class DetailFragment extends Fragment {
         setCreatorId();
 
 
-
         if (like != null) {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.d("T","checl");
                         volleyService.likePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
-                                Log.d("res",result);
                                 Toast toast = Toast.makeText(getContext(),
                                         result,
                                         Toast.LENGTH_SHORT);
@@ -103,8 +102,6 @@ public class DetailFragment extends Fragment {
 
                             @Override
                             public void onError(String result) {
-                                Log.d("res",result);
-
                                 Toast toast = Toast.makeText(getContext(),
                                         result,
                                         Toast.LENGTH_SHORT);
@@ -112,8 +109,6 @@ public class DetailFragment extends Fragment {
                             }
                         });
                     } else {
-                        Log.d("T","checl");
-
                         volleyService.unLikePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -180,7 +175,6 @@ public class DetailFragment extends Fragment {
                 }
             });
         }
-
         clicked.getComments().removeAll(Arrays.asList("", null));
         for (int i = 0; i < clicked.getComments().size(); i++) {
             commentPosts.add(clicked.getCommentedBy().get(i) + ": " + clicked.getComments().get(i));
@@ -220,32 +214,45 @@ public class DetailFragment extends Fragment {
                 return false;
             }
         });
-        /*
-        final Button publish = root.findViewById(R.id.postComment);
-        publish.setOnClickListener(new AdapterView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                comment = commentField.getText().toString();
-                commentPosts.add(comment); //lägg till namn innan såhär: name + ": " + comment
 
-            }
-        });
-
-         */
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
 
-        //kommentar skrivs i R.id.comment, som ska läggas i R.id.commentsList när den skickas.
-        //spara kommentaren i databasen kopplat till posten
-
         return root;
 
     }
+
+    private void setCreatorId() {
+        volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                initialPostCheck(like, follow, result);
+            }
+
+            @Override
+            public void onError(String result) {
+                Log.d("ERROR", result);
+            }
+        });
+    }
+
+    /**
+     * TODO:     *
+     *  Skapa så att lyssnarna är variabler så att du sedan kan använda
+     *  detta för att inte trigga checkedListener varje gång en post öppnas
+     *  mCheck.setOnCheckedChangeListener (null);
+     *  mCheck.setChecked (false);
+     *  mCheck.setOnCheckedChangeListener (mListener);
+     *  Gör detta för varje lyssnare genom att hela appen
+     */
+
+
+    private void initialPostCheck(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch like,
+                                  @SuppressLint("UseSwitchCompatOrMaterialCode") Switch follow,
+                                  String creatorId) {
     private void initialPostCheck(Switch like, Switch follow, String creatorId) {
         creatorIdStr = creatorId;
-//        like.setOnCheckedChangeListener(null);
-//        follow.setOnCheckedChangeListener(null);
         if (currentUser != null) {
             if (currentUser.isOwnPost(clicked)) {
                 like.setChecked(true);
@@ -259,6 +266,7 @@ public class DetailFragment extends Fragment {
             if (currentUser.isFollowed(creatorId)) {
                 follow.setChecked(true);
             }
+            //Lägg till en check för följda personer
         } else {
             like.setEnabled(false);
             follow.setEnabled(false);

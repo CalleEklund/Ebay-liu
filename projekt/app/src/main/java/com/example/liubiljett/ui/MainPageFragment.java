@@ -18,17 +18,15 @@ import com.google.gson.Gson;
 
 public class MainPageFragment extends Fragment implements ListFragment.ItemSelectedListener {
 
-    private Gson gson;
     ListFragment listFragment;
     DetailFragment detailFragment;
-    boolean hasAccessKey;
     User currentUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mainpage, container, false);
         super.onCreate(savedInstanceState);
-        gson = new Gson();
+        Gson gson = new Gson();
         if (getArguments() != null) {
             String currentUserString = getArguments().getString("user");
             currentUser = gson.fromJson(currentUserString, User.class);

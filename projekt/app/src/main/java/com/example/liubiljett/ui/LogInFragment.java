@@ -29,10 +29,6 @@ public class LogInFragment extends Fragment {
     OnAcccesKeyListener mainParent;
 
 
-    public static LogInFragment newInstance() {
-        return new LogInFragment();
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

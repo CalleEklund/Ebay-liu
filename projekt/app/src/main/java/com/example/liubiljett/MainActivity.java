@@ -1,7 +1,6 @@
 package com.example.liubiljett;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -19,8 +18,6 @@ import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity implements LogInFragment.OnAcccesKeyListener {
-    //ANVÄND javac -Xlint:unchecked MainActivity.java
-    //I TERMINALEN OCH GÅ IGENOM FELEN DÄR
     private boolean hasUserAccessKey;
     private User loggedInUser;
     BottomNavigationView navView;
@@ -38,8 +35,7 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Bundle args = new Bundle();
-                if (loggedInUser != null) {
-                }
+                
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
                         args.putString("result", new Gson().toJson(loggedInUser));

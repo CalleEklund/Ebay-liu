@@ -1,5 +1,7 @@
 package com.example.liubiljett.classes;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class User {
@@ -13,7 +15,9 @@ public class User {
     private List<Post> liked_posts;
     private List<Integer> user_following;
 
-    public User(String name, String email, String password, int id, boolean hasAccessToken, String accessToken, List<Post> created_posts, List<Post> liked_posts, List<Integer> user_following) {
+    public User(String name, String email, String password, int id, boolean hasAccessToken,
+                String accessToken, List<Post> created_posts, List<Post> liked_posts,
+                List<Integer> user_following) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -25,24 +29,12 @@ public class User {
         this.user_following = user_following;
     }
 
-    public User() {
-
-    }
-
-    public int getUserId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public boolean isAccessToken() {
@@ -57,16 +49,8 @@ public class User {
         return liked_posts;
     }
 
-    public void setCreated_post(List<Post> created_post) {
-        this.created_posts = created_post;
-    }
-
     public void addPost(Post p) {
         this.created_posts.add(p);
-    }
-
-    public void setLiked_post(List<Post> liked_post) {
-        this.liked_posts = liked_post;
     }
 
     public String getAccessToken() {
@@ -79,14 +63,6 @@ public class User {
 
     public void setHasAccessToken(boolean hasAccessToken) {
         this.hasAccessToken = hasAccessToken;
-    }
-
-    public List<Integer> getUser_followed() {
-        return user_following;
-    }
-
-    public void setUser_followed(List<Integer> user_followed) {
-        this.user_following = user_followed;
     }
 
     public boolean isOwnPost(Post p){
@@ -108,15 +84,16 @@ public class User {
         return false;
     }
     public boolean isFollowed(String userId){
-        if(this.user_following == null){return false;}
+        if (this.user_following == null) {return false;}
         for (int followingId : this.user_following){
-            if(followingId ==  Integer.parseInt(userId)){
+            if (followingId ==  Integer.parseInt(userId)){
                 return true;
             }
         }
         return false;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

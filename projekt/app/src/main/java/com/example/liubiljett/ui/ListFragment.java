@@ -61,7 +61,7 @@ public class ListFragment extends Fragment {
         rowItems = new ArrayList<>();
         gson = new Gson();
         listView = root.findViewById(R.id.itemList);
-        fragmentActivity = requireActivity();
+        FragmentActivity fragmentActivity = requireActivity();
         adapter = new FeedAdapter(fragmentActivity, rowItems);
         showPost = root.findViewById(R.id.showPostsSwitch);
 
@@ -130,16 +130,19 @@ public class ListFragment extends Fragment {
        volleyService.getAllPosts(new VolleyService.VolleyCallback() {
 
 
-            @Override
-            public void onSuccess(String result)  {
-                List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
-                }.getType());
-                addRowItems(feedPosts);
-                listView.setAdapter(adapter);
-            }
-            @Override
-            public void onError(String result) {
-                Log.d("ERROR", result);
+                        @Override
+                        public void onSuccess(String result)  {
+                            List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
+                            }.getType());
+                            addRowItems(feedPosts);
+                            listView.setAdapter(adapter);
+                        }
+                        @Override
+                        public void onError(String result) {
+                            Log.d("ERROR", result);
+                        }
+                    });
+                }
             }
         });
         return root;

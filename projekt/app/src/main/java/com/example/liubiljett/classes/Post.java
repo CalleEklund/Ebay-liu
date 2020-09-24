@@ -1,6 +1,7 @@
 package com.example.liubiljett.classes;
 
-import java.util.Collections;
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Post {
@@ -51,6 +52,7 @@ public class Post {
     }
 
 
+    @NonNull
     @Override
     public String toString() {
         return "Post{" +
