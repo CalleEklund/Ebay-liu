@@ -46,9 +46,9 @@ users_liked = db.Table('users_liked',
                                  primary_key=True)
                        )
 users_followed = db.Table('users_followed',
-                          db.Column('user_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+                          db.Column('following_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
                                     primary_key=True),
-                          db.Column('following', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
+                          db.Column('followed_id', db.Integer, db.ForeignKey('User.user_id', ondelete="CASCADE"),
                                     primary_key=True)
                           )
 
@@ -64,28 +64,13 @@ class User(db.Model):
     post_created = db.relationship('Post', secondary=users_created, backref="post_created")
     post_liked = db.relationship('Post', secondary=users_liked, backref=db.backref("post_liked"))
     user_following = db.relationship('User', secondary=users_followed,
-                                     primaryjoin=user_id == users_followed.c.user_id,
-                                     secondaryjoin=user_id == users_followed.c.following)
-
-    # _users_following = db.Column(db.String, default="")
+                                     primaryjoin=user_id == users_followed.c.following_id,
+                                     secondaryjoin=user_id == users_followed.c.followed_id)
 
     def __init__(self, name, password, email):
         self.user_name = name
         self.user_password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.user_email = email
-
-    # @property
-    # def users_following(self):
-    #     return [x for x in self._users_following.split(';')]
-    #
-    # @users_following.setter
-    # def users_following(self, follower_id):
-    #     if self._users_following is None:
-    #         self._users_following = follower_id
-    #     self._users_following += '%s;' % follower_id
-    #
-    # def set_users_following(self,following_list):
-    #     self.users_following = following_list
 
     def to_dict(self):
         return {'id': self.user_id, 'name': self.user_name, 'password': self.user_password,
@@ -204,6 +189,8 @@ def like_post(id_post):
     logged_in_user = get_curr_user()
     if searched_post is None:
         return '{"Error":"Inget inlägg hittat"}', 400
+    elif searched_post in logged_in_user.post_liked:
+        return '{"Message":""}',200
     else:
         logged_in_user.post_liked.append(searched_post)
 
@@ -235,10 +222,8 @@ def follow_user(id_user):
     logged_in_user = get_curr_user()
     if searched_user is None:
         return '{"Error":"Ingen användare hittad"}', 400
-    elif searched_user == logged_in_user:
-        return '{"Error":"Kan inte följa sig själv"}', 400
-    elif searched_user in logged_in_user.user_following:
-        return '{"Error":"Du följer redan användaren."}', 400
+    elif searched_user in logged_in_user.user_following or searched_user == logged_in_user:
+        return '{"Message":""}', 200
     else:
         logged_in_user.user_following.append(searched_user)
         db.session.commit()
@@ -322,6 +307,21 @@ def get_current_user():
     curr_user = get_jwt_identity()
     current_user = User.query.filter_by(user_email=curr_user).first()
     return jsonify(current_user.to_dict())
+
+
+@app.route('/user/getfollowedpost', methods=['POST'])
+@jwt_required
+def get_followed_posts():
+    current_user_following = get_curr_user().user_following
+    followed_user_posts = []
+    if len(current_user_following) == 0:
+        return {'followed_posts': []},400
+    else:
+        for user_followed in current_user_following:
+            follow_user = User.query.filter_by(user_id=user_followed.user_id).first()
+            followed_user_posts.append(follow_user.post_created)
+        result = {'followed_posts': [x.to_dict() for x in followed_user_posts[0]]}
+        return result,200
 
 
 def get_curr_user():

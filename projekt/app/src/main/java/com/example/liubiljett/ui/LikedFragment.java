@@ -9,10 +9,11 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.R;
-import com.example.liubiljett.handlers.FeedAdapter;
+import com.example.liubiljett.classes.Post;
 import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.FeedAdapter;
+import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -22,15 +23,17 @@ public class LikedFragment extends Fragment {
     private User currentUser;
     private ListView likedList;
     ArrayList<Post> userLikedPosts;
+    private VolleyService volleyService;
+    private Gson gson;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_liked, container, false);
-        Gson gson = new Gson();
+        gson = new Gson();
         userLikedPosts = new ArrayList<>();
-
+        volleyService = new VolleyService(getContext());
         likedList = root.findViewById(R.id.liked_list);
 
 
@@ -44,16 +47,25 @@ public class LikedFragment extends Fragment {
         }
 
 
-        showLikedPosts(currentUser);
+        showLikedPosts();
 
         return root;
     }
-    public void showLikedPosts(User u){
-        /**TODO:
-         * Lägg så att den hämtar användare för att hitta de gillade inläggen
-         */
-        userLikedPosts.addAll(u.getLiked_post());
-        FeedAdapter adapter = new FeedAdapter(requireActivity(), userLikedPosts);
-        likedList.setAdapter(adapter);
+    public void showLikedPosts(){
+        volleyService.getCurrentUser(currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                currentUser = gson.fromJson(result,User.class);
+                userLikedPosts.addAll(currentUser.getLiked_post());
+                FeedAdapter adapter = new FeedAdapter(requireActivity(), userLikedPosts);
+                likedList.setAdapter(adapter);
+            }
+
+            @Override
+            public void onError(String result) {
+
+            }
+        });
+
     }
 }

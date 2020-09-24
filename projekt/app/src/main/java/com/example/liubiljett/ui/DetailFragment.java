@@ -180,13 +180,10 @@ public class DetailFragment extends Fragment {
             commentPosts.add(clicked.getCommentedBy().get(i) + ": " + clicked.getComments().get(i));
         }
 
-        // FRÅN: https://stackoverflow.com/questions/8063439/android-edittext-finished-typing-event
         commentField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-//                  Bort kommentarad för att den kallar på addComment med en tom sträng en andra gång vilket knasar till det
-//                    if (event == null || !event.isShiftPressed()) {
                     final String comment = commentField.getText().toString();
                     volleyService.addComment(currentUser.getAccessToken(), clicked.getId(), comment, new VolleyService.VolleyCallback() {
                         @Override
@@ -208,8 +205,6 @@ public class DetailFragment extends Fragment {
                         }
                     });
                     commentField.setText("");
-//                        return true;
-//                    }
                 }
                 return false;
             }
@@ -237,21 +232,9 @@ public class DetailFragment extends Fragment {
         });
     }
 
-    /**
-     * TODO:     *
-     *  Skapa så att lyssnarna är variabler så att du sedan kan använda
-     *  detta för att inte trigga checkedListener varje gång en post öppnas
-     *  mCheck.setOnCheckedChangeListener (null);
-     *  mCheck.setChecked (false);
-     *  mCheck.setOnCheckedChangeListener (mListener);
-     *  Gör detta för varje lyssnare genom att hela appen
-     */
-
-
     private void initialPostCheck(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch like,
                                   @SuppressLint("UseSwitchCompatOrMaterialCode") Switch follow,
                                   String creatorId) {
-    private void initialPostCheck(Switch like, Switch follow, String creatorId) {
         creatorIdStr = creatorId;
         if (currentUser != null) {
             if (currentUser.isOwnPost(clicked)) {
@@ -266,38 +249,12 @@ public class DetailFragment extends Fragment {
             if (currentUser.isFollowed(creatorId)) {
                 follow.setChecked(true);
             }
-            //Lägg till en check för följda personer
         } else {
             like.setEnabled(false);
             follow.setEnabled(false);
             commentField.setEnabled(false);
         }
     }
-    private void setCreatorId() {
-        volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
-            @Override
-            public void onSuccess(String result) {
-                initialPostCheck(like, follow, result);
-            }
-
-            @Override
-            public void onError(String result) {
-                Log.d("ERROR", result);
-            }
-        });
-    }
-
-    /**
-     * TODO:
-     * Skapa så att lyssnarna är variabler så att du sedan kan använda
-     * detta för att inte trigga checkedListener varje gång en post öppnas
-     * mCheck.setOnCheckedChangeListener (null);
-     * mCheck.setChecked (false);
-     * mCheck.setOnCheckedChangeListener (mListener);
-     * Gör detta för varje lyssnare genom att hela appen
-     */
-
-
 
 
     @SuppressLint("SetTextI18n")

@@ -1,6 +1,7 @@
 package com.example.liubiljett.handlers;
 
 import android.content.Context;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -534,7 +535,7 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;

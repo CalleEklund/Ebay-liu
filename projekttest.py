@@ -89,13 +89,17 @@ def unfollow_user(user_id, token):
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
 
+def followed_posts(token):
+    r = requests.post("http://127.0.0.1:5000/user/getfollowedpost",
+                      headers={'Authorization': 'Bearer ' + token})
+    return r.json()
 
 # print(register_user("felix", "felixlosen", "felix@gmail.com"))
 # print(register_user("calle", "callelosen", "calle@gmail.com"))
-token = login_user('calle@gmail.com', 'callelosen')
+# token = login_user('calle@gmail.com', 'callelosen')
 # token = login_user("felix@gmail.com", "felixlosen")
 # print(create_post(token, "gilla", "10kr", "snälla"))
-print(get_user('calle@gmail.com'))
+# print(get_user('calle@gmail.com'))
 # print(get_user('felix@gmail.com'))
 # print(like_post(token, 1))
 # print(unlike_post(token,1))
@@ -108,3 +112,4 @@ print(get_user('calle@gmail.com'))
 # print(follow_user(1, token))
 # print(unfollow_user(1, token))
 # print(get_user('felix@gmail.com'))
+# print(followed_posts(token))

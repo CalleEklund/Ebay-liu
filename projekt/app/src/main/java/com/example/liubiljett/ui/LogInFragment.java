@@ -65,7 +65,6 @@ public class LogInFragment extends Fragment {
                         @Override
                         public void onSuccess(String result) {
                             setCurrentUser(result);
-//                            Log.d("key", result);
                             loginButton.setVisibility(View.INVISIBLE);
 
                         }
@@ -91,11 +90,6 @@ public class LogInFragment extends Fragment {
         volleyService.getCurrentUser(userAccessToken, new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                /** TODO:
-                 * Se om du kan göra detta smidigare genom att använda gsonbuilder för att kunna excluda hasAccesskey och sätt den sedan till true
-                 * https://www.tutorialspoint.com/gson/gson_excluded_serialization.htm
-                 * Använda transiten framför värderna
-                 */
                 User newUser = gson.fromJson(result, User.class);
                 newUser.setAccessToken(userAccessToken);
                 newUser.setHasAccessToken(true);

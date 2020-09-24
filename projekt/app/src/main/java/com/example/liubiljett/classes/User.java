@@ -64,7 +64,12 @@ public class User {
     public void setHasAccessToken(boolean hasAccessToken) {
         this.hasAccessToken = hasAccessToken;
     }
-
+    public void addLikedPost(Post p){
+        this.liked_posts.add(p);
+    }
+    public void removeLikedPost(Post p){
+        this.liked_posts.remove(p);
+    }
     public boolean isOwnPost(Post p){
         if(this.created_posts == null){return false;}
         for (Post userCreatedPost :  this.created_posts){
