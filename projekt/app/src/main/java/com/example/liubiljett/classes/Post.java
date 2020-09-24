@@ -12,6 +12,7 @@ public class Post {
     private int id;
 
     public Post(String title, String price, String desc) {
+
         this.title = title;
         this.price = price;
         this.desc = desc;

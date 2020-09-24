@@ -447,8 +447,8 @@ public class VolleyService {
         queue.add(request);
     }
 
-    public void followUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback){
-        String followUserURL = baseURL + "user/followuser/"+creatorId;
+    public void followUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback) {
+        String followUserURL = baseURL + "user/followuser/" + creatorId;
         RequestQueue queue = Volley.newRequestQueue(mContext);
         JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, followUserURL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -485,8 +485,9 @@ public class VolleyService {
         };
         queue.add(request);
     }
-    public void unFollowUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback){
-        String unFollowUser = baseURL + "user/unfollowuser/"+creatorId;
+
+    public void unFollowUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback) {
+        String unFollowUser = baseURL + "user/unfollowuser/" + creatorId;
         RequestQueue queue = Volley.newRequestQueue(mContext);
         JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, unFollowUser, null, new Response.Listener<JSONObject>() {
             @Override
@@ -508,6 +509,44 @@ public class VolleyService {
                     out = new JSONObject(responseBody).getString("Error");
                     volleyCallback.onError(out);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + accessToken);
+                return params;
+            }
+        };
+        queue.add(request);
+    }
+
+    public void getFollowedUsersPosts(final String accessToken, final VolleyCallback volleyCallback) {
+        String followedUsersPosts = baseURL + "user/getfollowedpost";
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, followedUsersPosts, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String volleyResponse = response.getString("followed_posts");
+                    volleyCallback.onSuccess(volleyResponse);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String responseBody;
+                String out;
+                responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                try {
+                    out = new JSONObject(responseBody).getString("followed_posts");
+                    volleyCallback.onError(out);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

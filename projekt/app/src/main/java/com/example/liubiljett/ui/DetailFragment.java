@@ -84,14 +84,17 @@ public class DetailFragment extends Fragment {
         setCreatorId();
 
 
+
         if (like != null) {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        Log.d("T","checl");
                         volleyService.likePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
+                                Log.d("res",result);
                                 Toast toast = Toast.makeText(getContext(),
                                         result,
                                         Toast.LENGTH_SHORT);
@@ -100,6 +103,8 @@ public class DetailFragment extends Fragment {
 
                             @Override
                             public void onError(String result) {
+                                Log.d("res",result);
+
                                 Toast toast = Toast.makeText(getContext(),
                                         result,
                                         Toast.LENGTH_SHORT);
@@ -107,6 +112,8 @@ public class DetailFragment extends Fragment {
                             }
                         });
                     } else {
+                        Log.d("T","checl");
+
                         volleyService.unLikePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -173,6 +180,7 @@ public class DetailFragment extends Fragment {
                 }
             });
         }
+
         clicked.getComments().removeAll(Arrays.asList("", null));
         for (int i = 0; i < clicked.getComments().size(); i++) {
             commentPosts.add(clicked.getCommentedBy().get(i) + ": " + clicked.getComments().get(i));
@@ -234,7 +242,29 @@ public class DetailFragment extends Fragment {
         return root;
 
     }
-
+    private void initialPostCheck(Switch like, Switch follow, String creatorId) {
+        creatorIdStr = creatorId;
+//        like.setOnCheckedChangeListener(null);
+//        follow.setOnCheckedChangeListener(null);
+        if (currentUser != null) {
+            if (currentUser.isOwnPost(clicked)) {
+                like.setChecked(true);
+                follow.setChecked(true);
+                like.setEnabled(false);
+                follow.setEnabled(false);
+            }
+            if (currentUser.isLikedPost(clicked)) {
+                like.setChecked(true);
+            }
+            if (currentUser.isFollowed(creatorId)) {
+                follow.setChecked(true);
+            }
+        } else {
+            like.setEnabled(false);
+            follow.setEnabled(false);
+            commentField.setEnabled(false);
+        }
+    }
     private void setCreatorId() {
         volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
             @Override
@@ -250,36 +280,17 @@ public class DetailFragment extends Fragment {
     }
 
     /**
-     * TODO:     *
-     *  Skapa så att lyssnarna är variabler så att du sedan kan använda
-     *  detta för att inte trigga checkedListener varje gång en post öppnas
-     *  mCheck.setOnCheckedChangeListener (null);
-     *  mCheck.setChecked (false);
-     *  mCheck.setOnCheckedChangeListener (mListener);
-     *  Gör detta för varje lyssnare genom att hela appen
+     * TODO:
+     * Skapa så att lyssnarna är variabler så att du sedan kan använda
+     * detta för att inte trigga checkedListener varje gång en post öppnas
+     * mCheck.setOnCheckedChangeListener (null);
+     * mCheck.setChecked (false);
+     * mCheck.setOnCheckedChangeListener (mListener);
+     * Gör detta för varje lyssnare genom att hela appen
      */
 
 
-    private void initialPostCheck(Switch like, Switch follow, String creatorId) {
-        creatorIdStr = creatorId;
-        if (currentUser != null) {
-            if (currentUser.isOwnPost(clicked)) {
-                like.setChecked(true);
-                follow.setChecked(true);
-                like.setEnabled(false);
-                follow.setEnabled(false);
-            } else if (currentUser.isLikedPost(clicked)) {
-                like.setChecked(true);
-            } else if (currentUser.isFollowed(creatorId)) {
-                follow.setChecked(true);
-            }
-            //Lägg till en check för följda personer
-        } else {
-            like.setEnabled(false);
-            follow.setEnabled(false);
-            commentField.setEnabled(false);
-        }
-    }
+
 
     @SuppressLint("SetTextI18n")
     private void showPost(Post data) {
