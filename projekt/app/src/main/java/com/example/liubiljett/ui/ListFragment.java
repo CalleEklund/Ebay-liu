@@ -30,12 +30,11 @@ import java.util.List;
 public class ListFragment extends Fragment {
     private ItemSelectedListener mainParent;
     private ArrayList<Post> rowItems;
-    private VolleyService volleyService;
     private Gson gson;
     private ListView listView;
-    private FragmentActivity fragmentActivity;
     private User currentUser;
     private FeedAdapter adapter;
+    private VolleyService volleyService;
     public ListFragment() {
 
     }
@@ -59,7 +58,7 @@ public class ListFragment extends Fragment {
         rowItems = new ArrayList<>();
         gson = new Gson();
         listView = root.findViewById(R.id.itemList);
-        fragmentActivity = requireActivity();
+        FragmentActivity fragmentActivity = requireActivity();
         adapter = new FeedAdapter(fragmentActivity, rowItems);
 
         if (getArguments() != null) {
@@ -93,27 +92,28 @@ public class ListFragment extends Fragment {
                 } else {
                     showPost.setText(R.string.showAll);
                     //visa alla poster som vanligt
+                    volleyService.getAllPosts(new VolleyService.VolleyCallback() {
+
+
+                        @Override
+                        public void onSuccess(String result)  {
+                            List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
+                            }.getType());
+                            addRowItems(feedPosts);
+                            listView.setAdapter(adapter);
+                        }
+                        @Override
+                        public void onError(String result) {
+                            Log.d("ERROR", result);
+                        }
+                    });
                 }
             }
         });
 
 
 
-       volleyService.getAllPosts(new VolleyService.VolleyCallback() {
 
-
-            @Override
-            public void onSuccess(String result)  {
-                List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
-                }.getType());
-                addRowItems(feedPosts);
-                listView.setAdapter(adapter);
-            }
-            @Override
-            public void onError(String result) {
-                Log.d("ERROR", result);
-            }
-        });
         return root;
     }
 

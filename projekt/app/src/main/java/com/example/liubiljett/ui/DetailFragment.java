@@ -40,7 +40,9 @@ public class DetailFragment extends Fragment {
     private Post clicked;
     private EditText commentField;
     String creatorIdStr = "";
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch like;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch follow;
 
     public DetailFragment() {
@@ -212,24 +214,10 @@ public class DetailFragment extends Fragment {
                 return false;
             }
         });
-        /*
-        final Button publish = root.findViewById(R.id.postComment);
-        publish.setOnClickListener(new AdapterView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                comment = commentField.getText().toString();
-                commentPosts.add(comment); //lägg till namn innan såhär: name + ": " + comment
 
-            }
-        });
-
-         */
         ListView listView = root.findViewById(R.id.commentsList);
         ArrayAdapter<String> commentAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, commentPosts);
         listView.setAdapter(commentAdapter);
-
-        //kommentar skrivs i R.id.comment, som ska läggas i R.id.commentsList när den skickas.
-        //spara kommentaren i databasen kopplat till posten
 
         return root;
 
@@ -260,7 +248,9 @@ public class DetailFragment extends Fragment {
      */
 
 
-    private void initialPostCheck(Switch like, Switch follow, String creatorId) {
+    private void initialPostCheck(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch like,
+                                  @SuppressLint("UseSwitchCompatOrMaterialCode") Switch follow,
+                                  String creatorId) {
         creatorIdStr = creatorId;
         if (currentUser != null) {
             if (currentUser.isOwnPost(clicked)) {
@@ -273,7 +263,6 @@ public class DetailFragment extends Fragment {
             } else if (currentUser.isFollowed(creatorId)) {
                 follow.setChecked(true);
             }
-            //Lägg till en check för följda personer
         } else {
             like.setEnabled(false);
             follow.setEnabled(false);

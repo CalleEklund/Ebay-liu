@@ -1,10 +1,6 @@
 package com.example.liubiljett.handlers;
 
 import android.content.Context;
-import android.util.Log;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,22 +22,6 @@ public class VolleyService {
 
     public VolleyService(Context mContext) {
         this.mContext = mContext;
-    }
-
-    public void connTest() {
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.GET, baseURL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("TEST", String.valueOf(response));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("TEST", String.valueOf(error));
-            }
-        });
-        queue.add(request);
     }
 
     public void createAccount(String name, String email, String password, final VolleyCallback volleyCallback) {
@@ -150,8 +130,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -200,8 +180,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -246,8 +226,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -291,8 +271,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -368,8 +348,8 @@ public class VolleyService {
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -407,8 +387,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -477,8 +457,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }
@@ -515,8 +495,8 @@ public class VolleyService {
         }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "Bearer " + accessToken);
                 return params;
             }

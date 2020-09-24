@@ -46,14 +46,12 @@ public class FeedAdapter extends BaseAdapter {
             TextView headline = convertView.findViewById(R.id.headlineID);
             TextView price = convertView.findViewById(R.id.priceID);
             TextView description = convertView.findViewById(R.id.descID);
-            //ImageView image = convertView.findViewById(R.id.image_holderID);
 
             Post currentRow = (Post) getItem(position);
 
             headline.setText(currentRow.getTitle());
             price.setText(currentRow.getPrice());
             description.setText(currentRow.getDesc());
-            //image.setImageResource(currentRow.getImageID());
         }
         return convertView;
     }
