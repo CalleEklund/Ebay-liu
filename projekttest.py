@@ -9,7 +9,7 @@ def start_test():
 def register_user(name, password, email):
     d = requests.post(
         "http://127.0.0.1:5000/user/register/" + str(name) + "/" + str(password) + "/" + str(email))
-    return d.text
+    return d.json()
 
 
 def login_user(email, password):
@@ -35,7 +35,7 @@ def get_curr_user(token):
 
 def create_post(token, post_title, post_price, post_description):
     r = requests.post("http://127.0.0.1:5000/user/createpost/" + post_title + "/" + post_price + "/" + post_description,
-                      headers={'Authorization': 'Bearer ' + token})
+                      headers={"Authorization": "Bearer " + token})
     return r.json()
 
 
@@ -94,14 +94,19 @@ def followed_posts(token):
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
 
+
+# print(start_test())
+
 # print(register_user("felix", "felixlosen", "felix@gmail.com"))
 # print(register_user("calle", "callelosen", "calle@gmail.com"))
 # token = login_user('calle@gmail.com', 'callelosen')
-# token = login_user("felix@gmail.com", "felixlosen")
+token = login_user("felix@gmail.com", "felixlosen")
+# print(token)
+# print(logout_current_user(token))
 # print(create_post(token, "gilla", "10kr", "snälla"))
 # print(get_user('calle@gmail.com'))
 # print(get_user('felix@gmail.com'))
-# print(like_post(token, 1))
+print(like_post(token, 1))
 # print(unlike_post(token,1))
 # print(delete_post(token,1))
 # print(get_feed())

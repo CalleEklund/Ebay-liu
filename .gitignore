@@ -9,3 +9,5 @@ env.bak/
 venv.bak/
 pip-selfcheck.json
 projektdb.db
+config.py
+my_env/*

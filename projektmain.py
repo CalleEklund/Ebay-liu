@@ -134,8 +134,8 @@ def register_user(username, password, email):
         new_user = User(username, password, email)
         db.session.add(new_user)
         db.session.commit()
-        return "{'message': 'Användare Registerad'}", 200
-    return "{'message':'Email readan tagen'}", 400
+        return jsonify(message='Användare Registerad'), 200
+    return jsonify(message='Email readan tagen'), 400
 
 
 @app.route('/user/login/<email>/<password>', methods=['POST'])
@@ -144,11 +144,11 @@ def login_user(email, password):
 
     if request.method == 'POST':
         if existing_user is None:
-            return '{"Error": "Ingen sådan användare"}', 400
+            return jsonify(Error="Ingen sådan användare"), 400
         if bcrypt.check_password_hash(existing_user.user_password, password):
             user_token = create_access_token(identity=existing_user.user_email)
             return jsonify(access_token=user_token), 200
-        return '{"Error":"Fel Lösenord"}', 400
+        return jsonify(Error="Fel Lösenord"), 400
 
 
 @app.route('/logout', methods=['DELETE'])
@@ -156,7 +156,7 @@ def login_user(email, password):
 def logout():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
-    return jsonify({"msg": "Du är utloggad"}), 200
+    return jsonify(msg="Du är utloggad"), 200
 
 
 @app.route('/user/createpost/<title>/<price>/<description>', methods=['POST'])
@@ -166,18 +166,18 @@ def create_post(title, price, description):
     db.session.add(new_post)
     logged_in_user = get_curr_user()
     if logged_in_user is None:
-        return "{'Error':'Ingen sådan användare'", 400
+        return jsonify(Error="Ingen sådan användare"), 400
     else:
         logged_in_user.post_created.append(new_post)
     db.session.commit()
-    return "{'message': 'Inlägg Skapat'}", 200
+    return jsonify(message='Inlägg Skapat'), 200
 
 
 @app.route('/post/getcreator/<id_post>', methods=['POST'])
 def get_creator(id_post):
     user_creator_id = User.query.filter(User.post_created.any(post_id=id_post)).first().user_id
     if user_creator_id is None:
-        return "{'Error':'Inget inlägg hittat'", 400
+        return jsonify(Error='Inget inlägg hittat'), 400
     else:
         return jsonify(creator_id=user_creator_id)
 
@@ -188,14 +188,17 @@ def like_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_curr_user()
     if searched_post is None:
-        return '{"Error":"Inget inlägg hittat"}', 400
+        return jsonify(Error='Inget inlägg hittat'), 400
+
     elif searched_post in logged_in_user.post_liked:
-        return '{"Message":""}',200
+        return jsonify(Message=''), 200
+    elif searched_post in logged_in_user.post_created:
+        return jsonify(Error="Kan inte gilla sitt eget inlägg"), 400
     else:
         logged_in_user.post_liked.append(searched_post)
 
     db.session.commit()
-    return '{"Message":"Inlägg Gillat"}', 200
+    return jsonify(Message = "Inlägg Gillat"),200
 
 
 @app.route('/user/unlikepost/<id_post>', methods=['POST'])
@@ -204,15 +207,15 @@ def unlike_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_curr_user()
     if searched_post is None:
-        return '{"Error":"Inget inlägg hittat"}', 400
+        return jsonify(Error='Inget inlägg hittat'), 400
     else:
         if searched_post not in logged_in_user.post_liked:
-            return '{"Error":"Kan inte ogillat inte gillat inlägg"}', 400
+            return jsonify(Error="Kan inte ogillat inte gillat inlägg"), 400
         else:
             logged_in_user.post_liked.remove(searched_post)
 
     db.session.commit()
-    return '{"Message":"Inlägg Ogillat"}', 200
+    return jsonify(Message = "Inlägg Ogillat"),200
 
 
 @app.route('/user/followuser/<id_user>', methods=['POST'])
@@ -221,13 +224,13 @@ def follow_user(id_user):
     searched_user = User.query.filter_by(user_id=id_user).first()
     logged_in_user = get_curr_user()
     if searched_user is None:
-        return '{"Error":"Ingen användare hittad"}', 400
+        return jsonify(Error='Inget inlägg hittat'), 400
     elif searched_user in logged_in_user.user_following or searched_user == logged_in_user:
-        return '{"Message":""}', 200
+        return jsonify(Message=''), 200
     else:
         logged_in_user.user_following.append(searched_user)
         db.session.commit()
-        return '{"Message":"Användare följd."}', 200
+        return jsonify(Message='Användare följd'), 200
 
 
 @app.route('/user/unfollowuser/<id_user>', methods=['POST'])
@@ -236,13 +239,13 @@ def unfollow_user(id_user):
     searched_user = User.query.filter_by(user_id=id_user).first()
     logged_in_user = get_curr_user()
     if searched_user is None:
-        return '{"Error":"Ingen användare hittad"}', 400
+        return jsonify(Error='Ingen användare hittad'), 400
     elif searched_user not in logged_in_user.user_following:
-        return '{"Error":"Kan inte ofölja en användare som du inte följer"}', 400
+        return jsonify(Error="Kan inte ofölja en användare som du inte följer"), 400
     else:
         logged_in_user.user_following.remove(searched_user)
         db.session.commit()
-        return '{"Message":"Du följer inte längre användaren."}', 200
+        return jsonify(Message="Du följer inte längre användaren"), 200
 
 
 @app.route('/user/deletepost/<id_post>', methods=['DELETE'])
@@ -251,11 +254,11 @@ def delete_post(id_post):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_current_user()
     if searched_post not in logged_in_user.post_created:
-        return '{"Error":"Inget inlägg hittat"}', 400
+        return jsonify(Error="Inget inlägg hittat"), 400
     else:
         db.session.delete(searched_post)
         db.session.commit()
-        return '{"Message":"Inlägg Borttaget"}', 200
+        return jsonify(Message="Inlägg Borttaget"), 400
 
 
 @app.route('/user/comment/<id_post>/<comment>', methods=['POST'])
@@ -264,14 +267,14 @@ def add_comment(id_post, comment):
     searched_post = Post.query.filter_by(post_id=id_post).first()
     logged_in_user = get_curr_user()
     if not searched_post:
-        return '{"Error":"Inget inlägg hittat"}', 400
+        return jsonify(Error="Inget inlägg hittat"), 400
     elif searched_post in logged_in_user.post_created:
-        return '{"Error":"Kan inte kommentera eget inlägg"}', 400
+        return jsonify(Error="Kan inte kommentera eget inlägg"), 400
     else:
         searched_post.comments = comment
         searched_post.commented_by = logged_in_user.user_email
         db.session.commit()
-        return '{"Message":"Inlägg kommenterat"}'
+        return jsonify(Message="Inlägg kommenterat"), 200
 
 
 @app.route('/user/all')
@@ -286,7 +289,7 @@ def get_all_users():
 def get_all_posts():
     all_posts = Post.query.all()
     if all_posts is None:
-        return "{'Error':'Hittad inga inlägg'}", 400
+        return jsonify(Error='Hittad inga inlägg'), 400
     else:
         result = {'all': [x.to_dict() for x in all_posts]}
         return jsonify(result)
@@ -296,7 +299,7 @@ def get_all_posts():
 def get_user(email):
     user_search = User.query.filter_by(user_email=email).first()
     if user_search is None:
-        return "{'Error':'Ingen sådan användare'", 400
+        return jsonify(Error='Ingen sådan användare'), 400
     else:
         return jsonify(user_search.to_dict()), 200
 
@@ -315,13 +318,13 @@ def get_followed_posts():
     current_user_following = get_curr_user().user_following
     followed_user_posts = []
     if len(current_user_following) == 0:
-        return {'followed_posts': []},400
+        return jsonify(followed_posts=[]), 400
     else:
         for user_followed in current_user_following:
             follow_user = User.query.filter_by(user_id=user_followed.user_id).first()
             followed_user_posts.append(follow_user.post_created)
         result = {'followed_posts': [x.to_dict() for x in followed_user_posts[0]]}
-        return result,200
+        return result, 200
 
 
 def get_curr_user():
@@ -330,12 +333,17 @@ def get_curr_user():
     return current_user
 
 
+def init_db():
+    db.drop_all()
+    db.create_all()
+
+
 @app.route('/', methods=['GET'])
 def start_page():
-    return "{'message':'liublijett'}", 200
+    return 'liubiljett', 200
 
 
 if __name__ == "__main__":
-    # db.drop_all()
+    db.drop_all()
     db.create_all()
     app.run(port=5000, debug=True)

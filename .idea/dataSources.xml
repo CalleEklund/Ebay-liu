@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\Carl Eklund\Desktop\TDDD80\tddd80-labbar-2020-u1-g03\projektdb.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="" uuid="16d49a30-21d6-4077-9669-ed51774ce44a">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\Carl Eklund\Desktop\TDDD80\tddd80-labbar-2020-u1-g03\.coverage</jdbc-url>
+    </data-source>
   </component>
 </project>
