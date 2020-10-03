@@ -23,16 +23,25 @@ def client():
 
 
 def test_empty_db(client):
+    """
+    Test server connection
+    """
     r = client.get('/')
     assert b'liubiljett' in r.data
 
 
 def test_register_account(client):
+    """
+    Tests registration of a user
+    """
     r = client.post('/user/register/test/testlosen/test@gmail.com')
     assert 'Användare Registerad' in r.get_json()['message']
 
 
 def test_login_logout(client):
+    """
+    Tests login of a user and logout
+    """
     r = client.post('/user/register/test/testlosen/test@gmail.com')
     login = client.post('/user/login/test@gmail.com/testlosen')
     token = login.get_json()['access_token']
@@ -43,6 +52,9 @@ def test_login_logout(client):
 
 
 def test_create_like_post(client):
+    """
+    Tests the creation of a post and error handling of liking a user's own post
+    """
     r = client.post('/user/register/test/testlosen/test@gmail.com')
     login = client.post('/user/login/test@gmail.com/testlosen')
     token = login.get_json()['access_token']
@@ -53,6 +65,9 @@ def test_create_like_post(client):
 
 
 def test_add_comment_like_post(client):
+    """
+    Tests commenting of a post and liking another users post
+    """
     r = client.post('/user/register/test/testlosen/test@gmail.com')
     d = client.post('/user/register/test/test2losen/test2@gmail.com')
 
@@ -72,6 +87,9 @@ def test_add_comment_like_post(client):
 
 
 def test_follow_unfollow(client):
+    """
+    Tests to follow and unfollow a user
+    """
     r = client.post('/user/register/test/testlosen/test@gmail.com')
     d = client.post('/user/register/test/test2losen/test2@gmail.com')
     login = client.post('/user/login/test2@gmail.com/test2losen')
