@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+/**
+ * User class for storing users, the class is used for retrieving and storing users from the database.
+ */
 public class User {
     private String name;
     private String email;
@@ -29,6 +32,9 @@ public class User {
         this.user_following = user_following;
     }
 
+    /**
+     * Getters
+     */
     public String getName() {
         return name;
     }
@@ -57,6 +63,9 @@ public class User {
         return accessToken;
     }
 
+    /**
+     * Setters
+     */
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
@@ -64,12 +73,12 @@ public class User {
     public void setHasAccessToken(boolean hasAccessToken) {
         this.hasAccessToken = hasAccessToken;
     }
-    public void addLikedPost(Post p){
-        this.liked_posts.add(p);
-    }
-    public void removeLikedPost(Post p){
-        this.liked_posts.remove(p);
-    }
+
+    /**
+     *
+     * @param p (Post class)
+     * @return if the post is created by the user
+     */
     public boolean isOwnPost(Post p){
         if(this.created_posts == null){return false;}
         for (Post userCreatedPost :  this.created_posts){
@@ -79,6 +88,12 @@ public class User {
         }
         return false;
     }
+
+    /**
+     *
+     * @param p (Post class)
+     * @return if the post is already liked by the user
+     */
     public boolean isLikedPost(Post p){
         if(this.liked_posts == null){return false;}
         for (Post userLikedPost : this.liked_posts){
@@ -88,6 +103,12 @@ public class User {
         }
         return false;
     }
+
+    /**
+     *
+     * @param userId (int) User's id
+     * @return if the user is already following the user
+     */
     public boolean isFollowed(String userId){
         if (this.user_following == null) {return false;}
         for (int followingId : this.user_following){

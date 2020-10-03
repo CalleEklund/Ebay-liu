@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+/**
+ * Post class used to store posts, there are two different constructors
+ * one for easier handling to VolleyService and one for retrieving posts from the database
+ */
 public class Post {
     private String title;
     private String price;
@@ -27,6 +31,9 @@ public class Post {
         this.comments = comments;
     }
 
+    /**
+     * Getters
+     */
     public List<String> getCommentedBy() {
         return commentedby;
     }
