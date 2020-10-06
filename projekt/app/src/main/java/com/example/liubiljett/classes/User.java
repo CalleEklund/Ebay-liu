@@ -32,9 +32,14 @@ public class User {
         this.user_following = user_following;
     }
 
+    public int getId() {
+        return id;
+    }
+
     /**
      * Getters
      */
+
     public String getName() {
         return name;
     }

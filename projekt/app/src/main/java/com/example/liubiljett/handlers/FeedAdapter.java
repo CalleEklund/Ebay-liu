@@ -12,6 +12,9 @@ import com.example.liubiljett.R;
 
 import java.util.ArrayList;
 
+/**
+ * A custom adapter class used for creating the main feed, followed users feed and like posts
+ */
 public class FeedAdapter extends BaseAdapter {
 
     private ArrayList<Post> singleRow;
@@ -22,6 +25,9 @@ public class FeedAdapter extends BaseAdapter {
         mInflater = (LayoutInflater.from(context));
     }
 
+    /**
+     * Getters
+     */
     @Override
     public int getCount() {
         return singleRow.size();

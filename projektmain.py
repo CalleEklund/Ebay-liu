@@ -258,11 +258,10 @@ def like_post(id_post):
     logged_in_user = get_curr_user()
     if searched_post is None:
         return jsonify(Error='Inget inlägg hittat'), 400
-
     elif searched_post in logged_in_user.post_liked:
         return jsonify(Message=''), 200
     elif searched_post in logged_in_user.post_created:
-        return jsonify(Error="Kan inte gilla sitt eget inlägg"), 400
+        return jsonify(Message=''), 200
     else:
         logged_in_user.post_liked.append(searched_post)
 

@@ -192,7 +192,7 @@ public class DetailFragment extends Fragment {
                                     result,
                                     Toast.LENGTH_SHORT);
                             toast.show();
-                            commentPosts.add(comment);
+                            commentPosts.add(currentUser.getEmail() + ": " + comment);
                         }
 
                         @Override
@@ -237,7 +237,7 @@ public class DetailFragment extends Fragment {
                                   String creatorId) {
         creatorIdStr = creatorId;
         if (currentUser != null) {
-            if (currentUser.isOwnPost(clicked)) {
+            if (creatorIdStr.equals(String.valueOf(currentUser.getId()))) {
                 like.setChecked(true);
                 follow.setChecked(true);
                 like.setEnabled(false);
@@ -260,7 +260,7 @@ public class DetailFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void showPost(Post data) {
         headline.setText("Title: " + data.getTitle());
-        price.setText("Price: " + data.getPrice());
+        price.setText("Price: " + data.getPrice() + "kr");
         description.setText("Övrig info: " + data.getDesc());
 
     }

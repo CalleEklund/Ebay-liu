@@ -64,7 +64,7 @@ public class PostFragment extends Fragment {
                 String postPrice = postPriceTextView.getText().toString();
                 String postDescription = postDescriptionTextView.getText().toString();
                 final Post newPost = new Post(postTitle, postPrice, postDescription);
-                if (validator.checkPostInput(newPost)){
+                if (validator.checkPostInput(newPost)) {
                     volleyService.uploadPost(currentUser.getAccessToken(), newPost, new VolleyService.VolleyCallback() {
                         @Override
                         public void onSuccess(String result) {
@@ -75,7 +75,7 @@ public class PostFragment extends Fragment {
 
                             toast.show();
                             currentUser.addPost(newPost);
-                           mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+                            mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
                         }
 
                         @Override
@@ -93,6 +93,7 @@ public class PostFragment extends Fragment {
 
         return root;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
