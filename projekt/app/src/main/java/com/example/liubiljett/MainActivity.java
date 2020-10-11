@@ -16,7 +16,9 @@ import com.example.liubiljett.ui.MainPageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
-
+/**
+ * Main class which holds the navigation bar and passes the current user to the different fragments
+ */
 public class MainActivity extends AppCompatActivity implements LogInFragment.OnAcccesKeyListener {
     private boolean hasUserAccessKey;
     private User loggedInUser;
@@ -31,11 +33,15 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
         navView = findViewById(R.id.nav_view);
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+        /*
+         * Send the user to the different fragments depending on which navigation item clicked.
+         * Also passes the right arguments to the destination fragment.
+         */
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Bundle args = new Bundle();
-                
+
                 switch (item.getItemId()) {
                     case R.id.navigation_post:
                         args.putString("result", new Gson().toJson(loggedInUser));
@@ -78,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
 
     }
 
+    /**
+     * Interface method to retrieve the current user and if the user has accesskey
+     *
+     * @param hasKey if user has accesskey
+     * @param u      current user
+     */
     @Override
     public void hasAccessKey(boolean hasKey, User u) {
         hasUserAccessKey = hasKey;

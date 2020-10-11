@@ -16,6 +16,9 @@ import com.example.liubiljett.classes.User;
 import com.google.gson.Gson;
 
 
+/**
+ * Frame class for switching between ListFragment and DetailFragment
+ */
 public class MainPageFragment extends Fragment implements ListFragment.ItemSelectedListener {
 
     ListFragment listFragment;
@@ -43,6 +46,11 @@ public class MainPageFragment extends Fragment implements ListFragment.ItemSelec
         return root;
     }
 
+    /**
+     * Send the user to DetailFragment with the clicked posts data
+     * @param listItem the clicked post item
+     * @param user current user
+     */
     @Override
     public void onItemSelected(Post listItem, User user) {
         if (getActivity().findViewById(R.id.frame_layout) != null) {

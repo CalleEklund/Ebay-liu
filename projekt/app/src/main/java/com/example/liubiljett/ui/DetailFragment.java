@@ -28,6 +28,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Class used för displaying posts in a more detailed view, accessed when a post is clicked
+ */
 public class DetailFragment extends Fragment {
 
     private Gson gson;
@@ -49,6 +52,13 @@ public class DetailFragment extends Fragment {
         gson = new Gson();
     }
 
+    /**
+     * Instance to display the clicked post
+     *
+     * @param listItem    The clicked post
+     * @param currentUser The current User
+     * @return the fragment with arguments of the clicked post and the current user
+     */
     public static DetailFragment newInstance(Post listItem, User currentUser) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
@@ -61,6 +71,9 @@ public class DetailFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Sets up the post and retrieves the argument
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -86,6 +99,9 @@ public class DetailFragment extends Fragment {
         setCreatorId();
 
 
+        /*
+         * Instantiate the like and follow switch also adds the comments to the post
+         */
         if (like != null) {
             like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -180,6 +196,9 @@ public class DetailFragment extends Fragment {
             commentPosts.add(clicked.getCommentedBy().get(i) + ": " + clicked.getComments().get(i));
         }
 
+        /*
+         * Instantiate the comment field
+         */
         commentField.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -218,6 +237,9 @@ public class DetailFragment extends Fragment {
 
     }
 
+    /**
+     * Retrieves the creator's id of the post
+     */
     private void setCreatorId() {
         volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
             @Override
@@ -232,6 +254,13 @@ public class DetailFragment extends Fragment {
         });
     }
 
+    /**
+     * Checks whether the clicked post is the current user own post or already liked/followed,
+     * set the like and follow switches accordingly
+     * @param like Like switch
+     * @param follow Follow switch
+     * @param creatorId the creator of the post id
+     */
     private void initialPostCheck(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch like,
                                   @SuppressLint("UseSwitchCompatOrMaterialCode") Switch follow,
                                   String creatorId) {
@@ -256,7 +285,10 @@ public class DetailFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Fills the fragment with detail of the post
+     * @param data Current post in Post object
+     */
     @SuppressLint("SetTextI18n")
     private void showPost(Post data) {
         headline.setText("Title: " + data.getTitle());

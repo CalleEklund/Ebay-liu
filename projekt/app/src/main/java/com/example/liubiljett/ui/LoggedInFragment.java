@@ -24,6 +24,9 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logged in page
+ */
 public class LoggedInFragment extends Fragment {
     TextView profileName;
     TextView profileEmail;
@@ -40,6 +43,12 @@ public class LoggedInFragment extends Fragment {
         gson = new Gson();
     }
 
+    /**
+     * Instance for getting the current user
+     *
+     * @param inUser current user in User object
+     * @return fragment with arguments of the current user
+     */
     public static LoggedInFragment newInstance(User inUser) {
         LoggedInFragment loggedInFragment = new LoggedInFragment();
         Bundle args = new Bundle();
@@ -67,6 +76,10 @@ public class LoggedInFragment extends Fragment {
         setData(currentUser);
 
         final Button logOut = root.findViewById(R.id.button4);
+        /*
+         *Logout button listener which calls the logout function from the database
+         *  and send the user to the login page
+         */
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +121,11 @@ public class LoggedInFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the logged in page with the current users data
+     *
+     * @param u current user in User object
+     */
     @SuppressLint("SetTextI18n")
     public void setData(User u) {
         profileName.setText("Namn: " + u.getName());

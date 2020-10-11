@@ -21,6 +21,9 @@ import com.example.liubiljett.handlers.Validator;
 import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
 
+/**
+ * Class user for creating a post
+ */
 public class PostFragment extends Fragment {
 
     private User currentUser;
@@ -56,7 +59,9 @@ public class PostFragment extends Fragment {
             Log.d("ERROR", "args null");
         }
 
-
+        /*
+         * Checks if the input for a post i valid, and stores the post to the current user's created posts
+         */
         postButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +99,10 @@ public class PostFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Check if MainActivity implements the right interface, if true then retrieve MainActivity's context
+     * @param context MainActivity's context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

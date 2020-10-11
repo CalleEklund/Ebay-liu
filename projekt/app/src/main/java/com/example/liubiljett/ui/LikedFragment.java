@@ -18,6 +18,9 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+/**
+ * Class used for display a user's liked posts
+ */
 public class LikedFragment extends Fragment {
 
     private User currentUser;
@@ -51,6 +54,10 @@ public class LikedFragment extends Fragment {
 
         return root;
     }
+
+    /**
+     * Gets the current user's liked posts, and inputs them into the FeedAdapter
+     */
     public void showLikedPosts(){
         volleyService.getCurrentUser(currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
             @Override

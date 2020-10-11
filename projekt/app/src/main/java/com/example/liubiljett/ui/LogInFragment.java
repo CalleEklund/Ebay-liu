@@ -20,6 +20,9 @@ import com.example.liubiljett.handlers.Validator;
 import com.example.liubiljett.handlers.VolleyService;
 import com.google.gson.Gson;
 
+/**
+ * Class for the login page
+ */
 public class LogInFragment extends Fragment {
 
     private Validator validator;
@@ -44,7 +47,7 @@ public class LogInFragment extends Fragment {
         emailTextView.setText("calle@gmail.com");
         passwordTextView.setText("callelosen");
 
-
+        //Sends the user to create account page
         textView.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +57,7 @@ public class LogInFragment extends Fragment {
             }
         });
 
+        //Checks user input and if correct logs in the user
         loginButton.setOnClickListener(new AdapterView.OnClickListener() {
 
             @Override
@@ -86,6 +90,11 @@ public class LogInFragment extends Fragment {
 
     }
 
+    /**
+     * Retrieves the current user with its accesstoken
+     * from the database and sends the user to the loggedin page
+     * @param userAccessToken user's accesstoken retrieved from logging in
+     */
     public void setCurrentUser(final String userAccessToken) {
         volleyService.getCurrentUser(userAccessToken, new VolleyService.VolleyCallback() {
             @Override
@@ -105,6 +114,10 @@ public class LogInFragment extends Fragment {
         });
     }
 
+    /**
+     * Check if MainActivity implements the right interface, if true then retrieve MainActivity's context
+     * @param context MainActivity's context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -115,6 +128,9 @@ public class LogInFragment extends Fragment {
         }
     }
 
+    /**
+     * Interface to pass the user and if the user has an accesskey
+     */
     public interface OnAcccesKeyListener {
         void hasAccessKey(boolean hasKey, User loggedInUser);
     }

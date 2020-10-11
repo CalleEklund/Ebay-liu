@@ -27,6 +27,9 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used for displaying a list of posts, ex: the main feed, and followed user's posts
+ */
 public class ListFragment extends Fragment {
     private ItemSelectedListener mainParent;
     private ArrayList<Post> rowItems;
@@ -41,6 +44,11 @@ public class ListFragment extends Fragment {
 
     }
 
+    /**
+     * Instance for retrieving the current user
+     * @param currentUser current user in a User object
+     * @return fragment with the current user as arguments
+     */
     public static ListFragment newInstance(User currentUser) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
@@ -72,6 +80,7 @@ public class ListFragment extends Fragment {
         } else {
             Log.d("ERROR", "args null");
         }
+        //If no user is logged in disable the function to show followed user's posts
         if(currentUser == null){
             showPost.setEnabled(false);
         }
@@ -85,6 +94,7 @@ public class ListFragment extends Fragment {
             }
 
         });
+        //Filter the feed so that it shows only followed user's posts
         showPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -104,8 +114,8 @@ public class ListFragment extends Fragment {
                             Log.d("ERROR", result);
                         }
                     });
-                    //filtrera så att man bara lägger till de rowitems som är gjorda av de man följer
                 } else {
+            //Shows all published posts when the user used the switch
                     showPost.setText(R.string.showAll);
                     volleyService.getAllPosts(new VolleyService.VolleyCallback() {
 
@@ -125,6 +135,7 @@ public class ListFragment extends Fragment {
                 }
             }
         });
+        //Initial retrieve for the all published posts
         volleyService.getAllPosts(new VolleyService.VolleyCallback() {
 
 
@@ -147,11 +158,19 @@ public class ListFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Adds the posts to an array
+     * @param currentFeed Retrieved list of posts from database
+     */
     private void addRowItems(List<Post> currentFeed) {
         rowItems.clear();
         rowItems.addAll(currentFeed);
     }
 
+    /**
+     * Interface used for passing the clicked item and current user between
+     * the feed and detailfragment
+     */
     public interface ItemSelectedListener {
         void onItemSelected(Post listItem, User user);
     }
