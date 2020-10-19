@@ -81,7 +81,7 @@ public class ListFragment extends Fragment {
             Log.d("ERROR", "args null");
         }
         //If no user is logged in disable the function to show followed user's posts
-        if(currentUser == null){
+        if(currentUser == null || currentUser.getUser_following().size() == 0){
             showPost.setEnabled(false);
         }
 
@@ -106,11 +106,16 @@ public class ListFragment extends Fragment {
                             List<Post> followedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                             }.getType());
                             addRowItems(followedPosts);
-                            listView.setAdapter(adapter);
+
+                                listView.setAdapter(adapter);
+
+
                         }
 
                         @Override
                         public void onError(String result) {
+                            listView.setAdapter(adapter);
+
                             Log.d("ERROR", result);
                         }
                     });

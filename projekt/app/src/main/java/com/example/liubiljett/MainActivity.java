@@ -1,6 +1,7 @@
 package com.example.liubiljett;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.liubiljett.classes.User;
+import com.example.liubiljett.handlers.VolleyService;
 import com.example.liubiljett.ui.ListFragment;
 import com.example.liubiljett.ui.LogInFragment;
 import com.example.liubiljett.ui.MainPageFragment;
@@ -22,11 +24,15 @@ import com.google.gson.Gson;
 public class MainActivity extends AppCompatActivity implements LogInFragment.OnAcccesKeyListener {
     private boolean hasUserAccessKey;
     private User loggedInUser;
+    private VolleyService volleyService;
+    private Gson gson;
     BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        volleyService = new VolleyService(getBaseContext());
+        gson = new Gson();
         setContentView(R.layout.main_activity);
 
 
@@ -41,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements LogInFragment.OnA
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Bundle args = new Bundle();
-
                 switch (item.getItemId()) {
+
                     case R.id.navigation_post:
                         args.putString("result", new Gson().toJson(loggedInUser));
                         navController.navigate(R.id.navigation_post, args);

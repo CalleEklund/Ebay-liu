@@ -1,7 +1,11 @@
 package com.example.liubiljett.classes;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -68,6 +72,10 @@ public class User {
         return accessToken;
     }
 
+    public List<Integer> getUser_following() {
+        return user_following;
+    }
+
     /**
      * Setters
      */
@@ -79,6 +87,34 @@ public class User {
         this.hasAccessToken = hasAccessToken;
     }
 
+    public void addLikedPosts(Post p){
+        this.liked_posts.add(p);
+    }
+    public void removeLikedPosts(Post p){
+        Log.d("innan", String.valueOf(liked_posts));
+        Iterator<Post> it = liked_posts.iterator();
+        while (it.hasNext()) {
+            Post search = it.next();
+            if (search.equals(p)) {
+                it.remove();
+            }
+        }
+        Log.d("efter", String.valueOf(liked_posts));
+
+    }
+
+    public void addFollowedUser(int userId){
+        this.user_following.add(userId);
+    }
+
+    public void removeFollowedUser(int userId){
+        for (int i = 0; i < user_following.size(); i++) {
+            if(user_following.get(i) == userId) {
+                user_following.remove(i);
+            }
+        }
+
+    }
     /**
      *
      * @param p (Post class)

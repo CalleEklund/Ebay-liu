@@ -94,4 +94,16 @@ def followed_posts(token):
                       headers={'Authorization': 'Bearer ' + token})
     return r.json()
 
+register_user("calle","callelosen","calle@gmail.com")
+register_user("calle","felixlosen","felix@gmail.com")
+
+# t = login_user("calle@gmail.com","callelosen")
+# create_post(t,"annon1 ","10","desc 1")
+# logout_current_user(t)
+
+t = login_user("felix@gmail.com","felixlosen")
+# create_post(t,"annons 2","20","desc 2")
+# follow_user(1,t)
+
+print(followed_posts(t))
 

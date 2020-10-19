@@ -1,6 +1,7 @@
 package com.example.liubiljett.handlers;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -250,6 +251,7 @@ public class VolleyService {
                 String out;
                 responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
                 try {
+                    Log.d("resp",responseBody);
                     out = new JSONObject(responseBody).getString("Error");
                     volleyCallback.onError(out);
 
@@ -301,6 +303,7 @@ public class VolleyService {
                 String out;
                 responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
                 try {
+                    Log.d("ERROR", responseBody);
                     out = new JSONObject(responseBody).getString("Error");
                     volleyCallback.onError(out);
 

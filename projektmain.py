@@ -374,8 +374,8 @@ def add_comment(id_post, comment):
     logged_in_user = get_curr_user()
     if not searched_post:
         return jsonify(Error="Inget inlägg hittat"), 400
-    elif searched_post in logged_in_user.post_created:
-        return jsonify(Error="Kan inte kommentera eget inlägg"), 400
+    # elif searched_post in logged_in_user.post_created:
+    #     return jsonify(Error="Kan inte kommentera eget inlägg"), 400
     else:
         searched_post.comments = comment
         searched_post.commented_by = logged_in_user.user_email

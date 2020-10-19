@@ -1,6 +1,7 @@
 package com.example.liubiljett.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -47,6 +48,8 @@ public class DetailFragment extends Fragment {
     Switch like;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch follow;
+    LogInFragment.OnAcccesKeyListener mainParent;
+
 
     public DetailFragment() {
         gson = new Gson();
@@ -107,6 +110,7 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        Log.d("curr user", currentUser.toString());
                         volleyService.likePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -114,6 +118,9 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+                                currentUser.addLikedPosts(clicked);
+                                mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+
                             }
 
                             @Override
@@ -122,6 +129,7 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+
                             }
                         });
                     } else {
@@ -132,6 +140,9 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+                                currentUser.removeLikedPosts(clicked);
+                                mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+
                             }
 
                             @Override
@@ -140,6 +151,7 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+
                             }
                         });
                     }
@@ -244,7 +256,8 @@ public class DetailFragment extends Fragment {
         volleyService.getPostCreator(clicked.getId(), new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                initialPostCheck(like, follow, result);
+                creatorIdStr = result;
+                initialPostCheck(like, follow, creatorIdStr);
             }
 
             @Override
@@ -265,6 +278,7 @@ public class DetailFragment extends Fragment {
                                   @SuppressLint("UseSwitchCompatOrMaterialCode") Switch follow,
                                   String creatorId) {
         creatorIdStr = creatorId;
+
         if (currentUser != null) {
             if (creatorIdStr.equals(String.valueOf(currentUser.getId()))) {
                 like.setChecked(true);
@@ -296,7 +310,19 @@ public class DetailFragment extends Fragment {
         description.setText("Övrig info: " + data.getDesc());
 
     }
-
+    /**
+     * Check if MainActivity implements the right interface, if true then retrieve MainActivity's context
+     * @param context MainActivity's context
+     */
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof LogInFragment.OnAcccesKeyListener) {
+            mainParent = (LogInFragment.OnAcccesKeyListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + "must implement interface");
+        }
+    }
 
 }
 

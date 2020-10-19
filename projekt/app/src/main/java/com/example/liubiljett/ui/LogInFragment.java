@@ -44,8 +44,8 @@ public class LogInFragment extends Fragment {
         final TextView emailTextView = root.findViewById(R.id.emailLogin);
         final TextView passwordTextView = root.findViewById(R.id.passwordLogin);
 
-        emailTextView.setText("calle@gmail.com");
-        passwordTextView.setText("callelosen");
+        emailTextView.setText("felix@gmail.com");
+        passwordTextView.setText("felixlosen");
 
         //Sends the user to create account page
         textView.setOnClickListener(new AdapterView.OnClickListener() {

@@ -69,30 +69,36 @@ public class PostFragment extends Fragment {
                 String postPrice = postPriceTextView.getText().toString();
                 String postDescription = postDescriptionTextView.getText().toString();
                 final Post newPost = new Post(postTitle, postPrice, postDescription);
-                if (validator.checkPostInput(newPost)) {
-                    volleyService.uploadPost(currentUser.getAccessToken(), newPost, new VolleyService.VolleyCallback() {
-                        @Override
-                        public void onSuccess(String result) {
+                if(currentUser == null){
+                    Toast toast = Toast.makeText(getContext(),"Du kan inte skapa ett inlägg om du inte är inloggad",Toast.LENGTH_SHORT);
+                    toast.show();
+                }else{
+                    if (validator.checkPostInput(newPost)) {
+                        volleyService.uploadPost(currentUser.getAccessToken(), newPost, new VolleyService.VolleyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
 
-                            Toast toast = Toast.makeText(getContext(),
-                                    result,
-                                    Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
 
-                            toast.show();
-                            currentUser.addPost(newPost);
-                            mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
-                        }
+                                toast.show();
+                                currentUser.addPost(newPost);
+                                mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
+                            }
 
-                        @Override
-                        public void onError(String result) {
-                            Toast toast = Toast.makeText(getContext(),
-                                    result,
-                                    Toast.LENGTH_SHORT);
+                            @Override
+                            public void onError(String result) {
+                                Toast toast = Toast.makeText(getContext(),
+                                        result,
+                                        Toast.LENGTH_SHORT);
 
-                            toast.show();
-                        }
-                    });
+                                toast.show();
+                            }
+                        });
+                    }
                 }
+
             }
         });
 
