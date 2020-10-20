@@ -32,9 +32,10 @@ public class VolleyService {
 
     /**
      * Creates a user account and retrieves a success or error message
-     * @param name User's name
-     * @param email User's email
-     * @param password User's password
+     *
+     * @param name           User's name
+     * @param email          User's email
+     * @param password       User's password
      * @param volleyCallback callback with information message
      */
     public void createAccount(String name, String email, String password, final VolleyCallback volleyCallback) {
@@ -82,8 +83,9 @@ public class VolleyService {
 
     /**
      * Logs in user
-     * @param email User's email
-     * @param password User's password
+     *
+     * @param email          User's email
+     * @param password       User's password
      * @param volleyCallback callback with accesstoken
      */
     public void logInUser(String email, String password, final VolleyCallback volleyCallback) {
@@ -124,7 +126,8 @@ public class VolleyService {
 
     /**
      * Retrieves the current logged in user
-     * @param accessToken User's accesstoken
+     *
+     * @param accessToken    User's accesstoken
      * @param volleyCallback callback with users information in JSON format or error message
      */
     public void getCurrentUser(final String accessToken, final VolleyCallback volleyCallback) {
@@ -168,8 +171,9 @@ public class VolleyService {
 
     /**
      * Uploads post and added to User's created by
-     * @param accessToken User's accesstoken
-     * @param post Post object containing all information about the post
+     *
+     * @param accessToken    User's accesstoken
+     * @param post           Post object containing all information about the post
      * @param volleyCallback callback with information message
      */
     public void uploadPost(final String accessToken, Post post, final VolleyCallback volleyCallback) {
@@ -225,8 +229,9 @@ public class VolleyService {
 
     /**
      * Likes post and added to User's liked posts
-     * @param accessToken User's accesstoken
-     * @param postId Post's id
+     *
+     * @param accessToken    User's accesstoken
+     * @param postId         Post's id
      * @param volleyCallback callback with information message
      */
     public void likePost(final String accessToken, int postId, final VolleyCallback volleyCallback) {
@@ -251,7 +256,6 @@ public class VolleyService {
                 String out;
                 responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
                 try {
-                    Log.d("resp",responseBody);
                     out = new JSONObject(responseBody).getString("Error");
                     volleyCallback.onError(out);
 
@@ -277,8 +281,9 @@ public class VolleyService {
 
     /**
      * Unlikes post and removes it from User's liked posts
-     * @param accessToken User's accesstoken
-     * @param postId Post's id
+     *
+     * @param accessToken    User's accesstoken
+     * @param postId         Post's id
      * @param volleyCallback callback with information message
      */
     public void unLikePost(final String accessToken, int postId, final VolleyCallback volleyCallback) {
@@ -329,6 +334,7 @@ public class VolleyService {
 
     /**
      * Retrieves all post for the main feed
+     *
      * @param volleyCallback callback with posts in a list of JSON format or error message
      */
     public void getAllPosts(final VolleyCallback volleyCallback) {
@@ -367,9 +373,10 @@ public class VolleyService {
 
     /**
      * Adds a comment to the post and the user to the Post's commented by
-     * @param accessToken User's accesstoken
-     * @param postId Post's id
-     * @param comment user's comment
+     *
+     * @param accessToken    User's accesstoken
+     * @param postId         Post's id
+     * @param comment        user's comment
      * @param volleyCallback callback with information message
      */
     public void addComment(final String accessToken, int postId, String comment, final VolleyCallback volleyCallback) {
@@ -414,7 +421,8 @@ public class VolleyService {
 
     /**
      * Logs out user and adds its access token to a blacklist
-     * @param accessToken User's access token
+     *
+     * @param accessToken    User's access token
      * @param volleyCallback callback with information message
      */
     public void logOutUser(final String accessToken, final VolleyCallback volleyCallback) {
@@ -458,7 +466,8 @@ public class VolleyService {
 
     /**
      * Get the creator of the post
-     * @param postId Searched Post's id
+     *
+     * @param postId         Searched Post's id
      * @param volleyCallback callback with the creator's id or error message
      */
     public void getPostCreator(int postId, final VolleyCallback volleyCallback) {
@@ -495,8 +504,9 @@ public class VolleyService {
     /**
      * Follows another user, access by following the creator of a Post.
      * Adds the user to the current User's followed users
-     * @param creatorId followed User's id
-     * @param accessToken Logged in User's Id
+     *
+     * @param creatorId      followed User's id
+     * @param accessToken    Logged in User's Id
      * @param volleyCallback callback with information message
      */
     public void followUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback) {
@@ -541,8 +551,9 @@ public class VolleyService {
     /**
      * Unfollows another user, access by following the creator of a Post.
      * Removes the user from the current User's followed users
-     * @param creatorId followed User's id
-     * @param accessToken Logged in User's Id
+     *
+     * @param creatorId      followed User's id
+     * @param accessToken    Logged in User's Id
      * @param volleyCallback callback with information message
      */
     public void unFollowUser(String creatorId, final String accessToken, final VolleyCallback volleyCallback) {
@@ -586,7 +597,8 @@ public class VolleyService {
 
     /**
      * Gets the posts of followed users
-     * @param accessToken Logged in User's access token
+     *
+     * @param accessToken    Logged in User's access token
      * @param volleyCallback callback with a list of posts created by the followed users or error message
      */
     public void getFollowedUsersPosts(final String accessToken, final VolleyCallback volleyCallback) {

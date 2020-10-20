@@ -106,15 +106,12 @@ public class ListFragment extends Fragment {
                             List<Post> followedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {
                             }.getType());
                             addRowItems(followedPosts);
-
-                                listView.setAdapter(adapter);
-
-
+                            listView.setAdapter(adapter);
                         }
 
                         @Override
                         public void onError(String result) {
-                            listView.setAdapter(adapter);
+
 
                             Log.d("ERROR", result);
                         }
@@ -123,8 +120,6 @@ public class ListFragment extends Fragment {
             //Shows all published posts when the user used the switch
                     showPost.setText(R.string.showAll);
                     volleyService.getAllPosts(new VolleyService.VolleyCallback() {
-
-
                         @Override
                         public void onSuccess(String result)  {
                             List<Post> feedPosts = gson.fromJson(result, new TypeToken<List<Post>>() {

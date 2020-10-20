@@ -99,6 +99,8 @@ public class DetailFragment extends Fragment {
         clicked = gson.fromJson(clickedItem, Post.class);
         currentUser = gson.fromJson(currentUserString, User.class);
         showPost(clicked);
+
+
         setCreatorId();
 
 
@@ -110,7 +112,6 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.d("curr user", currentUser.toString());
                         volleyService.likePost(currentUser.getAccessToken(), clicked.getId(), new VolleyService.VolleyCallback() {
                             @Override
                             public void onSuccess(String result) {
@@ -119,7 +120,7 @@ public class DetailFragment extends Fragment {
                                         Toast.LENGTH_SHORT);
                                 toast.show();
                                 currentUser.addLikedPosts(clicked);
-                                mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+                                mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
 
                             }
 
@@ -141,7 +142,7 @@ public class DetailFragment extends Fragment {
                                         Toast.LENGTH_SHORT);
                                 toast.show();
                                 currentUser.removeLikedPosts(clicked);
-                                mainParent.hasAccessKey(currentUser.isAccessToken(),currentUser);
+                                mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
 
                             }
 
@@ -171,6 +172,8 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+                                currentUser.addFollowedUser(Integer.parseInt(creatorIdStr));
+                                mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
                             }
 
                             @Override
@@ -189,6 +192,8 @@ public class DetailFragment extends Fragment {
                                         result,
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+                                currentUser.removeFollowedUser(Integer.parseInt(creatorIdStr));
+                                mainParent.hasAccessKey(currentUser.isAccessToken(), currentUser);
                             }
 
                             @Override
@@ -257,6 +262,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onSuccess(String result) {
                 creatorIdStr = result;
+
                 initialPostCheck(like, follow, creatorIdStr);
             }
 
@@ -270,8 +276,9 @@ public class DetailFragment extends Fragment {
     /**
      * Checks whether the clicked post is the current user own post or already liked/followed,
      * set the like and follow switches accordingly
-     * @param like Like switch
-     * @param follow Follow switch
+     *
+     * @param like      Like switch
+     * @param follow    Follow switch
      * @param creatorId the creator of the post id
      */
     private void initialPostCheck(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch like,
@@ -281,6 +288,7 @@ public class DetailFragment extends Fragment {
 
         if (currentUser != null) {
             if (creatorIdStr.equals(String.valueOf(currentUser.getId()))) {
+
                 like.setChecked(true);
                 follow.setChecked(true);
                 like.setEnabled(false);
@@ -301,6 +309,7 @@ public class DetailFragment extends Fragment {
 
     /**
      * Fills the fragment with detail of the post
+     *
      * @param data Current post in Post object
      */
     @SuppressLint("SetTextI18n")
@@ -310,8 +319,10 @@ public class DetailFragment extends Fragment {
         description.setText("Övrig info: " + data.getDesc());
 
     }
+
     /**
      * Check if MainActivity implements the right interface, if true then retrieve MainActivity's context
+     *
      * @param context MainActivity's context
      */
     @Override

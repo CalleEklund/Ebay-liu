@@ -1,10 +1,7 @@
 package com.example.liubiljett.classes;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,13 +33,12 @@ public class User {
         this.user_following = user_following;
     }
 
-    public int getId() {
-        return id;
-    }
-
     /**
      * Getters
      */
+    public int getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -90,8 +86,8 @@ public class User {
     public void addLikedPosts(Post p){
         this.liked_posts.add(p);
     }
+
     public void removeLikedPosts(Post p){
-        Log.d("innan", String.valueOf(liked_posts));
         Iterator<Post> it = liked_posts.iterator();
         while (it.hasNext()) {
             Post search = it.next();
@@ -99,8 +95,6 @@ public class User {
                 it.remove();
             }
         }
-        Log.d("efter", String.valueOf(liked_posts));
-
     }
 
     public void addFollowedUser(int userId){

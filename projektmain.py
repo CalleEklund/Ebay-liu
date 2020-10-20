@@ -444,7 +444,7 @@ def get_followed_posts():
     current_user_following = get_curr_user().user_following
     followed_user_posts = []
     if len(current_user_following) == 0:
-        return jsonify(followed_posts=[]), 400
+        return jsonify(followed_posts=[]), 200
     else:
         for user_followed in current_user_following:
             following_user = User.query.filter_by(user_id=user_followed.user_id).first()

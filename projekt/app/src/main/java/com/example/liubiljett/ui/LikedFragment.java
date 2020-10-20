@@ -63,7 +63,7 @@ public class LikedFragment extends Fragment {
         volleyService.getCurrentUser(currentUser.getAccessToken(), new VolleyService.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                currentUser = gson.fromJson(result,User.class);
+                currentUser = gson.fromJson(result, User.class);
                 userLikedPosts.addAll(currentUser.getLiked_post());
                 FeedAdapter adapter = new FeedAdapter(requireActivity(), userLikedPosts);
                 likedList.setAdapter(adapter);
