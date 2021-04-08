@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Labb1android</string>
-    <string name="title_text">Labb 1</string>
-    <string name="namn_text">Namn: </string>
-    <string name="button_text">Lägg till: </string>
-</resources>
